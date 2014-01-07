@@ -291,6 +291,7 @@ namespace H5TL {
 	class DSpace : public ID {
 		friend class Dataset;
 	protected:
+		DSpace() : ID() {}
 		DSpace(hid_t id) : ID(id) {}
 	public:
 		DSpace(const DSpace &ds) : ID(H5Scopy(ds)) {}
