@@ -9,8 +9,8 @@ The library includes compatibility for
 - std::vector and std::array
 
 TODO:
-- [ ] Get a first version working
-- [ ] Work out APIs for just about everything
+- Get a first version working
+- Work out APIs for just about everything
 
 
 Example
