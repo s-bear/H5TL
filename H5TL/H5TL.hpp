@@ -10,6 +10,7 @@
 #include <functional>
 #include <algorithm>
 #include <stdexcept>
+#include <sstream>
 
 namespace std {
 	template<typename InputIt, typename T>
@@ -23,70 +24,37 @@ namespace std {
 		else if(val > max) return max;
 		else return val;
 	}
+
+	template<typename InputIt>
+	string join(const std::string& delim, InputIt first, InputIt last) {
+		ostringstream builder;
+		builder << *first; ++first;
+		while(first != last) {
+			builder << delim << *first;
+			++first;
+		}
+		return builder.str();
+	}
 }
 
 
 
 namespace H5TL {
 	//General library interface:
+
+	/**
+	Initializes the HDF5 library.
+	*/
 	inline void open() {
 		if(H5open() < 0) throw std::runtime_error("open failed.");
 	}
+	/**
+	Close the HDF5 library.
+	*/
 	inline void close() {
 		if(H5close() < 0) throw std::runtime_error("close failed.");
 	}
-
-	//shape, rank, data prototypes for arithmetic types:
-	template<typename data_t>
-	typename std::enable_if<std::is_arithmetic<data_t>::value, size_t>::type
-	rank(const data_t&) {
-		return 0;
-	}
-	template<typename data_t>
-	typename std::enable_if<std::is_arithmetic<data_t>::value, std::vector<hsize_t>>::type
-	shape(const data_t&) {
-		return vector<hsize_t>();
-	}
-	template<typename data_t>
-	typename std::enable_if<std::is_arithmetic<data_t>::value, data_t*>::type
-	data(data_t& d) {
-		return &d;
-	}
-	template<typename data_t>
-	typename std::enable_if<std::is_arithmetic<data_t>::value, const data_t*>::type
-	data(const data_t& d) {
-		return &d;
-	}
-	//we can get data, but not shape or rank for pointer types:
-	template<typename data_t>
-	data_t* data(data_t* dp) {return dp;}
-	template<typename data_t>
-	const data_t* data(const data_t* dp) {return dp;}
-
-	//non-arithmetic default behavior is to fail at compile time
-	//see data adapters at bottom of file for implementations of supported types
-	template<typename data_t>
-	typename std::enable_if<!std::is_arithmetic<data_t>::value, size_t>::type
-	rank(const data_t&) {
-		static_assert(false,"No rank() overload for data_t. Enable, include, or write an appropriate overload.");
-	}
-	template<typename data_t>
-	typename std::enable_if<!std::is_arithmetic<data_t>::value, std::vector<hsize_t>>::type
-	shape(const data_t&) {
-		static_assert(false,"Noe shape() overload for data_t. Enable, include, or write an appropriate overload.");
-	}
-	template<typename data_t>
-	typename std::enable_if<!std::is_arithmetic<data_t>::value, void*>::type
-	data(data_t&) {
-		static_assert(false,"No data() overload for data_t. Enable, include, or write an appropriate overload.");
-	}
-	template<typename data_t>
-	typename std::enable_if<!std::is_arithmetic<data_t>::value, const void*>::type
-	data(const data_t&) {
-		static_assert(false,"No data() overload for const data_t. Enable, include, or write an appropriate overload.");
-	}
 	
-
 	class ID {
 	protected:
 		hid_t id;
@@ -161,39 +129,74 @@ namespace H5TL {
 	const PDType DType::FLOAT(H5T_NATIVE_FLOAT);
 	const PDType DType::DOUBLE(H5T_NATIVE_DOUBLE);
 	const DType DType::STRING(H5T_C_S1, 0);
-	
+
 	//template function returns reference to predefined datatype
-	
-	template<typename T> struct dtype_return {typedef const DType& type;};
+	template<typename T> const DType& dtype() { static_assert(false,"Type T is not convertible to a H5TL::DType");}
+	//specialization for basic types:
+	template<> const DType& dtype<int8_t>() {return DType::INT8;}
+	template<> const DType& dtype<uint8_t>() {return DType::UINT8;}
+	template<> const DType& dtype<int16_t>() {return DType::INT16;}
+	template<> const DType& dtype<uint16_t>() {return DType::UINT16;}
+	template<> const DType& dtype<int32_t>() {return DType::INT32;}
+	template<> const DType& dtype<uint32_t>() {return DType::UINT32;}
+	template<> const DType& dtype<int64_t>() {return DType::INT64;}
+	template<> const DType& dtype<uint64_t>() {return DType::UINT64;}
+	template<> const DType& dtype<float>() {return DType::FLOAT;}
+	template<> const DType& dtype<double>() {return DType::DOUBLE;}
+	template<> const DType& dtype<std::string>() {return DType::STRING;}
+	//const char* might be ambiguous, so leaving it out for now
 
-	template<typename T> typename dtype_return<T>::type dtype() { static_assert(false,"Type T is not convertible to a H5TL::DType");}
+	//H5TL adapter traits, enable parameter is for using enable_if for specializations
+	//specializations for compatible types are at the end of this file
+	template<typename data_t, typename enable=void>
+	struct adapt {
+		//default implementation does not compile
+		static_assert(false,"No specialization of H5TL::adapt for data_t. Please enable, include, or write an appropriate adapt specialization.");
+		
+		//here are required typedefs and member functions for complete compatibility
+		typedef const DType& dtype_return;
+		typedef void* data_return;
+		typedef const void* const_data_return;
+		typedef data_t allocate_return;
 
-	template<> typename dtype_return<int8_t>::type dtype<int8_t>() {return DType::INT8;}
-	template<> typename dtype_return<uint8_t>::type dtype<uint8_t>() {return DType::UINT8;}
-	template<> typename dtype_return<int16_t>::type dtype<int16_t>() {return DType::INT16;}
-	template<> typename dtype_return<uint16_t>::type dtype<uint16_t>() {return DType::UINT16;}
-	template<> typename dtype_return<int32_t>::type dtype<int32_t>() {return DType::INT32;}
-	template<> typename dtype_return<uint32_t>::type dtype<uint32_t>() {return DType::UINT32;}
-	template<> typename dtype_return<int64_t>::type dtype<int64_t>() {return DType::INT64;}
-	template<> typename dtype_return<uint64_t>::type dtype<uint64_t>() {return DType::UINT64;}
-	template<> typename dtype_return<float>::type dtype<float>() {return DType::FLOAT;}
-	template<> typename dtype_return<double>::type dtype<double>() {return DType::DOUBLE;}
-	template<> typename dtype_return<std::string>::type dtype<std::string>() {return DType::STRING;}
-	//given a pointer to chars, it's more likely that we've just got byte data, so don't use the string type
-	//this could also conflict with the INT8 type!
-	//template<> typename dtype_return<const char*>::type dtype<const char*>() {return DType::STRING;}
+		static size_t rank(const data_t&);
+		static std::vector<hsize_t> shape(const data_t&);
+		static dtype_return dtype(const data_t&);
+		static data_return data(data_t&);
+		static const_data_return data(const data_t&);
+		static allocate_return allocate(const std::vector<hsize_t>&);
+	};
 
-	//versions taking a reference or pointer to a datum
-	template<typename T> typename dtype_return<const T&>::type dtype(const T&) {return dtype<T>();}
-	template<typename T> typename dtype_return<const T*>::type dtype(const T*) {return dtype<T>();}
-	//fixed sized arrays of non-char data just give the primitive type
-	template<typename T, size_t N> typename dtype_return<const T[N]>::type dtype(const T[N]){return dtype<T>();}
-	//but C strings set the datatype size
-	template<size_t N> struct dtype_return<const char[N]>{typedef DType type;};
-	template<size_t N> typename dtype_return<const char[N]>::type dtype(const char(&)[N]) {
-		return DType(DType::STRING, N);
+	//functions to automatically infer proper adapter type:
+	template<typename data_t>
+	size_t rank(const data_t& d) {
+		return adapt<data_t>::rank(d);
 	}
-	//C++ strings are down with the std library adapters	
+	template<typename data_t>
+	std::vector<hsize_t> shape(const data_t& d) {
+		return adapt<data_t>::shape(d);
+	}
+	template<typename data_t>
+	typename adapt<data_t>::dtype_return
+	dtype(const data_t& d) {
+		return adapt<data_t>::dtype(d);
+	}
+	template<typename data_t>
+	typename adapt<data_t>::data_return
+	data(data_t& d) {
+		return adapt<data_t>::data(d);
+	}
+	template<typename data_t>
+	typename adapt<data_t>::const_data_return
+	data(const data_t& d) {
+		return adapt<data_t>::data(d);
+	}
+	template<typename data_t>
+	typename adapt<data_t>::allocate_return
+	allocate(const std::vector<hsize_t>& shape) {
+		return adapt<data_t>::allocate(shape);
+	}
+	
 
 	//dataset creation properties
 	class DProps : public ID {
@@ -291,9 +294,10 @@ namespace H5TL {
 	class DSpace : public ID {
 		friend class Dataset;
 	protected:
-		DSpace() : ID() {}
+		
 		DSpace(hid_t id) : ID(id) {}
 	public:
+		DSpace() : ID(H5Screate(H5S_SIMPLE)) {}
 		DSpace(const DSpace &ds) : ID(H5Scopy(ds)) {}
 		DSpace(DSpace &&ds) : ID(std::move(ds)) {}
 		DSpace(const std::vector<hsize_t>& shape) : ID(0) {
@@ -354,19 +358,24 @@ namespace H5TL {
 				return make_pair(std::vector<hsize_t>(),std::vector<hsize_t>());
 			}
 		}
-		void select_all() {
+		DSpace& select_all() {
 			H5Sselect_all(id);
+			return *this;
 		}
-		void select_none() {
+		DSpace& select_none() {
 			H5Sselect_none(id);
+			return *this;
 		}
-		void select(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
+		DSpace& select(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
 			H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr);
+			return *this;
 		}
 		static const DSpace SCALAR;
+		static const DSpace ALL;
 	};
 
 	const DSpace DSpace::SCALAR(H5Screate(H5S_SCALAR));
+	const DSpace DSpace::ALL(H5S_ALL); //this is id = 0, so we won't have destructor problems
 
 	//Location
 	//Files, Groups, Datasets
@@ -396,20 +405,30 @@ namespace H5TL {
 		DSpace& space() {
 			return mSpace;
 		}
-		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			
+		//write
+		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
+			H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
 		}
-		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape) {
-			H5Dwrite(id,buffer_type,buffer_shape,mSpace,H5P_DEFAULT,buffer);
+		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			write(buffer,buffer_type,buffer_shape,DSpace().select(offset,buffer_shape.extent()));
 		}
 		template<typename data_t>
-		void write(const data_t& buffer, const DSpace& buffer_shape) {
+		void write(const data_t& buffer, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
 			write(data(buffer),dtype(buffer),buffer_shape);
+		}
+		template<typename data_t>
+		void write(const data_t& buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			write(data(buffer),dtype(buffer),buffer_shape,offset);
 		}
 		template<typename data_t>
 		void write(const data_t& buffer) {
 			write(data(buffer),dtype(buffer),shape(buffer));
 		}
+		template<typename data_t>
+		void write(const data_t& buffer,const std::vector<hsize_t>& offset) {
+			write(data(buffer),dtype(buffer),shape(buffer),offset);
+		}
+		//append
 		void append(void *buffer, const DType& buffer_type, const DSpace& buffer_shape) {
 			//get the current and maximum extents of our space
 			std::vector<hsize_t> current, max;
@@ -421,6 +440,14 @@ namespace H5TL {
 			//extend the file space along the fastest varying dimension that is not yet maximal and is 1 in the buffer shape
 
 		}
+		//read - pre-allocated buffer
+		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
+			H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
+		}
+		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			read(buffer,buffer_type,buffer_shape,DSpace().select(offset,buffer_shape.extent()));
+		}
+		
 	};
 
 	//Files, Groups
@@ -493,28 +520,120 @@ namespace H5TL {
  * Type Adapters *
 \*****************/
 
-//rank(), shape(), dtype(), and data()
-//implementations for known types
+/*	Here is the required struct for compatibility.
+	Use the "enable" type parameter with std::enable_if to provide specializations for a whole class of types
+		- see arithmetic type adapter for example
+		- N.B. that all such specializations must be disjoint, or there will be ambiguities for the compiler (e.g. since there's an is_arithmetic specialization, we can't also have an is_integral specialization)
+   For partial compatibility, use static_assert(false, "message") to provide nice error messages. See the pointer-type adapter for examples
+
+template<typename data_t, typename enable=void>
+struct adapt {		
+	typedef const DType& dtype_return;
+	typedef void* data_return;
+	typedef const void* const_data_return;
+	typedef data_t allocate_return;
+
+	static size_t rank(const data_t&);
+	static std::vector<hsize_t> shape(const data_t&);
+	static dtype_return dtype(const data_t&);
+	static data_return data(data_t&);
+	static const_data_return data(const data_t&);
+	static allocate_return allocate(const std::vector<hsize_t>&);
+};
+*/
 
 namespace H5TL {
+
+	//arithmetic type adapter
+	template<typename data_t, typename std::enable_if<std::is_arithmetic<data_t>::value>::type>
+	struct adapt {
+		typedef const DType& dtype_return;
+		typedef data_t* data_return;
+		typedef const data_t* const_data_return;
+		typedef data_t allocate_return;
+
+		static size_t rank(const data_t&) {
+			return 0;
+		}
+		static std::vector<hsize_t> shape(const data_t&) {
+			return std::vector<hsize_t>();
+		}
+		static dtype_return dtype(const data_t&) {
+			return dtype<data_t>();
+		}
+		static data_return data(data_t& d) {
+			return &d;
+		}
+		static const_data_return data(const data_t& d) {
+			return &d;
+		}
+		static allocate_return allocate(const std::vector<hsize_t>&) {
+			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
+			if(n != 1)
+				throw runtime_error("Cannot allocate data_t with shape = {"+std::join(", ", begin(shape), end(shape))+"}"); //TODO: convert the shape to a string
+			return data_t(0);
+		}
+	};
+
+	//constant sized array adapter
+	template<typename T, size_t N>
+	struct adapt<T[N]> {
+		typedef const DType& dtype_return;
+		typedef T* data_return;
+		typedef const T* const_data_return;
+		typedef T* allocate_return;
+
+		static size_t rank(const T(&)[N]) {
+			return 1;
+		}
+		static std::vector<hsize_t> shape(const T(&)[N]) {
+			return std::vector<hsize_t>(1,N);
+		}
+		static dtype_return dtype(const T(&)[N]) {
+			return dtype<T>();
+		}
+		static data_return data(T(&d)[N]) {
+			return std::begin(d);
+		}
+		static const_data_return data(const T(&d)[N]) {
+			return std::begin(d);
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+			if(std::product(begin(shape),end(shape),hsize_t(1)) != N)
+				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + std::join(", ",begin(shape),end(shape)) + "}");
+			return new T[N];
+		}
+	};
 	
-	//constant-sized arrays
-	template<typename T, size_t N>
-	size_t rank(const T(&)[N]) {
-		return 1;
-	}
-	template<typename T, size_t N>
-	std::vector<hsize_t> shape(const T(&)[N]) {
-		return std::vector<hsize_t>(1,N);
-	}
-	template<typename T, size_t N>
-	T* data(T(&arr)[N]) {
-		return arr;
-	}
-	template<typename T, size_t N>
-	const T* data(const T(&arr)[N]) {
-		return arr;
-	}
+	//pointer adapter
+	template<typename ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value>::type>
+	struct adapt {
+		typedef typename std::remove_pointer<ptr_t>::type data_t;
+		typedef const DType& dtype_return;
+		typedef ptr_t data_return;
+		typedef const ptr_t const_data_return;
+		typedef ptr_t allocate_return;
+
+		static size_t rank(const ptr_t&) {
+			static_assert(false, "Cannot determine rank of data from pointer");
+		}
+		static std::vector<hsize_t> shape(const ptr_t&) {
+			static_assert(false, "Cannot determine shape of data from pointer");
+		}
+		static dtype_return dtype(const ptr_t&) {
+			return dtype<data_t>();
+		}
+		static data_return data(ptr_t& p) {
+			return p;
+		}
+		static const_data_return data(const ptr_t& p) {
+			return p;
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
+			return new data_t[n];
+		}
+	};
 
 }
 
@@ -523,24 +642,37 @@ namespace H5TL {
 //Shape, rank, dtype, data functions for standard container types:
 namespace H5TL {
 
-	//std::string is treated as a scalar value
-	size_t rank(const std::string&) {
-		return 0;
-	}
-	std::vector<hsize_t> shape(const std::string&) {
-		return std::vector<hsize_t>();
-	}
-	//create a new DType object with fixed size
-	template<> struct dtype_return<const std::string&>{typedef DType type;};
-	template<> typename dtype_return<const std::string&>::type dtype(const std::string& s) {
-		return DType(DType::STRING, s.size());
-	}
-	std::string::pointer data(std::string& s) {
-		return &s[0]; //.data() member only returns const_pointer
-	}
-	std::string::const_pointer data(const std::string& s) {
-		return s.data();
-	}
+	template<>
+	struct adapt<std::string> {
+		typedef DType dtype_return;
+		typedef std::string::pointer data_return;
+		typedef std::string::const_pointer const_data_return;
+		typedef std::string allocate_return;
+
+		static size_t rank(const std::string&) {
+			return 0;
+		}
+		static std::vector<hsize_t> shape(const std::string&) {
+			return std::vector<hsize_t>();
+		}
+		static dtype_return dtype(const std::string& s) {
+			return DType(H5TL::dtype<std::string>(), s.size());
+		}
+		static data_return data(std::string& s) {
+			return &(s[0]); //s.data() always returns const pointer :(
+		}
+		static const_data_return data(const std::string& s) {
+			return s.data();
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+			if(shape.size() > 1 && std::product(shape.begin()+1,shape.end(),hsize_t(1)) > 1) //TODO: does this make sense?
+				throw runtime_error("Cannot allocate std::string with rank > 1");
+			return std::string(shape[0],'\0');
+		}
+	};
+
+
+	//TODO: complete these changes
 
 	//std::array
 	template<typename T, size_t N>
@@ -563,7 +695,10 @@ namespace H5TL {
 	const T* data(const std::array<T,N>& a) {
 		return a.data();
 	}
-
+	template<typename T, size_t N>
+	typename allocate_return<std::array<T,N>> allocate<std::array<T,N>>(const std::vector<hsize_t>& shape) {
+		return std::array<T,N>();
+	}
 	//std::vector
 	template<typename T, typename A>
 	size_t rank(const std::vector<T,A>& vec) {

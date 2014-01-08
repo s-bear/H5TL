@@ -37,6 +37,13 @@ int main(int argc, char* argv[])
 	out(x);
 	cout << H5TL::rank(5) << endl;
 	cout << H5TL::rank(x) << endl;
+
+	vector<hsize_t> w;
+	int a = H5TL::allocate<int>(w);
+	w.push_back(10);
+	int *b = H5TL::allocate<int*>(w);
+
+	int *c = H5TL::allocate<int[10]>(w);
 	return 0;
 }
 
