@@ -1,0 +1,8 @@
+.svn/
+x64/
+Debug/
+*.dll
+*.suo
+*.user
+*.sdf
+*.opensdf
