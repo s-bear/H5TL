@@ -99,6 +99,7 @@ namespace H5TL {
 		void close() {
 			H5Tclose(id); id = 0;
 		}
+	static const PDType NONE;
 	static const PDType INT8;
 	static const PDType UINT8;
 	static const PDType INT16;
@@ -121,6 +122,7 @@ namespace H5TL {
 		virtual ~PDType() {id = 0;} //doesn't need to close(), but set id=0 so other destructors don't try to close it!
 		void close() {}
 	};
+	const PDType DType::NONE(0);
 	const PDType DType::INT8(H5T_NATIVE_INT8);
 	const PDType DType::UINT8(H5T_NATIVE_UINT8);
 	const PDType DType::INT16(H5T_NATIVE_INT16);
@@ -153,21 +155,30 @@ namespace H5TL {
 	//specializations for compatible types are at the end of this file
 	template<typename data_t, typename enable=void>
 	struct adapt {
-		//default implementation does not compile
-		static_assert(false,"No specialization of H5TL::adapt for data_t. Please enable, include, or write an appropriate adapt specialization.");
-		
 		//here are required typedefs and member functions for complete compatibility
 		typedef const DType& dtype_return;
 		typedef void* data_return;
 		typedef const void* const_data_return;
 		typedef data_t allocate_return;
-
-		static size_t rank(const data_t&);
-		static std::vector<hsize_t> shape(const data_t&);
-		static dtype_return dtype(const data_t&);
-		static data_return data(data_t&);
-		static const_data_return data(const data_t&);
-		static allocate_return allocate(const std::vector<hsize_t>&, const DType&);
+		//default implementation will fail on every call
+		static size_t rank(const data_t&) {
+			static_assert(false,"rank(const data_t&) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
+		static std::vector<hsize_t> shape(const data_t&) {
+			static_assert(false,"shape(const data_t&) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
+		static dtype_return dtype(const data_t&) {
+			static_assert(false,"dtype(const data_t&) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
+		static data_return data(data_t&) {
+			static_assert(false,"data(data_t&) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
+		static const_data_return data(const data_t&) {
+			static_assert(false,"data(const data_t&) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
+		static allocate_return allocate(const std::vector<hsize_t>&, const DType&) {
+			static_assert(false,"allocate<data_t>(...) is not supported for data_t. See further error messages for details. Enable, include, or write an appropriate specialization of H5TL::adapt<data_t>.");
+		}
 	};
 
 	//functions to automatically infer proper adapter type:
@@ -196,7 +207,7 @@ namespace H5TL {
 	}
 	template<typename data_t>
 	typename adapt<data_t>::allocate_return
-	allocate(const std::vector<hsize_t>& shape, const DType& dt) {
+	allocate(const std::vector<hsize_t>& shape, const DType& dt = DType::NONE) {
 		return adapt<data_t>::allocate(shape, dt);
 	}
 	
@@ -294,6 +305,37 @@ namespace H5TL {
 
 	const DProps DProps::DEFAULT(H5P_DATASET_CREATE_DEFAULT);
 
+	class Selection : public ID {
+	protected:
+		Selection(hid_t id) : ID(id) {}
+	public:
+		Selection() : ID(H5Screate(H5S_SIMPLE)) {}
+		Selection(const Selection &s) : ID(H5Scopy(s)) {}
+		Selection(Selection &&s) : ID(std::move(s)) {}
+		Selection(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) : ID(H5Screate(H5S_SIMPLE)) {
+			set(start,count);
+		}
+		virtual ~Selection() {
+			if(id) close();
+		}
+		void close() {
+			H5Sclose(id);
+		}
+		Selection& all() {
+			H5Sselect_all(id); return *this;
+		}
+		Selection& none() {
+			H5Sselect_none(id); return *this;
+		}
+		Selection& set(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
+			H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr);
+			return *this;
+		}
+		static const Selection ALL;  
+	};
+
+	const Selection Selection::ALL(H5S_ALL); //this is id = 0, so we won't have destructor problems
+
 	class DSpace : public ID {
 		friend class Dataset;
 	protected:
@@ -361,24 +403,11 @@ namespace H5TL {
 				return make_pair(std::vector<hsize_t>(),std::vector<hsize_t>());
 			}
 		}
-		DSpace& select_all() {
-			H5Sselect_all(id);
-			return *this;
-		}
-		DSpace& select_none() {
-			H5Sselect_none(id);
-			return *this;
-		}
-		DSpace& select(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
-			H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr);
-			return *this;
-		}
+		
 		static const DSpace SCALAR;
-		static const DSpace ALL;
 	};
 
 	const DSpace DSpace::SCALAR(H5Screate(H5S_SCALAR));
-	const DSpace DSpace::ALL(H5S_ALL); //this is id = 0, so we won't have destructor problems
 
 	//Location
 	//Files, Groups, Datasets
@@ -394,9 +423,8 @@ namespace H5TL {
 	class Dataset : public Location {
 		friend class Group;
 	protected:
-		DSpace mSpace;
-		Dataset() : Location(), mSpace() {}
-		Dataset(hid_t id) : Location(id), mSpace(H5Dget_space(id)) {}
+		Dataset() : Location() {}
+		Dataset(hid_t id) : Location(id) {}
 	public:
 		Dataset(Dataset &&dset) : Location(std::move(dset)) {}
 		virtual ~Dataset() {
@@ -405,18 +433,19 @@ namespace H5TL {
 		virtual void close() {
 			H5Dclose(id); id = 0;
 		}
-		DSpace& space() {
-			return mSpace;
+		DSpace space() {
+			return DSpace(H5Dget_space(id));
 		}
+
 		//write
-		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
+		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
 		}
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			write(buffer,buffer_type,buffer_shape,DSpace().select(offset,buffer_shape.extent()));
+			write(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
 		}
 		template<typename data_t>
-		void write(const data_t& buffer, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
+		void write(const data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			write(data(buffer),dtype(buffer),buffer_shape);
 		}
 		template<typename data_t>
@@ -424,7 +453,7 @@ namespace H5TL {
 			write(data(buffer),dtype(buffer),buffer_shape,offset);
 		}
 		template<typename data_t>
-		void write(const data_t& buffer) {
+		void write(const data_t& buffer, const Selection& selection = Selection::ALL) {
 			write(data(buffer),dtype(buffer),shape(buffer));
 		}
 		template<typename data_t>
@@ -435,7 +464,7 @@ namespace H5TL {
 		void append(void *buffer, const DType& buffer_type, const DSpace& buffer_shape) {
 			//get the current and maximum extents of our space
 			std::vector<hsize_t> current, max;
-			std::tie(current, max) = mSpace.extents();
+			std::tie(current, max) = space().extents();
 			//prepend 1s onto the front of buffer_shape until its the same size as current
 			std::vector<hsize_t> bs_old = buffer_shape.extent();
 			std::vector<hsize_t> bs_new(current.size(),1);
@@ -444,11 +473,28 @@ namespace H5TL {
 
 		}
 		//read - pre-allocated buffer
-		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const DSpace& selection = DSpace::ALL) {
+		//TODO: think about the behavior of read() with a pre-allocated buffer
+		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
 		}
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			read(buffer,buffer_type,buffer_shape,DSpace().select(offset,buffer_shape.extent()));
+			read(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
+		}
+		template<typename data_t>
+		void read(data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			read(data(buffer),dtype(buffer),buffer_shape,selection);
+		}
+		template<typename data_t>
+		void read(data_t& buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			read(data(buffer),dtype(buffer),buffer_shape,offset);
+		}
+		template<typename data_t>
+		void read(data_t& buffer, const Selection& selection = Selection::ALL) {
+			read(data(buffer),dtype(buffer),shape(buffer),selection);
+		}
+		template<typename data_t>
+		void read(data_t& buffer, const std::vector<hsize_t>& offset) {
+			read(data(buffer),dtype(buffer),shape(buffer),offset);
 		}
 		
 	};
@@ -544,12 +590,11 @@ struct adapt {
 	static allocate_return allocate(const std::vector<hsize_t>&, const DType&);
 };
 */
-
 namespace H5TL {
 
 	//arithmetic type adapter
-	template<typename data_t, typename std::enable_if<std::is_arithmetic<data_t>::value>::type>
-	struct adapt {
+	template<typename data_t>
+	struct adapt<data_t,typename std::enable_if<std::is_arithmetic<data_t>::value>::type> {
 		typedef const DType& dtype_return;
 		typedef data_t* data_return;
 		typedef const data_t* const_data_return;
@@ -577,28 +622,29 @@ namespace H5TL {
 			return data_t(0);
 		}
 	};
-
+	 
 	//constant sized array adapter
 	template<typename T, size_t N>
 	struct adapt<T[N]> {
+		typedef typename std::remove_cv<T>::type data_t;
 		typedef const DType& dtype_return;
-		typedef T* data_return;
-		typedef const T* const_data_return;
-		typedef T* allocate_return;
+		typedef data_t* data_return;
+		typedef const data_t* const_data_return;
+		typedef data_t* allocate_return;
 
 		static size_t rank(const T(&)[N]) {
 			return 1;
 		}
-		static std::vector<hsize_t> shape(const T(&)[N]) {
+		static std::vector<hsize_t> shape(const data_t(&)[N]) {
 			return std::vector<hsize_t>(1,N);
 		}
-		static dtype_return dtype(const T(&)[N]) {
+		static dtype_return dtype(const data_t(&)[N]) {
 			return dtype<T>();
 		}
-		static data_return data(T(&d)[N]) {
+		static data_return data(data_t(&d)[N]) {
 			return std::begin(d);
 		}
-		static const_data_return data(const T(&d)[N]) {
+		static const_data_return data(const data_t(&d)[N]) {
 			return std::begin(d);
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
@@ -609,9 +655,9 @@ namespace H5TL {
 	};
 	
 	//pointer adapter
-	template<typename ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value>::type>
-	struct adapt {
-		typedef typename std::remove_pointer<ptr_t>::type data_t;
+	template<typename ptr_t>
+	struct adapt<ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value>::type> {
+		typedef typename std::remove_cv<typename std::remove_pointer<ptr_t>::type>::type data_t;
 		typedef const DType& dtype_return;
 		typedef ptr_t data_return;
 		typedef const ptr_t const_data_return;
@@ -637,8 +683,9 @@ namespace H5TL {
 			return new data_t[n];
 		}
 	};
-
+	
 }
+
 
 #define H5TL_STD_ADAPT
 #ifdef H5TL_STD_ADAPT
@@ -669,17 +716,14 @@ namespace H5TL {
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if(shape.size() > 1 && std::product(shape.begin()+1,shape.end(),hsize_t(1)) > 1) //TODO: does this make sense?
-				throw runtime_error("Cannot allocate std::string with rank > 1");
+				throw std::runtime_error("Cannot allocate std::string with rank > 1");
 			return std::string(shape[0],'\0');
 		}
 	};
 
-
-	//TODO: complete these changes
-
 	//std::array
 	template<typename T, size_t N>
-	struct adapt<std::array<T,N>> {
+	struct adapt<std::array<T,N>,void> {
 		typedef const DType& dtype_return;
 		typedef T* data_return;
 		typedef const T* const_data_return;
@@ -732,7 +776,7 @@ namespace H5TL {
 			return v.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			return std::vector<T>(std::product(shape.begin(),shape.end(),hsize_t(1)),
+			return std::vector<T>(std::product(shape.begin(),shape.end(),hsize_t(1)),T());
 		}
 	};
 }
@@ -851,8 +895,10 @@ namespace H5TL {
 			return d.data;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType& dt) {
-			vector<int> sz(shape.begin(),shape.end());
-			return cv::Mat(sz.size(),sz.data(),h5_cv(dt));
+			//allocate and then fill using std::transform with explicit cast -- avoids conversion warnings blowing up the console
+			std::vector<int> sz(shape.size());
+			std::transform(shape.begin(),shape.end(),sz.begin(),[](hsize_t x){return int(x);});
+			return cv::Mat(int(sz.size()),sz.data(),h5_cv(dt));
 		}
 	};
 	/*
