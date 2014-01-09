@@ -66,6 +66,9 @@ namespace H5TL {
 		virtual ~ID() {}
 		virtual void close()=0;
 		virtual operator hid_t() const {return id;}
+		virtual bool operator==(const ID& other) const {
+			return this == &other || id == other.id;
+		}
 	};
 
 	class DType;
@@ -164,7 +167,7 @@ namespace H5TL {
 		static dtype_return dtype(const data_t&);
 		static data_return data(data_t&);
 		static const_data_return data(const data_t&);
-		static allocate_return allocate(const std::vector<hsize_t>&);
+		static allocate_return allocate(const std::vector<hsize_t>&, const DType&);
 	};
 
 	//functions to automatically infer proper adapter type:
@@ -193,8 +196,8 @@ namespace H5TL {
 	}
 	template<typename data_t>
 	typename adapt<data_t>::allocate_return
-	allocate(const std::vector<hsize_t>& shape) {
-		return adapt<data_t>::allocate(shape);
+	allocate(const std::vector<hsize_t>& shape, const DType& dt) {
+		return adapt<data_t>::allocate(shape, dt);
 	}
 	
 
@@ -235,7 +238,7 @@ namespace H5TL {
 			//if chunk_nbytes is 0, we should compute a value for it:
 			if(chunk_nbytes = 0) {
 				//get size of dataset in mb
-				size_t data_mb = (item_nbytes*std::product(begin(data_shape),end(data_shape),size_t(1))) >> 20;
+				size_t data_mb = (item_nbytes*std::product(data_shape.begin(),data_shape.end(),size_t(1))) >> 20;
 				data_mb = std::clip<size_t>(data_mb,1,1 << 23); //stay between 1 MB and 8 TB
 				//data size -> chunk size: 1 MB -> 1 line, 1 TB -> 1k lines
 				//                         2^0  -> 2^0,   2^20 -> 2^10
@@ -247,14 +250,14 @@ namespace H5TL {
 			//start with the chunk size the same as the whole shape:
 			std::vector<hsize_t> chunk_shape(data_shape);
 			//it's possible the shape is <= the desired chunk size
-			size_t chunk_size = std::product(begin(chunk_shape),end(chunk_shape),size_t(1));
+			size_t chunk_size = std::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
 			if(chunk_size <= desired_chunk_size)
 				return chunked(chunk_shape);
 			//if it's not, trim each dimension in turn to reduce the chunk size
 			for(size_t trim_dim = 0; trim_dim < chunk_shape.size(); ++trim_dim) {
 				chunk_shape[trim_dim] = 1; //trim
 				//is the new size less than the desired size?
-				chunk_size = std::product(begin(chunk_shape),end(chunk_shape),size_t(1));
+				chunk_size = std::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
 				if(chunk_size < desired_chunk_size) {
 					//yes -- expand it as much as possible, then return
 					chunk_shape[trim_dim] = desired_chunk_size / chunk_size;
@@ -538,7 +541,7 @@ struct adapt {
 	static dtype_return dtype(const data_t&);
 	static data_return data(data_t&);
 	static const_data_return data(const data_t&);
-	static allocate_return allocate(const std::vector<hsize_t>&);
+	static allocate_return allocate(const std::vector<hsize_t>&, const DType&);
 };
 */
 
@@ -567,10 +570,10 @@ namespace H5TL {
 		static const_data_return data(const data_t& d) {
 			return &d;
 		}
-		static allocate_return allocate(const std::vector<hsize_t>&) {
+		static allocate_return allocate(const std::vector<hsize_t>&, const DType&) {
 			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
 			if(n != 1)
-				throw runtime_error("Cannot allocate data_t with shape = {"+std::join(", ", begin(shape), end(shape))+"}"); //TODO: convert the shape to a string
+				throw runtime_error("Cannot allocate data_t with shape = {"+std::join(", ", shape.begin(), shape.end())+"}"); //TODO: convert the shape to a string
 			return data_t(0);
 		}
 	};
@@ -598,9 +601,9 @@ namespace H5TL {
 		static const_data_return data(const T(&d)[N]) {
 			return std::begin(d);
 		}
-		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if(std::product(begin(shape),end(shape),hsize_t(1)) != N)
-				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + std::join(", ",begin(shape),end(shape)) + "}");
+				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + std::join(", ",shape.begin(),shape.end()) + "}");
 			return new T[N];
 		}
 	};
@@ -629,7 +632,7 @@ namespace H5TL {
 		static const_data_return data(const ptr_t& p) {
 			return p;
 		}
-		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
 			return new data_t[n];
 		}
@@ -664,7 +667,7 @@ namespace H5TL {
 		static const_data_return data(const std::string& s) {
 			return s.data();
 		}
-		static allocate_return allocate(const std::vector<hsize_t>& shape) {
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if(shape.size() > 1 && std::product(shape.begin()+1,shape.end(),hsize_t(1)) > 1) //TODO: does this make sense?
 				throw runtime_error("Cannot allocate std::string with rank > 1");
 			return std::string(shape[0],'\0');
@@ -676,50 +679,62 @@ namespace H5TL {
 
 	//std::array
 	template<typename T, size_t N>
-	size_t rank(const std::array<T,N>&) {
-		return 1;
-	}
-	template<typename T, size_t N>
-	std::vector<hsize_t> shape(const std::array<T,N>&) {
-		return std::vector<hsize_t>(1,N);
-	}
-	template<typename T, size_t N>
-	typename dtype_return<T>::type dtype(const std::array<T,N>&) {
-		return dtype<T>();
-	}
-	template<typename T, size_t N>
-	T* data(std::array<T,N>& a) {
-		return a.data();
-	}
-	template<typename T, size_t N>
-	const T* data(const std::array<T,N>& a) {
-		return a.data();
-	}
-	template<typename T, size_t N>
-	typename allocate_return<std::array<T,N>> allocate<std::array<T,N>>(const std::vector<hsize_t>& shape) {
-		return std::array<T,N>();
-	}
+	struct adapt<std::array<T,N>> {
+		typedef const DType& dtype_return;
+		typedef T* data_return;
+		typedef const T* const_data_return;
+		typedef std::array<T,N> allocate_return;
+
+		static size_t rank(const std::array<T,N>&) {
+			return 1;
+		}
+		static std::vector<hsize_t> shape(const std::array<T,N>&) {
+			return std::vector<hsize_t>(1,hsize_t(N));
+		}
+		static dtype_return dtype(const std::array<T,N>&) {
+			return dtype<T>();
+		}
+		static data_return data(std::array<T,N> &d) {
+			return d.data();
+		}
+		static const_data_return data(const std::array<T,N>& d) {
+			return d.data();
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
+			if(std::product(shape.begin(),shape.end(),hsize_t(1)) != N)
+				throw runtime_error("Cannot allocate std::array<T,N> with shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
+			return std::array<T,N>();
+		}
+	};
+	
 	//std::vector
-	template<typename T, typename A>
-	size_t rank(const std::vector<T,A>& vec) {
-		return 1;
-	}
-	template<typename T, typename A>
-	std::vector<hsize_t> shape(const std::vector<T,A>& vec) {
-		return std::vector<hsize_t>(1,vec.size());
-	}
-	template<typename T, typename A>
-	typename dtype_return<T>::type dtype(const std::vector<T,A>&) {
-		return dtype<T>();
-	}
-	template<typename T, typename A>
-	T* data(std::vector<T,A>& vec) {
-		return vec.data();
-	}
-	template<typename T, typename A>
-	const T* data(const std::vector<T,A>& vec) {
-		return vec.data();
-	}
+	template<typename T>
+	struct adapt<std::vector<T>> {
+		
+		typedef const DType& dtype_return;
+		typedef typename std::vector<T>::pointer data_return;
+		typedef typename std::vector<T>::const_pointer const_data_return;
+		typedef std::vector<T> allocate_return;
+
+		static size_t rank(const std::vector<T>&) {
+			return 1;
+		}
+		static std::vector<hsize_t> shape(const std::vector<T>& v) {
+			return std::vector<hsize_t>(1,v.size());
+		}
+		static dtype_return dtype(const std::vector<T>&) {
+			return dtype<T>();
+		}
+		static data_return data(std::vector<T>& v) {
+			return v.data();
+		}
+		static const_data_return data(const std::vector<T>& v) {
+			return v.data();
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
+			return std::vector<T>(std::product(shape.begin(),shape.end(),hsize_t(1)),
+		}
+	};
 }
 #endif
 
@@ -729,26 +744,37 @@ namespace H5TL {
 #include "blitz/array.h"
 namespace H5TL {
 	template<typename T, int N>
-	size_t rank(const blitz::Array<T,N>&) {
-		return N;
-	}
-	template<typename T, int N>
-	std::vector<hsize_t> shape(const blitz::Array<T,N>& a) {
-		auto s = a.shape();
-		return std::vector<hsize_t>(std::begin(s),std::end(s));
-	}
-	template<typename T, int N>
-	typename dtype_return<T>::type dtype(const blitz::Array<T,N>&) {
-		return dtype<T>();
-	}
-	template<typename T, int N>
-	T* data(blitz::Array<T,N>& a) {
-		return a.data();
-	}
-	template<typename T, int N>
-	const T* data(const blitz::Array<T,N>& a) {
-		return a.data();
-	}
+	struct adapt<blitz::Array<T,N>> {
+		typedef const DType& dtype_return;
+		
+		typedef T* data_return;
+		typedef const T* const_data_return;
+		typedef blitz::Array<T,N> allocate_return;
+
+		static size_t rank(const blitz::Array<T,N>&) {
+			return N;
+		}
+		static std::vector<hsize_t> shape(const blitz::Array<T,N>& d) {
+			blitz::TinyVector<int,N> &s = d.shape();
+			return std::vector<hsize_t>(s.begin(),s.end());
+		}
+		static dtype_return dtype(const blitz::Array<T,N>&) {
+			return dtype<T>();
+		}
+		static data_return data(blitz::Array<T,N>& d) {
+			return d.data();
+		}
+		static const_data_return data(const blitz::Array<T,N>& d) {
+			return d.data();
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
+			if(shape.size() != N)
+				throw runtime_error("Cannot allocate blitz::Array<T,N> with shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
+			blitz::TinyVector<int,N> extent;
+			std::copy(shape.begin(),shape.end(),extent.begin());
+			return blitz::Array<T,N>(extent);
+		}
+	};
 }
 #endif
 
@@ -758,54 +784,91 @@ namespace H5TL {
 #include "opencv2/opencv.hpp"
 
 namespace H5TL {
-	size_t rank(const cv::Mat& m) {
-		return m.dims + (m.channels() > 1 ? 1 : 0);
-	}
-	std::vector<hsize_t> shape(const cv::Mat& m) {
-		std::vector<hsize_t> tmp(rank(m));
-		std::copy(m.size.p, m.size.p + m.dims, tmp.begin());
-		if(m.channels() > 1)
-			tmp[m.dims] = m.channels();
-		return tmp;
-	}
-
-	dtype_return<void>::type dtype(const cv::Mat& m) {
-		switch(CV_MAT_DEPTH(m.type())) {
-		case CV_8U:
-			return DType::UINT8;
-		case CV_8S:
-			return DType::INT8;
-		case CV_16U:
-			return DType::UINT16;
-		case CV_16S:
-			return DType::INT16;
-		case CV_32S:
-			return DType::INT32;
-		case CV_32F:
-			return DType::FLOAT;
-		case CV_64F:
-			return DType::DOUBLE;
-		default:
-			throw std::runtime_error("Datatype is not convertible from cv::Mat to H5TL::Dtype");
+	template<>
+	struct adapt<cv::Mat> {
+	protected:
+		static const DType& cv_h5(int cv_type) {
+			switch(CV_MAT_DEPTH(cv_type)) {
+			case CV_8U:
+				return DType::UINT8;
+			case CV_8S:
+				return DType::INT8;
+			case CV_16U:
+				return DType::UINT16;
+			case CV_16S:
+				return DType::INT16;
+			case CV_32S:
+				return DType::INT32;
+			case CV_32F:
+				return DType::FLOAT;
+			case CV_64F:
+				return DType::DOUBLE;
+			default:
+				throw std::runtime_error("Datatype is not convertible from cv::Mat to H5TL::DType");
+			}
 		}
-	}
+		static int h5_cv(const DType& dt) {
+			if(dt == DType::UINT8)
+				return CV_8U;
+			else if(dt == DType::INT8)
+				return CV_8S;
+			else if(dt == DType::UINT16)
+				return CV_16U;
+			else if(dt == DType::INT16)
+				return CV_16S;
+			else if(dt == DType::INT32)
+				return CV_32S;
+			else if(dt == DType::FLOAT)
+				return CV_32F;
+			else if(dt == DType::DOUBLE)
+				return CV_64F;
+			else
+				throw std::runtime_error("Datatype is not convertible from H5TL::DType to cv::Mat type");
+		}
+	public:
+		typedef const DType& dtype_return;
+		typedef void* data_return;
+		typedef const void* const_data_return;
+		typedef cv::Mat allocate_return;
 
+		static size_t rank(const cv::Mat& d) {
+			return d.dims + (d.channels() > 1 ? 1 : 0);
+		}
+		static std::vector<hsize_t> shape(const cv::Mat& d) {
+			std::vector<hsize_t> tmp(rank(d));
+			std::copy(d.size.p, d.size.p + d.dims, tmp.begin());
+			if(d.channels() > 1)
+				tmp[d.dims] = d.channels();
+			return tmp;
+		}
+		static dtype_return dtype(const cv::Mat& d) {
+			return cv_h5(d.type());
+		}
+		static data_return data(cv::Mat& d) {
+			return d.data;
+		}
+		static const_data_return data(const cv::Mat& d) {
+			return d.data;
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType& dt) {
+			vector<int> sz(shape.begin(),shape.end());
+			return cv::Mat(sz.size(),sz.data(),h5_cv(dt));
+		}
+	};
+	/*
 	template<typename T>
-	typename dtype_return<T>::type dtype(const cv::Mat_<T>&) {
-		return dtype<T>();
-	}
+	struct adapt<cv::Mat_<T>> {
+		typedef const DType& dtype_return;
+		typedef void* data_return;
+		typedef const void* const_data_return;
+		typedef data_t allocate_return;
 
-	template<typename T, int N>
-	typename dtype_return<T>::type dtype(const cv::Mat_<cv::Vec<T,N>>&) {
-		return dtype<T>();
-	}
-
-	void* data(cv::Mat& m) {
-		return m.data;
-	}
-
-	const void* data(const cv::Mat &m) {
-		return m.data;
-	}
+		static size_t rank(const data_t&);
+		static std::vector<hsize_t> shape(const data_t&);
+		static dtype_return dtype(const data_t&);
+		static data_return data(data_t&);
+		static const_data_return data(const data_t&);
+		static allocate_return allocate(const std::vector<hsize_t>&);
+	}; */
 }
 #endif
