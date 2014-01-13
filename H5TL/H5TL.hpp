@@ -472,9 +472,10 @@ namespace H5TL {
 			//extend the file space along the fastest varying dimension that is not yet maximal and is 1 in the buffer shape
 
 		}
-		//read - pre-allocated buffer
-		//TODO: think about the behavior of read() with a pre-allocated buffer
+		//read
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			//if buffer_shape is empty, allocate space to hold the selection
+
 			H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
 		}
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
@@ -607,7 +608,7 @@ namespace H5TL {
 			return std::vector<hsize_t>();
 		}
 		static dtype_return dtype(const data_t&) {
-			return dtype<data_t>();
+			return H5TL::dtype<data_t>();
 		}
 		static data_return data(data_t& d) {
 			return &d;
@@ -639,7 +640,7 @@ namespace H5TL {
 			return std::vector<hsize_t>(1,N);
 		}
 		static dtype_return dtype(const data_t(&)[N]) {
-			return dtype<T>();
+			return H5TL::dtype<T>();
 		}
 		static data_return data(data_t(&d)[N]) {
 			return std::begin(d);
@@ -656,7 +657,9 @@ namespace H5TL {
 	
 	//pointer adapter
 	template<typename ptr_t>
-	struct adapt<ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value>::type> {
+	struct adapt<ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value 
+												&& !std::is_void<typename std::remove_pointer<ptr_t>::type>::value
+										>::type> {
 		typedef typename std::remove_cv<typename std::remove_pointer<ptr_t>::type>::type data_t;
 		typedef const DType& dtype_return;
 		typedef ptr_t data_return;
@@ -670,7 +673,7 @@ namespace H5TL {
 			static_assert(false, "Cannot determine shape of data from pointer");
 		}
 		static dtype_return dtype(const ptr_t&) {
-			return dtype<data_t>();
+			return H5TL::dtype<data_t>();
 		}
 		static data_return data(ptr_t& p) {
 			return p;
@@ -683,7 +686,23 @@ namespace H5TL {
 			return new data_t[n];
 		}
 	};
-	
+	//void pointer adapter
+	template<>
+	struct adapt<void*> {
+		typedef const DType& dtype_return;
+		typedef void* data_return;
+		typedef const void* const_data_return;
+		typedef void* allocate_return;
+
+		static size_t rank(const void*) {
+			//static_assert(false, "Cannot determine rank of data from pointer");
+		}
+		static std::vector<hsize_t> shape(const void*);
+		static dtype_return dtype(const void*);
+		static data_return data(void* d);
+		static const_data_return data(const void* d);
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType& dt);
+	};
 }
 
 
@@ -736,7 +755,7 @@ namespace H5TL {
 			return std::vector<hsize_t>(1,hsize_t(N));
 		}
 		static dtype_return dtype(const std::array<T,N>&) {
-			return dtype<T>();
+			return H5TL::dtype<T>();
 		}
 		static data_return data(std::array<T,N> &d) {
 			return d.data();
@@ -767,7 +786,7 @@ namespace H5TL {
 			return std::vector<hsize_t>(1,v.size());
 		}
 		static dtype_return dtype(const std::vector<T>&) {
-			return dtype<T>();
+			return H5TL::dtype<T>();
 		}
 		static data_return data(std::vector<T>& v) {
 			return v.data();
@@ -782,7 +801,7 @@ namespace H5TL {
 }
 #endif
 
-#define H5TL_BLITZ_ADAPT
+//#define H5TL_BLITZ_ADAPT
 #ifdef H5TL_BLITZ_ADAPT
 //BLITZ++ shape, rank, dtype, data adapters
 #include "blitz/array.h"
@@ -803,7 +822,7 @@ namespace H5TL {
 			return std::vector<hsize_t>(s.begin(),s.end());
 		}
 		static dtype_return dtype(const blitz::Array<T,N>&) {
-			return dtype<T>();
+			return H5TL::dtype<T>();
 		}
 		static data_return data(blitz::Array<T,N>& d) {
 			return d.data();
@@ -822,7 +841,7 @@ namespace H5TL {
 }
 #endif
 
-#define H5TL_OCV_ADAPT
+//#define H5TL_OCV_ADAPT
 #ifdef H5TL_OCV_ADAPT
 //OpenCV shape, rank, dtype, data adapters
 #include "opencv2/opencv.hpp"
