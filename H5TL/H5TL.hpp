@@ -210,17 +210,47 @@ namespace H5TL {
 	allocate(const std::vector<hsize_t>& shape, const DType& dt = DType::NONE) {
 		return adapt<data_t>::allocate(shape, dt);
 	}
-	
+	//property list
+	class Props : public ID {
+	protected:
+		Props(hid_t id) : ID(id) {}
+		Props(hid_t class_id,int) : ID(H5Pcreate(class_id)) {}
+	public:
+		Props(const Props &p) : ID(H5Pcopy(p)) {}
+		Props(Props &&p) : ID(std::move(p)) {}
+		virtual ~Props() {
+			if(id) close();
+		}
+		virtual void close() {
+			H5Pclose(id); id = 0;
+		}
+	};
+
+	//link creation properties
+	class LProps : public Props {
+		LProps(hid_t id) : Props(id) {}
+	public:
+		static const LProps DEFAULT;
+		LProps() : Props(H5P_LINK_CREATE,0) {}
+		LProps(const LProps &lp) : Props(lp) {}
+		LProps(LProps &&lp) : Props(std::move(lp)) {}
+		virtual ~LProps() {}
+		LProps& create_intermediate() {
+			H5Pset_create_intermediate_group(id,1);
+			return *this;
+		}
+	};
+
+	const LProps LProps::DEFAULT = LProps().create_intermediate();
 
 	//dataset creation properties
-	class DProps : public ID {
-	protected:
-		DProps(hid_t id) : ID(id) {}
+	class DProps : public Props {
+		DProps(hid_t id) : Props(id) {}
 	public:
 		static const DProps DEFAULT;
-		DProps() : ID(H5Pcreate(H5P_DATASET_CREATE)) {}
-		DProps(const DProps &dp) : ID(H5Pcopy(dp)) {}
-		DProps(DProps &&dp) : ID(std::move(dp)) {}
+		DProps() : Props(H5P_DATASET_CREATE,0) {}
+		DProps(const DProps &dp) : Props(dp) {}
+		DProps(DProps &&dp) : Props(std::move(dp)) {}
 		virtual ~DProps() {
 			if(id) close();
 		}
@@ -514,25 +544,26 @@ namespace H5TL {
 			H5Gclose(id);
 		}
 		Group openGroup(const std::string &name) {
-			return Group(H5Gopen(id,name.c_str(),H5P_DEFAULT));
+			return Group(H5Gopen(id,name.c_str(),H5P_GROUP_ACCESS_DEFAULT));
 		}
 		Group createGroup(const std::string &name) {
-			return Group(H5Gcreate(id,name.c_str(),H5P_DEFAULT,H5P_DEFAULT,H5P_DEFAULT));
+			return Group(H5Gcreate(id,name.c_str(),LProps::DEFAULT,H5P_GROUP_CREATE_DEFAULT,H5P_GROUP_ACCESS_DEFAULT));
 		}
 		Dataset openDataset(const std::string &name) {
-			return Dataset(H5Dopen(id,name.c_str(),H5P_DEFAULT));
+			return Dataset(H5Dopen(id,name.c_str(),H5P_DATASET_ACCESS_DEFAULT));
 		}
 		Dataset createDataset(const std::string &name, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
 			//if props is chunked, but does not have chunk dimensions yet, we need to compute them
 			if(props.is_chunked() && props.chunk().size() == 0) {
 				DProps new_props(props);
 				new_props.chunked(space.extent(),dt.size());
-				return Dataset(H5Dcreate(id,name.c_str(),dt,space,H5P_DEFAULT,new_props,H5P_DEFAULT));
+				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,new_props,H5P_DATASET_ACCESS_DEFAULT));
 			} else {
 				//no changes necessary
-				return Dataset(H5Dcreate(id,name.c_str(),dt,space,H5P_DEFAULT,props,H5P_DEFAULT));
+				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,props,H5P_DATASET_ACCESS_DEFAULT));
 			}
 		}
+		//create dataset and write data in
 		Dataset writeDataset(const std::string &name, const void* buffer, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
 			//create and write in one fell swoop
 			Dataset dset = createDataset(name,dt,space,props);
@@ -556,11 +587,28 @@ namespace H5TL {
 	//Files
 	class File : public Group {
 	public:
+		enum OpenMode : unsigned int {
+#pragma push_macro("H5CHECK") //compatible with MSVC, gcc, clang
+#define H5CHECK //need to make this not call H5check() so that the following expressions are constant:
+			TRUNCATE = H5F_ACC_TRUNC,
+			CREATE = H5F_ACC_EXCL,
+			READ_WRITE = H5F_ACC_RDWR,
+			READ = H5F_ACC_RDONLY
+#pragma pop_macro("H5CHECK")
+		};
+		File(const std::string& name, const OpenMode& mode = READ_WRITE) {
+			if(mode == TRUNCATE || mode == CREATE) {
+				id = H5Fcreate(name.c_str(),mode,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT);
+			} else {
+				id = H5Fopen(name.c_str(),mode,H5P_FILE_ACCESS_DEFAULT);
+				//TODO: if mode is READ_WRITE and the open failed, we should create the file
+			}
+		}
 		virtual ~File() {
 			if(id) close();
 		}
 		virtual void close() {
-			H5Fclose(id);
+			H5Fclose(id); id = 0;
 		}
 	};
 
@@ -594,8 +642,9 @@ struct adapt {
 namespace H5TL {
 
 	//arithmetic type adapter
-	template<typename data_t>
-	struct adapt<data_t,typename std::enable_if<std::is_arithmetic<data_t>::value>::type> {
+	template<typename number_t>
+	struct adapt<number_t,typename std::enable_if<std::is_arithmetic<number_t>::value>::type> {
+		typedef typename std::remove_cv<number_t>::type data_t;
 		typedef const DType& dtype_return;
 		typedef data_t* data_return;
 		typedef const data_t* const_data_return;
