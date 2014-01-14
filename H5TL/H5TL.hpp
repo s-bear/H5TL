@@ -907,10 +907,13 @@ namespace H5TL {
 			return d.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			if(shape.size() > N)
+			size_t n = shape.size();
+			if(n > N)
 				throw runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
 			blitz::TinyVector<int,N> extent(1);
-			std::copy_backward(shape.begin(),shape.end(),extent.end());
+			//we can't use std::copy_backward because blitz::TinyVector::iterator is just a raw pointer
+			for(int i = N-n; i < N; ++i)
+				extent[i] = shape[i];
 			return blitz::Array<T,N>(extent);
 		}
 	};
