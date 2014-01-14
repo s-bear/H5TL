@@ -11,20 +11,34 @@
 #include <numeric>
 using namespace std;
 
+#include "blitz/Array.h"
+
 template<typename T>
-void out(const vector<T>& vec) {
-	cout << "vector[";
+ostream& operator<<(ostream& os, const vector<T>& vec) {
+	os << "vector{";
 	bool first = true;
 	for(auto t : vec) {
-		if(first) {cout << t; first = false;}
-		else {cout << ", " << t;}
+		if(first) {os << t; first = false;}
+		else {os << ", " << t;}
 	}
-	cout << "]" << endl;
+	os << "}" << endl;
 }
 
 int main(int argc, char* argv[])
 {
+	//Testing:
+	//creating & opening files
+	//creating & opening groups
+	//creating & opening datasets
+	//writing & reading datasets
 	H5TL::File f("test.h5",H5TL::File::TRUNCATE);
-	f.writeDataset("data/x",15);
+	auto x = f.createDataset("data/x",H5TL::DType::UINT8,H5TL::DSpace::SCALAR);
+	x.write(15);
+	int y = x.read<int>();
+
+	auto z = x.read<blitz::Array<float,2>>();
+
+	cout << boolalpha;
+	cout << "equal? " << (x.dtype() == H5TL::DType::UINT8) << endl;
 	return 0;
 }
