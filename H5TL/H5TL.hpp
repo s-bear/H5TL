@@ -894,7 +894,7 @@ namespace H5TL {
 			return N;
 		}
 		static std::vector<hsize_t> shape(const blitz::Array<T,N>& d) {
-			blitz::TinyVector<int,N> &s = d.shape();
+			const blitz::TinyVector<int,N> &s = d.shape();
 			return std::vector<hsize_t>(s.begin(),s.end());
 		}
 		static dtype_return dtype(const blitz::Array<T,N>&) {
