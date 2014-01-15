@@ -9,9 +9,9 @@ The library includes compatibility for
 - std::vector and std::array
 
 TODO:
-- Get a first version working
-- Work out APIs for just about everything
-
+- Testing & bug fixes
+- Attribute support
+- Documentation
 
 Example
 -------
@@ -24,17 +24,17 @@ Example
 using namespace std;
 
 int main(int argc, char *argv[]) {
-    H5TL::File mFile("test.h5");
-    mFile.write("note","This file was created using the H5TL wrapper library");
+    H5TL::File f("test.h5");
+    f.write("note","This file was created using the H5TL wrapper library");
 
-    //writing
+    //writing a std::vector<int>:
     vector<int> a(10,1);
     partial_sum(a.begin(),a.end(),a.begin());
     mFile.write("data\a",a);
 
-    //reading
-    vector<float> b;
-    mFile.read("data\a",b); //doesn't work yet :(
+    //reading a std::vector<float>
+    auto b = mFile.read<vector<float>>("data\a");
+    return 0;
 }
 
 ```
