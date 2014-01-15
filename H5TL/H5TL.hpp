@@ -1,7 +1,8 @@
 #pragma once
-
+//HDF5:
 #include "hdf5.h"
-
+//#include "hdf5_hl.h"
+//STL:
 #include <utility>
 #include <vector>
 #include <array>
@@ -40,6 +41,25 @@ namespace std {
 namespace H5TL {
 	//General library interface:
 
+	//Error handling:
+	inline std::string _error_class_name(hid_t class_id) {
+		ssize_t len = H5Eget_class_name(class_id,nullptr,0);
+		std::string tmp(len,'\0');
+		H5Eget_class_name(class_id,&(tmp[0]),len);
+		return tmp;
+	}
+	inline herr_t _append_error(unsigned n, const H5E_error2_t *err_desc, void *client_data) {
+		std::ostream &os = *(std::ostream*)client_data;
+		os << "#" << n << ":" << err_desc->file_name << " line " << err_desc->line << " in " << err_desc->func_name << ": " << err_desc->desc << std::endl;
+		os << "class: " << _error_class_name(err_desc->maj_num) << ": " << _error_class_name(err_desc->min_num) << std::endl;
+		return 1;
+	}
+	inline std::string get_error() {
+		std::ostringstream oss;
+		H5Ewalk2(H5E_DEFAULT,H5E_WALK_DOWNWARD,_append_error,&oss);
+		return oss.str();
+	}
+
 	/**
 	Initializes the HDF5 library.
 	*/
@@ -67,8 +87,9 @@ namespace H5TL {
 		virtual bool operator==(const ID& other) const {
 			return this == &other || id == other.id;
 		}
-		virtual bool valid() const {return H5Iis_valid(id);}
+		virtual bool valid() const {return H5Iis_valid(id) > 0;}
 		virtual operator bool() const {return valid();}
+
 	};
 
 	class DType;
@@ -452,6 +473,9 @@ namespace H5TL {
 	public:
 		Location(Location &&loc) : ID(std::move(loc)) {}
 		virtual ~Location() {}
+		virtual bool exists() {
+			return H5Oexists_by_name(id,".",H5P_LINK_ACCESS_DEFAULT) > 0;
+		}
 	};
 
 	class Dataset : public Location {
@@ -473,7 +497,27 @@ namespace H5TL {
 		DType dtype() {
 			return DType(H5Dget_type(id));
 		}
-
+		//Dimension Scale:
+		/*
+		void makeScale(const std::string &name = std::string()) {
+			if(name.size())
+				H5DSset_scale(id,name.c_str());
+			else
+				H5DSset_scale(id,nullptr);
+		}
+		bool isScale() {
+			return H5DSis_scale(id) > 0;
+		}
+		void attachScale(Dataset& scale, unsigned int dim) {
+			H5DSattach_scale(id,scale,dim);
+		}
+		bool isAttached(const Dataset& scale, unsigned int dim) {
+			return H5DSis_attached(id,scale,dim) > 0;
+		}
+		void detachScale(Dataset& scale, unsigned int dim) {
+			H5DSdetach_scale(id,scale,dim);
+		}
+		*/
 		//write
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
@@ -563,6 +607,51 @@ namespace H5TL {
 		virtual void close() {
 			H5Gclose(id);
 		}
+		using ID::valid;
+		virtual bool valid(const std::string &path) {
+			//Copy logic of H5TLpath_valid
+			//the path to the current object or root is always valid:
+			if(path == "." || path == "/" || path == "./")
+				return true;
+
+			//make a working copy of the path
+			std::string current_path(path);
+			//we want to check each step along the path, except the last
+			//so find each path delimiter in turn
+			size_t delimiter_pos = 0;
+			if(path.compare(0,1,"/") == 0)
+				delimiter_pos = 1; //skip the first '/' of an absolute path
+			else if(path.compare(0,2,"./") == 0)
+				delimiter_pos = 2; //the path starts with "./" -- skip this part
+			while((delimiter_pos = path.find('/',delimiter_pos+1)) != std::string::npos) {
+				//if the path ends with a '/', we should ignore it in this loop
+				if(delimiter_pos == path.size()-1) break;
+				//change the character to null
+				current_path[delimiter_pos] = '\0';
+				//check the link
+				htri_t link_exists = H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
+				if(link_exists < 0) throw std::runtime_error(""); //TODO
+				else if(link_exists == 0) return false;
+				//check that the link resolves to an object
+				htri_t obj_exists = H5Oexists_by_name(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
+				if(obj_exists < 0) throw std::runtime_error(""); //TODO
+				else if(obj_exists == 0) return false;
+				//replace the delimiter and move on to the next step of the path
+				current_path[delimiter_pos] = '/';
+			}
+			//all of the steps of the path have been checked, except the last
+			//make sure the link to the last object exists
+			htri_t link_exists = H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
+			if(link_exists < 0) throw std::runtime_error(""); //TODO
+			else return (link_exists > 0);
+		}
+		virtual bool exists(const std::string &path) {
+			if(!valid(path))
+				return false;
+			htri_t obj_exists = H5Oexists_by_name(id,path.c_str(),H5P_LINK_ACCESS_DEFAULT);
+			if(obj_exists < 0) throw std::runtime_error(""); //TODO
+			else return (obj_exists > 0);
+		}
 		Group openGroup(const std::string &name) {
 			return Group(H5Gopen(id,name.c_str(),H5P_GROUP_ACCESS_DEFAULT));
 		}
@@ -584,18 +673,18 @@ namespace H5TL {
 			}
 		}
 		//create dataset and write data in
-		Dataset writeDataset(const std::string &name, const void* buffer, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
+		Dataset write(const std::string &name, const void* buffer, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
 			//create and write in one fell swoop
 			Dataset dset = createDataset(name,dt,space,props);
 			dset.write(buffer,dt,space);
 			return dset;
 		}
 		template<typename data_t>
-		Dataset writeDataset(const std::string &name, const data_t& buffer, const DSpace &space, const DProps &props = DProps::DEFAULT) {
+		Dataset write(const std::string &name, const data_t& buffer, const DSpace &space, const DProps &props = DProps::DEFAULT) {
 			return writeDataset(name,data(buffer),dtype(buffer),space,props);
 		}
 		template<typename data_t>
-		Dataset writeDataset(const std::string &name, const data_t& buffer, const DProps &props = DProps::DEFAULT) {
+		Dataset write(const std::string &name, const data_t& buffer, const DProps &props = DProps::DEFAULT) {
 			return writeDataset(name,data(buffer),dtype(buffer),shape(buffer),props);
 		}
 		/*
@@ -907,13 +996,14 @@ namespace H5TL {
 			return d.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			size_t n = shape.size();
-			if(n > N)
+			if(shape.size() > N)
 				throw runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
 			blitz::TinyVector<int,N> extent(1);
-			//we can't use std::copy_backward because blitz::TinyVector::iterator is just a raw pointer
-			for(int i = N-n; i < N; ++i)
-				extent[i] = shape[i];
+			//we can't use std::copy_backward on MSVC because blitz::TinyVector::iterator is just a raw pointer
+			auto in = shape.end();
+			auto out = extent.end();
+			while(in != shape.begin())
+				*(--out) = int(*(--in));
 			return blitz::Array<T,N>(extent);
 		}
 	};

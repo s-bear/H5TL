@@ -32,6 +32,8 @@ int main(int argc, char* argv[])
 	//creating & opening datasets
 	//writing & reading datasets
 	H5TL::File f("test.h5",H5TL::File::TRUNCATE);
+	
+	auto a = f.openDataset("data");
 	auto x = f.createDataset("data/x",H5TL::DType::UINT8,H5TL::DSpace::SCALAR);
 	x.write(15);
 	int y = x.read<int>();
