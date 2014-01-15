@@ -41,46 +41,73 @@ namespace std {
 namespace H5TL {
 	//General library interface:
 
+	class h5tl_error : public std::runtime_error {
+	public:
+		explicit h5tl_error(const std::string& what_arg) : std::runtime_error(what_arg) {}
+		explicit h5tl_error(const char* what_arg) : std::runtime_error(what_arg) {}
+	};
+
 	//Error handling:
-	inline std::string _error_class_name(hid_t class_id) {
-		ssize_t len = H5Eget_class_name(class_id,nullptr,0);
-		std::string tmp(len,'\0');
-		H5Eget_class_name(class_id,&(tmp[0]),len);
-		return tmp;
-	}
-	inline herr_t _append_error(unsigned n, const H5E_error2_t *err_desc, void *client_data) {
-		std::ostream &os = *(std::ostream*)client_data;
-		os << "#" << n << ":" << err_desc->file_name << " line " << err_desc->line << " in " << err_desc->func_name << ": " << err_desc->desc << std::endl;
-		os << "class: " << _error_class_name(err_desc->maj_num) << ": " << _error_class_name(err_desc->min_num) << std::endl;
-		return 1;
-	}
-	inline std::string get_error() {
-		std::ostringstream oss;
-		H5Ewalk2(H5E_DEFAULT,H5E_WALK_DOWNWARD,_append_error,&oss);
-		H5Eclear2(H5E_DEFAULT);
-		return oss.str();
-	}
+	class ErrorHandler {
+		//use constructor of private static member to run this when the library loads:
+		ErrorHandler() {
+			//disable automatic error printing
+			H5Eset_auto(H5E_DEFAULT,nullptr,nullptr);
+		}
+		static const ErrorHandler EH;
+	protected:
+		static std::string class_name(hid_t class_id) {
+			ssize_t len = H5Eget_class_name(class_id,nullptr,0);
+			std::string tmp(len,'\0');
+			H5Eget_class_name(class_id,&(tmp[0]),len);
+			return tmp;
+		}
+		static herr_t append_error(unsigned n, const H5E_error2_t *err_desc, void *client_data) {
+			std::ostream &os = *(std::ostream*)client_data;
+			os << "#" << n << ": " << err_desc->file_name << " line " << err_desc->line << ": " << err_desc->func_name << "(): " << std::endl;
+			os << "    " << H5Eget_major(err_desc->maj_num) << ": " << H5Eget_minor(err_desc->min_num) << ": " << err_desc->desc << std::endl;
+			//os << "class: " << _error_class_name(err_desc->cls_id) << std::endl;
+			return 1;
+		}
+	public:
+		static std::string get_error() {
+			std::ostringstream oss;
+			H5Ewalk2(H5E_DEFAULT,H5E_WALK_DOWNWARD,append_error,&oss);
+			H5Eclear2(H5E_DEFAULT);
+			return oss.str();
+		}
+	};
+	const ErrorHandler ErrorHandler::EH;
+
 	inline void check(herr_t e) {
-		if(e < 0) throw std::runtime_error(get_error());
+		if(e < 0) throw h5tl_error(ErrorHandler::get_error());
+	}
+	inline bool check_tri(htri_t t) {
+		if(t < 0) throw h5tl_error(ErrorHandler::get_error());
+		else return t > 0;
+	}
+	inline hid_t check_id(hid_t id) {
+		if(id < 0) throw h5tl_error(ErrorHandler::get_error());
+		else return id;
 	}
 	/**
 	Initializes the HDF5 library.
 	*/
 	inline void open() {
-		if(H5open() < 0) throw std::runtime_error("open failed.");
+		check(H5open());
 	}
 	/**
 	Close the HDF5 library.
 	*/
 	inline void close() {
-		if(H5close() < 0) throw std::runtime_error("close failed.");
+		check(H5close());
 	}
 	
 	class ID {
 	protected:
 		hid_t id;
 		ID() : id(0) {}
-		ID(hid_t _id) : id(_id) {}
+		ID(hid_t _id) : id(check_id(_id)) {}
 	public:
 		ID(const ID& i) : id(i.id) {}
 		ID(ID &&i) : id(i.id) {i.id=0;}
@@ -90,7 +117,7 @@ namespace H5TL {
 		virtual bool operator==(const ID& other) const {
 			return this == &other || id == other.id;
 		}
-		virtual bool valid() const {return H5Iis_valid(id) > 0;}
+		virtual bool valid() const {return check_tri(H5Iis_valid(id));}
 		virtual operator bool() const {return valid();}
 
 	};
@@ -106,16 +133,16 @@ namespace H5TL {
 			size(sz);
 		}
 	public:
-		DType(const DType &dt) : ID(H5Tcopy(dt)) {}
+		DType(const DType &dt) : ID(check_id(H5Tcopy(dt))) {}
 		DType(DType &&dt) : ID(std::move(dt)) {}
-		DType(const DType &dt, size_t sz) : ID(H5Tcopy(dt)) {
+		DType(const DType &dt, size_t sz) : ID(check_id(H5Tcopy(dt))) {
 			size(sz);
 		}
 		virtual ~DType() {
 			if(id) close();
 		}
 		void close() {
-			H5Tclose(id); id = 0;
+			check(H5Tclose(id)); id = 0;
 		}
 		void size(size_t sz) {
 			if(sz == 0) check(H5Tset_size(id,H5T_VARIABLE));
@@ -124,11 +151,8 @@ namespace H5TL {
 		virtual size_t size() const {
 			return H5Tget_size(id);
 		}
-		virtual H5T_class_t classid() const {
-			return H5Tget_class(id);
-		}
 		virtual bool operator==(const DType& other) const {
-			return H5Tequal(id,other) > 0;
+			return check_tri(H5Tequal(id,other));
 		}
 	static const PDType NONE;
 	static const PDType INT8;
@@ -141,7 +165,7 @@ namespace H5TL {
 	static const PDType UINT64;
 	static const PDType FLOAT;
 	static const PDType DOUBLE;
-	static const DType STRING;
+	static const PDType STRING;
 	};
 	class PDType : public DType {
 		friend class DType;
@@ -164,7 +188,7 @@ namespace H5TL {
 	const PDType DType::UINT64(H5T_NATIVE_UINT64);
 	const PDType DType::FLOAT(H5T_NATIVE_FLOAT);
 	const PDType DType::DOUBLE(H5T_NATIVE_DOUBLE);
-	const DType DType::STRING(H5T_C_S1);
+	const PDType DType::STRING(H5T_C_S1);
 
 	//template function returns reference to predefined datatype
 	template<typename T> const DType& dtype() { static_assert(false,"Type T is not convertible to a H5TL::DType");}
@@ -253,7 +277,7 @@ namespace H5TL {
 			if(id) close();
 		}
 		virtual void close() {
-			H5Pclose(id); id = 0;
+			check(H5Pclose(id)); id = 0;
 		}
 	};
 
@@ -267,7 +291,7 @@ namespace H5TL {
 		LProps(LProps &&lp) : Props(std::move(lp)) {}
 		virtual ~LProps() {}
 		LProps& create_intermediate() {
-			H5Pset_create_intermediate_group(id,1);
+			check(H5Pset_create_intermediate_group(id,1));
 			return *this;
 		}
 	};
@@ -291,19 +315,19 @@ namespace H5TL {
 		//chainable property setters:
 		//eg. DProps().chunked().deflate(3).shuffle();
 		DProps& compact() {
-			H5Pset_layout(id,H5D_COMPACT);
+			check(H5Pset_layout(id,H5D_COMPACT));
 			return *this;
 		}
 		DProps& contiguous() {
-			H5Pset_layout(id,H5D_CONTIGUOUS);
+			check(H5Pset_layout(id,H5D_CONTIGUOUS));
 			return *this;
 		}
 		DProps& chunked() {
-			H5Pset_layout(id,H5D_CHUNKED);
+			check(H5Pset_layout(id,H5D_CHUNKED));
 			return *this;
 		}
 		DProps& chunked(const std::vector<hsize_t> &chunk_shape) {
-			H5Pset_chunk(id,int(chunk_shape.size()),chunk_shape.data());
+			check(H5Pset_chunk(id,int(chunk_shape.size()),chunk_shape.data()));
 			return *this;
 		}
 		DProps& chunked(const std::vector<hsize_t> &data_shape, size_t item_nbytes, size_t chunk_nbytes=0, size_t line_nbytes = 8192) {
@@ -340,15 +364,15 @@ namespace H5TL {
 			return chunked(chunk_shape);
 		}
 		DProps& deflate(unsigned int level) {
-			H5Pset_deflate(id,level);
+			check(H5Pset_deflate(id,level));
 			return *this;
 		}
 		DProps& fletcher32() {
-			H5Pset_fletcher32(id);
+			check(H5Pset_fletcher32(id));
 			return *this;
 		}
 		DProps& shuffle() {
-			H5Pset_shuffle(id);
+			check(H5Pset_shuffle(id));
 			return *this;
 		}
 		bool is_chunked() const {
@@ -380,16 +404,16 @@ namespace H5TL {
 			if(id) close();
 		}
 		void close() {
-			H5Sclose(id);
+			check(H5Sclose(id));
 		}
 		Selection& all() {
-			H5Sselect_all(id); return *this;
+			check(H5Sselect_all(id)); return *this;
 		}
 		Selection& none() {
-			H5Sselect_none(id); return *this;
+			check(H5Sselect_none(id)); return *this;
 		}
 		Selection& set(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
-			H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr);
+			check(H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr));
 			return *this;
 		}
 		static const Selection ALL;  
@@ -408,31 +432,31 @@ namespace H5TL {
 		DSpace(DSpace &&ds) : ID(std::move(ds)) {}
 		DSpace(const std::vector<hsize_t>& shape) : ID(0) {
 			if(shape.size()) {
-				id = H5Screate(H5S_SIMPLE);
+				id = check_id(H5Screate(H5S_SIMPLE));
 				extent(shape,shape);
 			} else {
-				id = H5Screate(H5S_SCALAR);
+				id = check_id(H5Screate(H5S_SCALAR));
 			}
 		}
 		DSpace(const std::vector<hsize_t> &shape, const std::vector<hsize_t> &maxshape) : ID(H5Screate(H5S_SIMPLE)) {
 			if(shape.size()) {
-				id = H5Screate(H5S_SIMPLE);
+				id = check_id(H5Screate(H5S_SIMPLE));
 				extent(shape,maxshape);
 			} else {
-				id = H5Screate(H5S_SCALAR);
+				id = check_id(H5Screate(H5S_SCALAR));
 			}
 		}
 		~DSpace() {
 			if(id) close();
 		}
 		void close() {
-			H5Sclose(id);
+			check(H5Sclose(id));
 		}
 		void extent(const std::vector<hsize_t> &shape) {
 			extent(shape,shape);
 		}
 		void extent(const std::vector<hsize_t> &shape, const std::vector<hsize_t> &maxshape) {
-			H5Sset_extent_simple(id,int(shape.size()),shape.data(),maxshape.data());	
+			check(H5Sset_extent_simple(id,int(shape.size()),shape.data(),maxshape.data()));
 		}
 		std::vector<hsize_t> extent() const {
 			if(H5Sget_simple_extent_type(id) == H5S_SIMPLE) {
@@ -480,7 +504,7 @@ namespace H5TL {
 		Location(Location &&loc) : ID(std::move(loc)) {}
 		virtual ~Location() {}
 		virtual bool exists() {
-			return H5Oexists_by_name(id,".",H5P_LINK_ACCESS_DEFAULT) > 0;
+			return check_tri(H5Oexists_by_name(id,".",H5P_LINK_ACCESS_DEFAULT));
 		}
 	};
 
@@ -495,7 +519,7 @@ namespace H5TL {
 			if(id) close();
 		}
 		virtual void close() {
-			H5Dclose(id); id = 0;
+			check(H5Dclose(id)); id = 0;
 		}
 		DSpace space() {
 			return DSpace(H5Dget_space(id));
@@ -526,7 +550,7 @@ namespace H5TL {
 		*/
 		//write
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
-			H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
+			check(H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer));
 		}
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
 			write(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
@@ -562,7 +586,7 @@ namespace H5TL {
 		//read
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			//if buffer_shape is empty, allocate space to hold the selection???
-			H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer);
+			check(H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer));
 		}
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
 			read(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
@@ -611,7 +635,7 @@ namespace H5TL {
 			if(id) close();
 		}
 		virtual void close() {
-			H5Gclose(id);
+			check(H5Gclose(id));
 		}
 		using ID::valid;
 		virtual bool valid(const std::string &path) {
@@ -635,28 +659,26 @@ namespace H5TL {
 				//change the character to null
 				current_path[delimiter_pos] = '\0';
 				//check the link
-				htri_t link_exists = H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
-				if(link_exists < 0) throw std::runtime_error(""); //TODO
-				else if(link_exists == 0) return false;
+				if(!check_tri(H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT))) return false;
 				//check that the link resolves to an object
-				htri_t obj_exists = H5Oexists_by_name(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
-				if(obj_exists < 0) throw std::runtime_error(""); //TODO
-				else if(obj_exists == 0) return false;
+				if(!check_tri(H5Oexists_by_name(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT))) return false;
 				//replace the delimiter and move on to the next step of the path
 				current_path[delimiter_pos] = '/';
 			}
 			//all of the steps of the path have been checked, except the last
 			//make sure the link to the last object exists
-			htri_t link_exists = H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT);
-			if(link_exists < 0) throw std::runtime_error(""); //TODO
-			else return (link_exists > 0);
+			return check_tri(H5Lexists(id,current_path.c_str(),H5P_LINK_ACCESS_DEFAULT));
 		}
 		virtual bool exists(const std::string &path) {
 			if(!valid(path))
 				return false;
-			htri_t obj_exists = H5Oexists_by_name(id,path.c_str(),H5P_LINK_ACCESS_DEFAULT);
-			if(obj_exists < 0) throw std::runtime_error(""); //TODO
-			else return (obj_exists > 0);
+			return check_tri(H5Oexists_by_name(id,path.c_str(),H5P_LINK_ACCESS_DEFAULT));
+		}
+		Group group(const std::string& name) {
+			if(exists(name))
+				return openGroup(name); //if it's not a group, this will throw an exception
+			else
+				return createGroup(name);
 		}
 		Group openGroup(const std::string &name) {
 			return Group(H5Gopen(id,name.c_str(),H5P_GROUP_ACCESS_DEFAULT));
@@ -732,10 +754,21 @@ namespace H5TL {
 			return ds.read<data_t>();
 		}
 
-		/*
-		void createHardLink();
-		void createLink();
-		*/
+		void createHardLink(const std::string& name, const Group& target_group, const std::string& target) {
+			check(H5Lcreate_hard(target_group,target.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
+		}
+		void createHardLink(const std::string& name, const std::string& target) {
+			createHardLink(name,*this,target);
+		}
+		void createHardLink(const std::string& name, const Location& target) {
+			check(H5Olink(target,id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
+		}
+		void createLink(const std::string& name, const std::string& target) {
+			check(H5Lcreate_soft(path.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
+		}
+		void createLink(const std::string& name, const std::string& file, const std::string& target) {
+			check(H5Lcreate_external(file.c_str(),target.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
+		}
 	};
 
 	//Files
@@ -752,20 +785,19 @@ namespace H5TL {
 		};
 		File(const std::string& name, const OpenMode& mode = READ_WRITE) {
 			if(mode == TRUNCATE || mode == CREATE) {
-				id = H5Fcreate(name.c_str(),mode,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT);
+				id = check_id(H5Fcreate(name.c_str(),mode,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT));
 			} else {
-				id = H5Fopen(name.c_str(),mode,H5P_FILE_ACCESS_DEFAULT);
-				if(!valid()) //if we failed to open, let's try creating the file
-					id = H5Fcreate(name.c_str(),CREATE,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT);
+				hid_t tmp_id = H5Fopen(name.c_str(),mode,H5P_FILE_ACCESS_DEFAULT);
+				if(tmp_id < 0) //if we failed to open, let's try creating the file
+					tmp_id = H5Fcreate(name.c_str(),CREATE,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT);
+				id = check_id(tmp_id);
 			}
-			if(!valid())
-				throw std::runtime_error("Failed to open file");
 		}
 		virtual ~File() {
 			if(id) close();
 		}
 		virtual void close() {
-			H5Fclose(id); id = 0;
+			check(H5Fclose(id)); id = 0;
 		}
 	};
 }

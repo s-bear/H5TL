@@ -25,22 +25,20 @@ ostream& operator<<(ostream& os, const vector<T>& vec) {
 	return os;
 }
 
-int main(int argc, char* argv[])
-{
-	//Testing:
-	//creating & opening files
-	//creating & opening groups
-	//creating & opening datasets
-	//writing & reading datasets
-	H5TL::File f("test.h5",H5TL::File::TRUNCATE);
-	f.write("note","This file was created using H5TL");
+int main(int argc, char* argv[]) {
+	try {
+		H5TL::File f("test.h5");
+		f.write("note","This file was created using H5TL");
 
-	vector<int> a(10,1);
-	cout << "a: " << a;
-	partial_sum(a.begin(),a.end(),a.begin());
-	f.write("data/a",a);
+		vector<int> a(10,1);
+		cout << "a: " << a;
+		partial_sum(a.begin(),a.end(),a.begin());
+		f.write("data/a",a);
 
-	vector<float> b = f.read<vector<float>>("data/a");
-	cout << "b: " << b;
-	return 0;
+		vector<float> b = f.read<vector<float>>("data/a");
+		cout << "b: " << b;
+		return 0;
+	} catch(H5TL::h5tl_error &e) {
+		cerr << e.what();
+	}
 }
