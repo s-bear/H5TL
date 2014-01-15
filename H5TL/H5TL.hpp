@@ -57,9 +57,12 @@ namespace H5TL {
 	inline std::string get_error() {
 		std::ostringstream oss;
 		H5Ewalk2(H5E_DEFAULT,H5E_WALK_DOWNWARD,_append_error,&oss);
+		H5Eclear2(H5E_DEFAULT);
 		return oss.str();
 	}
-
+	inline void check(herr_t e) {
+		if(e < 0) throw std::runtime_error(get_error());
+	}
 	/**
 	Initializes the HDF5 library.
 	*/
@@ -115,11 +118,14 @@ namespace H5TL {
 			H5Tclose(id); id = 0;
 		}
 		void size(size_t sz) {
-			if(sz == 0) H5Tset_size(id,H5T_VARIABLE);
-			else H5Tset_size(id,sz);
+			if(sz == 0) check(H5Tset_size(id,H5T_VARIABLE));
+			else check(H5Tset_size(id,sz));
 		}
 		virtual size_t size() const {
 			return H5Tget_size(id);
+		}
+		virtual H5T_class_t classid() const {
+			return H5Tget_class(id);
 		}
 		virtual bool operator==(const DType& other) const {
 			return H5Tequal(id,other) > 0;
@@ -158,7 +164,7 @@ namespace H5TL {
 	const PDType DType::UINT64(H5T_NATIVE_UINT64);
 	const PDType DType::FLOAT(H5T_NATIVE_FLOAT);
 	const PDType DType::DOUBLE(H5T_NATIVE_DOUBLE);
-	const DType DType::STRING(H5T_C_S1, 0);
+	const DType DType::STRING(H5T_C_S1);
 
 	//template function returns reference to predefined datatype
 	template<typename T> const DType& dtype() { static_assert(false,"Type T is not convertible to a H5TL::DType");}
@@ -173,14 +179,14 @@ namespace H5TL {
 	template<> const DType& dtype<uint64_t>() {return DType::UINT64;}
 	template<> const DType& dtype<float>() {return DType::FLOAT;}
 	template<> const DType& dtype<double>() {return DType::DOUBLE;}
-	template<> const DType& dtype<std::string>() {return DType::STRING;}
-	//const char* might be ambiguous, so leaving it out for now
+	template<> const DType& dtype<const char*>() {return DType::STRING;}
 
 	//H5TL adapter traits, enable parameter is for using enable_if for specializations
 	//specializations for compatible types are at the end of this file
 	template<typename data_t, typename enable=void>
 	struct adapt {
 		//here are required typedefs and member functions for complete compatibility
+		typedef typename std::remove_cv<data_t>::type data_t;
 		typedef const DType& dtype_return;
 		typedef void* data_return;
 		typedef const void* const_data_return;
@@ -681,12 +687,51 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		Dataset write(const std::string &name, const data_t& buffer, const DSpace &space, const DProps &props = DProps::DEFAULT) {
-			return writeDataset(name,data(buffer),dtype(buffer),space,props);
+			return write(name,H5TL::data(buffer),H5TL::dtype(buffer),space,props);
 		}
 		template<typename data_t>
 		Dataset write(const std::string &name, const data_t& buffer, const DProps &props = DProps::DEFAULT) {
-			return writeDataset(name,data(buffer),dtype(buffer),shape(buffer),props);
+			return write(name,H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),props);
 		}
+		//open and read dataset
+		Dataset read(const std::string &name, void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			Dataset ds = openDataset(name);
+			ds.read(buffer,buffer_type,buffer_shape,selection);
+			return ds;
+		}
+		Dataset read(const std::string &name, void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			return read(name, buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,selection);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t& buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,offset);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t& buffer, const Selection& selection = Selection::ALL) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),selection);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t& buffer, const std::vector<hsize_t>& offset) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),offset);
+		}
+		//open dataset, read with allocate
+		template<typename data_t>
+		typename adapt<data_t>::allocate_return
+		read(const std::string &name, const std::vector<hsize_t>& offset, const std::vector<hsize_t>& buffer_shape) {
+			Dataset ds = openDataset(name);
+			return ds.read<data_t>(offset,buffer_shape);
+		}
+		template<typename data_t>
+		typename adapt<data_t>::allocate_return
+		read(const std::string &name) {
+			Dataset ds = openDataset(name);
+			return ds.read<data_t>();
+		}
+
 		/*
 		void createHardLink();
 		void createLink();
@@ -800,7 +845,7 @@ namespace H5TL {
 			return std::vector<hsize_t>(1,N);
 		}
 		static dtype_return dtype(const data_t(&)[N]) {
-			return H5TL::dtype<T>();
+			return H5TL::dtype<data_t>();
 		}
 		static data_return data(data_t(&d)[N]) {
 			return std::begin(d);
@@ -812,6 +857,31 @@ namespace H5TL {
 			if(std::product(begin(shape),end(shape),hsize_t(1)) != N)
 				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + std::join(", ",shape.begin(),shape.end()) + "}");
 			return new T[N];
+		}
+	};
+
+	//C string adapter
+	template<size_t N>
+	struct adapt<const char[N]> {
+		typedef const char data_t;
+		typedef DType dtype_return;
+		typedef const char* const_data_return;
+		typedef data_t* allocate_return;
+
+		static size_t rank(const data_t(&)[N]) {
+			return 0;
+		}
+		static std::vector<hsize_t> shape(const data_t(&)[N]) {
+			return std::vector<hsize_t>();
+		}
+		static dtype_return dtype(const data_t(&)[N]) {
+			return DType(DType::STRING,N);
+		}
+		static const_data_return data(const data_t(&d)[N]) {
+			return std::begin(d);
+		}
+		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
+			static_assert(false,"Cannot allocate a C-style string. Please use std::string instead");
 		}
 	};
 	
@@ -890,7 +960,7 @@ namespace H5TL {
 			return std::vector<hsize_t>();
 		}
 		static dtype_return dtype(const std::string& s) {
-			return DType(H5TL::dtype<std::string>(), s.size());
+			return DType(DType::STRING, s.size());
 		}
 		static data_return data(std::string& s) {
 			return &(s[0]); //s.data() always returns const pointer :(

@@ -22,6 +22,7 @@ ostream& operator<<(ostream& os, const vector<T>& vec) {
 		else {os << ", " << t;}
 	}
 	os << "}" << endl;
+	return os;
 }
 
 int main(int argc, char* argv[])
@@ -32,15 +33,14 @@ int main(int argc, char* argv[])
 	//creating & opening datasets
 	//writing & reading datasets
 	H5TL::File f("test.h5",H5TL::File::TRUNCATE);
-	
-	auto a = f.openDataset("data");
-	auto x = f.createDataset("data/x",H5TL::DType::UINT8,H5TL::DSpace::SCALAR);
-	x.write(15);
-	int y = x.read<int>();
+	f.write("note","This file was created using H5TL");
 
-	auto z = x.read<blitz::Array<float,2>>();
+	vector<int> a(10,1);
+	cout << "a: " << a;
+	partial_sum(a.begin(),a.end(),a.begin());
+	f.write("data/a",a);
 
-	cout << boolalpha;
-	cout << "equal? " << (x.dtype() == H5TL::DType::UINT8) << endl;
+	vector<float> b = f.read<vector<float>>("data/a");
+	cout << "b: " << b;
 	return 0;
 }
