@@ -494,27 +494,27 @@ namespace H5TL {
 
 	const DSpace DSpace::SCALAR(H5Screate(H5S_SCALAR));
 
-	//Location
+	//Object
 	//Files, Groups, Datasets
-	class Location : public ID {
+	class Object : public ID {
 	protected:
-		Location() : ID(0) {}
-		Location(hid_t _id) : ID(_id) {}
+		Object() : ID(0) {}
+		Object(hid_t _id) : ID(_id) {}
 	public:
-		Location(Location &&loc) : ID(std::move(loc)) {}
-		virtual ~Location() {}
+		Object(Object &&loc) : ID(std::move(loc)) {}
+		virtual ~Object() {}
 		virtual bool exists() {
 			return check_tri(H5Oexists_by_name(id,".",H5P_LINK_ACCESS_DEFAULT));
 		}
 	};
 
-	class Dataset : public Location {
+	class Dataset : public Object {
 		friend class Group;
 	protected:
-		Dataset() : Location() {}
-		Dataset(hid_t id) : Location(id) {}
+		Dataset() : Object() {}
+		Dataset(hid_t id) : Object(id) {}
 	public:
-		Dataset(Dataset &&dset) : Location(std::move(dset)) {}
+		Dataset(Dataset &&dset) : Object(std::move(dset)) {}
 		virtual ~Dataset() {
 			if(id) close();
 		}
@@ -625,12 +625,12 @@ namespace H5TL {
 	};
 
 	//Files, Groups
-	class Group : public Location {
+	class Group : public Object {
 	protected:
-		Group() : Location() {}
-		Group(hid_t id) : Location(id) {}
+		Group() : Object() {}
+		Group(hid_t id) : Object(id) {}
 	public:
-		Group(Group &&grp) : Location(std::move(grp)) {}
+		Group(Group &&grp) : Object(std::move(grp)) {}
 		virtual ~Group() {
 			if(id) close();
 		}
@@ -753,14 +753,14 @@ namespace H5TL {
 			Dataset ds = openDataset(name);
 			return ds.read<data_t>();
 		}
-
+		//linking
 		void createHardLink(const std::string& name, const Group& target_group, const std::string& target) {
 			check(H5Lcreate_hard(target_group,target.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
 		}
 		void createHardLink(const std::string& name, const std::string& target) {
 			createHardLink(name,*this,target);
 		}
-		void createHardLink(const std::string& name, const Location& target) {
+		void createHardLink(const std::string& name, const Object& target) {
 			check(H5Olink(target,id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
 		}
 		void createLink(const std::string& name, const std::string& target) {
