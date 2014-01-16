@@ -41,21 +41,23 @@ namespace std {
 namespace H5TL {
 	//General library interface:
 
+	///exception class for all HDF5 errors.
 	class h5tl_error : public std::runtime_error {
 	public:
 		explicit h5tl_error(const std::string& what_arg) : std::runtime_error(what_arg) {}
 		explicit h5tl_error(const char* what_arg) : std::runtime_error(what_arg) {}
 	};
 
-	//Error handling:
+	///<summary> class for walking the HDF5 error stack.
 	class ErrorHandler {
+	protected:
 		//use constructor of private static member to run this when the library loads:
 		ErrorHandler() {
 			//disable automatic error printing
 			H5Eset_auto(H5E_DEFAULT,nullptr,nullptr);
 		}
 		static const ErrorHandler EH;
-	protected:
+		
 		static std::string class_name(hid_t class_id) {
 			ssize_t len = H5Eget_class_name(class_id,nullptr,0);
 			std::string tmp(len,'\0');
@@ -70,25 +72,54 @@ namespace H5TL {
 			return 1;
 		}
 	public:
-		static std::string get_error() {
+		/** \brief Return a std::string for the HDF5 error stack.
+		Walks and then clears the indicated HDF5 error stack, building a string description of the current error.
+		\param[in] es The error stack to walk, and subsequently clear.
+		\return A string representation of the error stack.
+		*/
+		static std::string get_error(hid_t es = H5E_DEFAULT) {
 			std::ostringstream oss;
-			H5Ewalk2(H5E_DEFAULT,H5E_WALK_DOWNWARD,append_error,&oss);
-			H5Eclear2(H5E_DEFAULT);
+			H5Ewalk2(es,H5E_WALK_DOWNWARD,append_error,&oss);
+			H5Eclear2(es);
 			return oss.str();
 		}
 	};
 	const ErrorHandler ErrorHandler::EH;
 
+	/** \brief Checks an HDF5 herr_t return code for errors.
+	 * Checks an HDF5 herr_t return code for errors. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
+	 * \param[in] e Error code to check, throws an H5TL::h5tl_error if e < 0.
+	 */
 	inline void check(herr_t e) {
 		if(e < 0) throw h5tl_error(ErrorHandler::get_error());
 	}
+
+	/** \brief Checks an HDF5 htri_t return code for errors and converts it to a bool.
+	* Checks an HDF5 tri_t return code for errors and converts it to a bool. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
+	* \param t The htri_t return code to check
+	* \returns true if t > 0
+	*/
 	inline bool check_tri(htri_t t) {
 		if(t < 0) throw h5tl_error(ErrorHandler::get_error());
 		else return t > 0;
 	}
+	/** \brief Checks an HDF5 hid_t return code for errors.
+	* Checks an HDF5 hid_t return code for errors and returns it. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
+	* \param id The hid_t return code to check.
+	* \returns id, unchanged.
+	*/
 	inline hid_t check_id(hid_t id) {
 		if(id < 0) throw h5tl_error(ErrorHandler::get_error());
 		else return id;
+	}
+	/** \brief Checks an HDF5 ssize_t return code for errors.
+	* Checks an HDF5 ssize_t return code for errors and returns it. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
+	* \param sz The ssize_t return code to check.
+	* \returns sz, unchanged.
+	*/
+	inline ssize_t check_size(ssize_t sz) {
+		if(sz < 0) throw h5tl_error(ErrorHandler::get_error());
+		else return sz;
 	}
 	/**
 	Initializes the HDF5 library.
@@ -103,6 +134,7 @@ namespace H5TL {
 		check(H5close());
 	}
 	
+	/** \brief Virtual class encapsulating an hid_t. */
 	class ID {
 	protected:
 		hid_t id;
@@ -117,6 +149,9 @@ namespace H5TL {
 		virtual bool operator==(const ID& other) const {
 			return this == &other || id == other.id;
 		}
+		/** \brief Checks that this ID refers to a valid HDF5 object.
+		* \returns true if this refers to a valid HDF5 object.
+		*/
 		virtual bool valid() const {return check_tri(H5Iis_valid(id));}
 		virtual operator bool() const {return valid();}
 
@@ -125,8 +160,12 @@ namespace H5TL {
 	class DType;
 	class PDType;
 
+	/** \brief Encapsulate an HDF5 data type object.
+	* DetailedDescription
+	*/
 	class DType : public ID {
 		friend class Dataset;
+		friend class Attribute;
 	protected:
 		DType(hid_t id) : ID(id) {}
 		DType(hid_t id, size_t sz) : ID(H5Tcopy(id)) {
@@ -144,6 +183,10 @@ namespace H5TL {
 		void close() {
 			check(H5Tclose(id)); id = 0;
 		}
+		/** \brief Set the size, in bytes, of the datatype
+		 * Set the size, in bytes, of the datatype.
+		 * \param[in] sz The size of the datatype, in bytes. Set to 0 for variable-size strings.
+		 */
 		void size(size_t sz) {
 			if(sz == 0) check(H5Tset_size(id,H5T_VARIABLE));
 			else check(H5Tset_size(id,sz));
@@ -154,18 +197,19 @@ namespace H5TL {
 		virtual bool operator==(const DType& other) const {
 			return check_tri(H5Tequal(id,other));
 		}
-	static const PDType NONE;
-	static const PDType INT8;
-	static const PDType UINT8;
-	static const PDType INT16;
-	static const PDType UINT16;
-	static const PDType INT32;
-	static const PDType UINT32;
-	static const PDType INT64;
-	static const PDType UINT64;
-	static const PDType FLOAT;
-	static const PDType DOUBLE;
-	static const PDType STRING;
+	static const PDType NONE; ///< Not a valid type
+	static const PDType INT8; ///< Native 8-bit signed integer type
+	static const PDType UINT8; ///< Native 8-bit unsigned integer type
+	static const PDType INT16; ///< Native 16-bit signed integer type
+	static const PDType UINT16; ///< Native 16-bit unsigned integer type
+	static const PDType INT32; ///< Native 32-bit signed integer type
+	static const PDType UINT32; ///< Native 32-bit unsigned integer type
+	static const PDType INT64; ///< Native 64-bit signed integer type
+	static const PDType UINT64; ///< Native 64-bit unsigned integer type
+	static const PDType FLOAT; ///< Native float type
+	static const PDType DOUBLE; ///< Native double-precision float type
+	static const PDType STRING; ///< Native string character type (copy and set size for multi-character strings)
+	static const PDType REFERENCE; ///< HDF5 object reference type
 	};
 	class PDType : public DType {
 		friend class DType;
@@ -189,6 +233,7 @@ namespace H5TL {
 	const PDType DType::FLOAT(H5T_NATIVE_FLOAT);
 	const PDType DType::DOUBLE(H5T_NATIVE_DOUBLE);
 	const PDType DType::STRING(H5T_C_S1);
+	const PDType DType::REFERENCE(H5T_STD_REF_OBJ);
 
 	//template function returns reference to predefined datatype
 	template<typename T> const DType& dtype() { static_assert(false,"Type T is not convertible to a H5TL::DType");}
@@ -423,6 +468,7 @@ namespace H5TL {
 
 	class DSpace : public ID {
 		friend class Dataset;
+		friend class Attribute;
 	protected:
 		
 		DSpace(hid_t id) : ID(id) {}
@@ -494,17 +540,97 @@ namespace H5TL {
 
 	const DSpace DSpace::SCALAR(H5Screate(H5S_SCALAR));
 
+	//Attributes
+	class Attribute : public ID {
+	friend class Object;
+	protected:
+		Attribute() : ID(0) {}
+		Attribute(hid_t id) : ID(id) {}
+	public:
+		Attribute(Attribute &&attr) : ID(std::move(attr)) {}
+		virtual ~Attribute() {
+			if(id) close();
+		}
+		virtual void close() {
+			check(H5Aclose(id)); id = 0;
+		}
+		std::string name() {
+			ssize_t len = check_size(H5Aget_name(id,0,nullptr));
+			std::string tmp(len,'\0');
+			check_size(H5Aget_name(id,len,&(tmp[0])));
+			return tmp;
+		}
+		DType dtype() {
+			return DType(H5Aget_type(id));
+		}
+		DSpace space() {
+			return DSpace(H5Aget_space(id));
+		}
+		void write(const void* buffer, const DType &buffer_type) {
+			check(H5Awrite(id,buffer_type,buffer));
+		}
+		template<typename data_t>
+		void write(const data_t& buffer) {
+			write(H5TL::data(buffer),H5TL::dtype(buffer));
+		}
+		void read(void* buffer, const DType &buffer_type) {
+			check(H5Aread(id,buffer_type,buffer));
+		}
+		template<typename data_t>
+		void read(data_t& buffer) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer));
+		}
+		template<typename data_t>
+		void read() {
+			auto buffer = H5TL::allocate<data_t>(space().extent(),dtype());
+			read(buffer);
+			return buffer;
+		}
+	};
+
 	//Object
 	//Files, Groups, Datasets
 	class Object : public ID {
 	protected:
 		Object() : ID(0) {}
-		Object(hid_t _id) : ID(_id) {}
+		Object(hid_t id) : ID(id) {}
 	public:
 		Object(Object &&loc) : ID(std::move(loc)) {}
 		virtual ~Object() {}
 		virtual bool exists() {
 			return check_tri(H5Oexists_by_name(id,".",H5P_LINK_ACCESS_DEFAULT));
+		}
+		//attributes:
+		bool hasAttribute(const std::string& name) {
+			return check_tri(H5Aexists(id,name.c_str()));
+		}
+		Attribute createAttribute(const std::string& name, const DType& type, const DSpace& space) {
+			return Attribute(H5Acreate(id,name.c_str(),type,space,H5P_ATTRIBUTE_CREATE_DEFAULT,H5P_DEFAULT));
+		}
+		Attribute openAttribute(const std::string& name) {
+			return Attribute(H5Aopen(id,name.c_str(),H5P_DEFAULT));
+		}
+		Attribute writeAttribute(const std::string& name, const void* buffer, const DType& buffer_type, const DSpace& space) {
+			Attribute tmp = createAttribute(name,buffer_type,space);
+			tmp.write(buffer,buffer_type);
+			return tmp;
+		}
+		template<typename data_t>
+		Attribute writeAttribute(const std::string& name, const data_t& buffer, const DSpace& space) {
+			return writeAttribute(name,H5TL::data(buffer),H5TL::dtype(buffer),space);
+		}
+		template<typename data_t>
+		Attribute writeAttribute(const std::string& name, const data_t& buffer) {
+			return writeAttribute(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer));
+		}
+		Attribute readAttribute(const std::string& name, void* buffer, const DType& buffer_type) {
+			Attribute tmp = openAttribute(name);
+			tmp.read(buffer,buffer_type);
+			return tmp;
+		}
+		template<typename data_t>
+		Attribute readAttribute(const std::string& name, data_t& buffer) {
+			return readAttribute(name,H5TL::data(buffer),H5TL::dtype(buffer));
 		}
 	};
 
@@ -674,6 +800,9 @@ namespace H5TL {
 				return false;
 			return check_tri(H5Oexists_by_name(id,path.c_str(),H5P_LINK_ACCESS_DEFAULT));
 		}
+		bool hasAttribute(const std::string& object, const std::string& attr) {
+			return check_tri(H5Aexists_by_name(id,object.c_str(),attr.c_str(),H5P_LINK_ACCESS_DEFAULT));
+		}
 		Group group(const std::string& name) {
 			if(exists(name))
 				return openGroup(name); //if it's not a group, this will throw an exception
@@ -686,10 +815,10 @@ namespace H5TL {
 		Group createGroup(const std::string &name) {
 			return Group(H5Gcreate(id,name.c_str(),LProps::DEFAULT,H5P_GROUP_CREATE_DEFAULT,H5P_GROUP_ACCESS_DEFAULT));
 		}
-		Dataset openDataset(const std::string &name) {
+		Dataset open(const std::string &name) {
 			return Dataset(H5Dopen(id,name.c_str(),H5P_DATASET_ACCESS_DEFAULT));
 		}
-		Dataset createDataset(const std::string &name, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
+		Dataset create(const std::string &name, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
 			//if props is chunked, but does not have chunk dimensions yet, we need to compute them
 			if(props.is_chunked() && props.chunk().size() == 0) {
 				DProps new_props(props);
