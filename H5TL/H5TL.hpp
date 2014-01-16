@@ -48,7 +48,7 @@ namespace H5TL {
 		explicit h5tl_error(const char* what_arg) : std::runtime_error(what_arg) {}
 	};
 
-	///<summary> class for walking the HDF5 error stack.
+	///class for walking the HDF5 error stack.
 	class ErrorHandler {
 	protected:
 		//use constructor of private static member to run this when the library loads:
@@ -73,6 +73,7 @@ namespace H5TL {
 		}
 	public:
 		/** \brief Return a std::string for the HDF5 error stack.
+
 		Walks and then clears the indicated HDF5 error stack, building a string description of the current error.
 		\param[in] es The error stack to walk, and subsequently clear.
 		\return A string representation of the error stack.
@@ -87,6 +88,7 @@ namespace H5TL {
 	const ErrorHandler ErrorHandler::EH;
 
 	/** \brief Checks an HDF5 herr_t return code for errors.
+	 *
 	 * Checks an HDF5 herr_t return code for errors. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
 	 * \param[in] e Error code to check, throws an H5TL::h5tl_error if e < 0.
 	 */
@@ -95,6 +97,7 @@ namespace H5TL {
 	}
 
 	/** \brief Checks an HDF5 htri_t return code for errors and converts it to a bool.
+	*
 	* Checks an HDF5 tri_t return code for errors and converts it to a bool. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
 	* \param t The htri_t return code to check
 	* \returns true if t > 0
@@ -104,6 +107,7 @@ namespace H5TL {
 		else return t > 0;
 	}
 	/** \brief Checks an HDF5 hid_t return code for errors.
+	*
 	* Checks an HDF5 hid_t return code for errors and returns it. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
 	* \param id The hid_t return code to check.
 	* \returns id, unchanged.
@@ -113,6 +117,7 @@ namespace H5TL {
 		else return id;
 	}
 	/** \brief Checks an HDF5 ssize_t return code for errors.
+	*
 	* Checks an HDF5 ssize_t return code for errors and returns it. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
 	* \param sz The ssize_t return code to check.
 	* \returns sz, unchanged.
@@ -161,6 +166,7 @@ namespace H5TL {
 	class PDType;
 
 	/** \brief Encapsulate an HDF5 data type object.
+	*
 	* DetailedDescription
 	*/
 	class DType : public ID {
@@ -184,6 +190,7 @@ namespace H5TL {
 			check(H5Tclose(id)); id = 0;
 		}
 		/** \brief Set the size, in bytes, of the datatype
+		*
 		 * Set the size, in bytes, of the datatype.
 		 * \param[in] sz The size of the datatype, in bytes. Set to 0 for variable-size strings.
 		 */
