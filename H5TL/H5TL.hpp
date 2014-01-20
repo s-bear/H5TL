@@ -13,32 +13,39 @@
 #include <stdexcept>
 #include <sstream>
 
-namespace std {
-	template<typename InputIt, typename T>
-	T product(InputIt first, InputIt last, T init) {
-		return accumulate(first,last,init,multiplies<T>());
-	}
-
-	template<typename T>
-	T clip(const T& val, const T& min, const T& max) {
-		if(val < min) return min;
-		else if(val > max) return max;
-		else return val;
-	}
-
-	template<typename InputIt>
-	string join(const std::string& delim, InputIt first, InputIt last) {
-		ostringstream builder;
-		builder << *first; ++first;
-		while(first != last) {
-			builder << delim << *first;
-			++first;
-		}
-		return builder.str();
-	}
-}
-
 namespace H5TL {
+	namespace util {
+		template<typename InputIt, typename T>
+		T product(InputIt first, InputIt last, T init) {
+			return accumulate(first,last,init,multiplies<T>());
+		}
+
+		template<typename T>
+		T clip(const T& val, const T& min, const T& max) {
+			if(val < min) return min;
+			else if(val > max) return max;
+			else return val;
+		}
+
+		template<typename T>
+		void prepend(std::vector<T> &vec, size_t N, const T& t) {
+			std::vector<T> tmp(vec.size()+N);
+			std::fill_n(tmp.begin(),N,t);
+			std::copy_backward(vec.begin(),vec.end(),tmp.end());
+			vec = std::move(tmp);
+		}
+
+		template<typename InputIt>
+		std::string join(const std::string& delim, InputIt first, InputIt last) {
+			ostringstream builder;
+			builder << *first; ++first;
+			while(first != last) {
+				builder << delim << *first;
+				++first;
+			}
+			return builder.str();
+		}
+	}
 	//General library interface:
 
 	///exception class for all HDF5 errors.
@@ -384,10 +391,10 @@ namespace H5TL {
 		}
 		DProps& chunked(const std::vector<hsize_t> &data_shape, size_t item_nbytes, size_t chunk_nbytes=0, size_t line_nbytes = 8192) {
 			//if chunk_nbytes is 0, we should compute a value for it:
-			if(chunk_nbytes = 0) {
+			if(chunk_nbytes == 0) {
 				//get size of dataset in mb
-				size_t data_mb = (item_nbytes*std::product(data_shape.begin(),data_shape.end(),size_t(1))) >> 20;
-				data_mb = std::clip<size_t>(data_mb,1,1 << 23); //stay between 1 MB and 8 TB
+				size_t data_mb = (item_nbytes*util::product(data_shape.begin(),data_shape.end(),size_t(1))) >> 20;
+				data_mb = util::clip<size_t>(data_mb,1,1 << 23); //stay between 1 MB and 8 TB
 				//data size -> chunk size: 1 MB -> 1 line, 1 TB -> 1k lines
 				//                         2^0  -> 2^0,   2^20 -> 2^10
 				//  chunk_size = 2^(log2(data_mb)*10/20)*line_size = sqrt(data_mb)*line_size
@@ -398,14 +405,14 @@ namespace H5TL {
 			//start with the chunk size the same as the whole shape:
 			std::vector<hsize_t> chunk_shape(data_shape);
 			//it's possible the shape is <= the desired chunk size
-			size_t chunk_size = std::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
+			size_t chunk_size = util::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
 			if(chunk_size <= desired_chunk_size)
 				return chunked(chunk_shape);
 			//if it's not, trim each dimension in turn to reduce the chunk size
 			for(size_t trim_dim = 0; trim_dim < chunk_shape.size(); ++trim_dim) {
 				chunk_shape[trim_dim] = 1; //trim
 				//is the new size less than the desired size?
-				chunk_size = std::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
+				chunk_size = util::product(chunk_shape.begin(),chunk_shape.end(),size_t(1));
 				if(chunk_size < desired_chunk_size) {
 					//yes -- expand it as much as possible, then return
 					chunk_shape[trim_dim] = desired_chunk_size / chunk_size;
@@ -442,48 +449,53 @@ namespace H5TL {
 
 	const DProps DProps::DEFAULT(H5P_DATASET_CREATE_DEFAULT);
 
-	class Selection : public ID {
-	protected:
-		Selection(hid_t id) : ID(id) {}
-	public:
-		Selection() : ID(H5Screate(H5S_SIMPLE)) {}
-		Selection(const Selection &s) : ID(H5Scopy(s)) {}
-		Selection(Selection &&s) : ID(std::move(s)) {}
-		Selection(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) : ID(H5Screate(H5S_SIMPLE)) {
-			set(start,count);
-		}
-		virtual ~Selection() {
-			if(id) close();
-		}
-		void close() {
-			check(H5Sclose(id));
-		}
-		Selection& all() {
-			check(H5Sselect_all(id)); return *this;
-		}
-		Selection& none() {
-			check(H5Sselect_none(id)); return *this;
-		}
-		Selection& set(const std::vector<hsize_t> &start, const std::vector<hsize_t> &count) {
-			check(H5Sselect_hyperslab(id,H5S_SELECT_SET,start.data(),nullptr,count.data(),nullptr));
-			return *this;
-		}
-		static const Selection ALL;  
-	};
+	class DSpace;
 
-	const Selection Selection::ALL(H5S_ALL); //this is id = 0, so we won't have destructor problems
+	class SelectAll;
+
+	class Selection {
+	public:
+		Selection() {}
+		Selection(const Selection &s) {}
+		Selection(Selection &&s) {}
+		virtual ~Selection() {}
+		virtual void set(DSpace& ds) const = 0;
+		static const SelectAll ALL;
+	};
 
 	class DSpace : public ID {
 		friend class Dataset;
 		friend class Attribute;
 	protected:
-		
 		DSpace(hid_t id) : ID(id) {}
 	public:
-		DSpace() : ID(H5Screate(H5S_SIMPLE)) {}
+		DSpace() : ID(H5Screate(H5S_SCALAR)) {}
 		DSpace(const DSpace &ds) : ID(H5Scopy(ds)) {}
 		DSpace(DSpace &&ds) : ID(std::move(ds)) {}
-		DSpace(const std::vector<hsize_t>& shape) : ID(0) {
+		DSpace(size_t N, const hsize_t *shape, const hsize_t *maxshape = nullptr) : ID(0) {
+			if(N) {
+				id = check_id(H5Screate_simple(int(N),shape,maxshape));
+			} else {
+				id = check_id(H5Screate(H5S_SCALAR));
+			}
+		}
+		template<size_t N>
+		explicit DSpace(const hsize_t(&shape)[N]) : ID(0) {
+			if(N) {
+				id = check_id(H5Screate_simple(int(N),shape,nullptr));
+			} else {
+				id = check_id(H5Screate(H5S_SCALAR));
+			}
+		}
+		template<size_t N>
+		DSpace(const hsize_t(&shape)[N], const hsize_t(&maxshape)[N]) : ID(0) {
+			if(N) {
+				id = check_id(H5Screate_simple(int(N),shape,maxshape));
+			} else {
+				id = check_id(H5Screate(H5S_SCALAR));
+			}
+		}
+		explicit DSpace(const std::vector<hsize_t>& shape) : ID(0) {
 			if(shape.size()) {
 				id = check_id(H5Screate(H5S_SIMPLE));
 				extent(shape,shape);
@@ -491,7 +503,7 @@ namespace H5TL {
 				id = check_id(H5Screate(H5S_SCALAR));
 			}
 		}
-		DSpace(const std::vector<hsize_t> &shape, const std::vector<hsize_t> &maxshape) : ID(H5Screate(H5S_SIMPLE)) {
+		DSpace(const std::vector<hsize_t> &shape, const std::vector<hsize_t> &maxshape) : ID(0) {
 			if(shape.size()) {
 				id = check_id(H5Screate(H5S_SIMPLE));
 				extent(shape,maxshape);
@@ -504,6 +516,10 @@ namespace H5TL {
 		}
 		void close() {
 			check(H5Sclose(id));
+		}
+		DSpace& select(const Selection& s) {
+			s.set(*this);
+			return *this;
 		}
 		void extent(const std::vector<hsize_t> &shape) {
 			extent(shape,shape);
@@ -541,11 +557,40 @@ namespace H5TL {
 				return make_pair(std::vector<hsize_t>(),std::vector<hsize_t>());
 			}
 		}
-		
+		static const size_t MAX_RANK;
+		static const hsize_t UNLIMITED;
+		static const hsize_t UNL;
 		static const DSpace SCALAR;
 	};
-
+	const size_t DSpace::MAX_RANK(H5S_MAX_RANK);
+	const hsize_t DSpace::UNLIMITED(H5S_UNLIMITED);
+	const hsize_t DSpace::UNL(H5S_UNLIMITED);
 	const DSpace DSpace::SCALAR(H5Screate(H5S_SCALAR));
+
+	template<typename data_t>
+	DSpace space(const data_t& d) {
+		return DSpace(H5TL::shape(d));
+	}
+
+	class SelectAll : public Selection {
+		virtual void set(DSpace& ds) const {
+			check(H5Sselect_all(ds));
+		}
+	};
+	const SelectAll Selection::ALL; 
+
+	class Hyperslab : public Selection {
+	protected:
+		std::vector<hsize_t> start, stride, count, block;
+	public:
+		Hyperslab() {}
+		Hyperslab(const Hyperslab& h) : Selection(h), start(h.start), stride(h.stride), count(h.count), block(h.block) {}
+		Hyperslab(Hyperslab&& h) : Selection(std::move(h)), start(std::move(h.start)), stride(std::move(h.stride)), count(std::move(h.count)), block(std::move(h.block)) {}
+		Hyperslab(const std::vector<hsize_t>& start, const std::vector<hsize_t>& count) : start(start), count(count) {}
+		virtual void set(DSpace& ds) const {
+			check(H5Sselect_hyperslab(ds,H5S_SELECT_SET,start.data(),stride.data(),count.data(),block.data()));
+		}
+	};
 
 	//Attributes
 	class Attribute : public ID {
@@ -628,7 +673,7 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		Attribute writeAttribute(const std::string& name, const data_t& buffer) {
-			return writeAttribute(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer));
+			return writeAttribute(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer));
 		}
 		Attribute readAttribute(const std::string& name, void* buffer, const DType& buffer_type) {
 			Attribute tmp = openAttribute(name);
@@ -683,10 +728,21 @@ namespace H5TL {
 		*/
 		//write
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
-			check(H5Dwrite(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer));
+			check(H5Dwrite(id,buffer_type,buffer_shape,space().select(selection),H5P_DATASET_XFER_DEFAULT,buffer));
 		}
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			write(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
+			//we need to pad buffer_shape and offset to the correct dimensionality for making the selection
+			//get the current extent of the dataset:
+			auto extent = space().extent();
+			//get the extent of the buffer and prepend with 1's:
+			auto buffer_extent = buffer_shape.extent();
+			if(buffer_extent.size() < extent.size())
+				util::prepend(buffer_extent,extent.size()-buffer_extent.size(),hsize_t(1));
+			//prepend the offset with 0s:
+			std::vector<hsize_t> new_offset(offset);
+			if(new_offset.size() < extent.size())
+				util::prepend(new_offset,extent.size()-new_offset.size(),hsize_t(0));
+			write(buffer,buffer_type,buffer_shape,Hyperslab(new_offset,buffer_extent));
 		}
 		template<typename data_t>
 		void write(const data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
@@ -697,32 +753,99 @@ namespace H5TL {
 			write(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,offset);
 		}
 		template<typename data_t>
+		void write(const data_t& buffer, const DType& buffer_type, const Selection& selection = Selection::ALL) {
+			write(H5TL::data(buffer),buffer_type,H5TL::space(buffer),selection);
+		}
+		template<typename data_t>
+		void write(const data_t& buffer, const DType& buffer_type, const std::vector<hsize_t>& offset) {
+			write(H5TL::data(buffer),buffer_type,H5TL::space(buffer),offset);
+		}
+		template<typename data_t>
 		void write(const data_t& buffer, const Selection& selection = Selection::ALL) {
-			write(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer));
+			write(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer));
 		}
 		template<typename data_t>
 		void write(const data_t& buffer,const std::vector<hsize_t>& offset) {
-			write(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),offset);
+			write(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
-		//append
-		void append(void *buffer, const DType& buffer_type, const DSpace& buffer_shape) {
-			//get the current and maximum extents of our space
-			std::vector<hsize_t> current, max;
-			std::tie(current, max) = space().extents();
-			//prepend 1s onto the front of buffer_shape until its the same size as current
-			std::vector<hsize_t> bs_old = buffer_shape.extent();
-			std::vector<hsize_t> bs_new(current.size(),1);
-			std::copy_backward(bs_old.begin(),bs_old.begin(),bs_new.end());
-			//extend the file space along the fastest varying dimension that is not yet maximal and is 1 in the buffer shape
-
+		//extend
+		void extend(const std::vector<hsize_t>& extent) {
+			check(H5Dextend(id,extent.data()));
+		}
+		//append with offset -- like write with offset, but checks to see if the dataset needs to be extended first
+		void append(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			//get the current and maximum extents of the dataset
+			std::vector<hsize_t> current_extent, max_extent;
+			std::tie(current_extent, max_extent) = space().extents();
+			//get the buffer extents, prepend 1s as necessary to make it the correct size
+			std::vector<hsize_t> buffer_extent = buffer_shape.extent();
+			if(buffer_extent.size() < current_extent.size()) {
+				util::prepend(buffer_extent,current_extent.size()-buffer_extent.size(),hsize_t(1));
+			}
+			//do we need to extend the dataset?
+			//the new extents will be the offset + buffer_extent
+			std::vector<hsize_t> new_extent(offset.size());
+			std::transform(buffer_extent.begin(),buffer_extent.end(),offset.begin(),new_extent.begin(),std::plus<hsize_t>());
+			//if any element of the new extents are > current extents, we need to extend the dataset
+			if(!std::equal(new_extent.begin(),new_extent.end(),current_extent.begin(),std::less_equal<hsize_t>())) {
+				extend(new_extent);
+			}
+			//now that the dataset is extended, we can write into it
+			write(buffer,buffer_type,buffer_shape,offset);
+		}
+		template<typename data_t>
+		void append(const data_t& buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			append(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,offset);
+		}
+		template<typename data_t>
+		void append(const data_t& buffer, const DType& buffer_type, const std::vector<hsize_t>& offset) {
+			append(H5TL::data(buffer),buffer_type,H5TL::space(buffer),offset);
+		}
+		template<typename data_t>
+		void append(const data_t& buffer, const std::vector<hsize_t>& offset) {
+			append(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
+		}
+		//append without offset -- automatically extends the slowest varying dimension (0)
+		void append(const void *buffer, const DType& buffer_type, const DSpace& buffer_shape) {
+			//get the current extent
+			std::vector<hsize_t> current_extent = space().extent();
+			//get the buffer shape, and extend as necessary
+			std::vector<hsize_t> buffer_extent = buffer_shape.extent();
+			if(buffer_extent.size() < current_extent.size()) {
+				util::prepend(buffer_extent,current_extent.size()-buffer_extent.size(),hsize_t(1));
+			}
+			//we only extend the slowest varying dimension for now
+			//TODO: extend the fastest varying extendable dimension?
+			size_t dim_to_extend = 0;
+			//compute the offset into the file where we will store the data
+			std::vector<hsize_t> offset(current_extent.size(),0);
+			offset[dim_to_extend] = current_extent[dim_to_extend];
+			current_extent[dim_to_extend] += buffer_extent[dim_to_extend];
+			//extend
+			extend(current_extent);
+			//write
+			write(buffer,buffer_type,DSpace(buffer_extent),offset);
+		}
+		
+		template<typename data_t>
+		void append(const data_t& buffer, const DSpace& buffer_shape) {
+			append(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape);
+		}
+		template<typename data_t>
+		void append(const data_t& buffer, const DType& buffer_type) {
+			append(H5TL::data(buffer),buffer_type,H5TL::space(buffer));
+		}
+		template<typename data_t>
+		void append(const data_t& buffer) {
+			append(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer));
 		}
 		//read
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			//if buffer_shape is empty, allocate space to hold the selection???
-			check(H5Dread(id,buffer_type,buffer_shape,selection,H5P_DATASET_XFER_DEFAULT,buffer));
+			check(H5Dread(id,buffer_type,buffer_shape,space().select(selection),H5P_DATASET_XFER_DEFAULT,buffer));
 		}
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			read(buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
+			read(buffer,buffer_type,buffer_shape,Hyperslab(offset,buffer_shape.extent()));
 		}
 		template<typename data_t>
 		void read(data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
@@ -734,11 +857,11 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		void read(data_t& buffer, const Selection& selection = Selection::ALL) {
-			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),selection);
+			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),selection);
 		}
 		template<typename data_t>
 		void read(data_t& buffer, const std::vector<hsize_t>& offset) {
-			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),offset);
+			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
 		//read with allocate
 		template<typename data_t>
@@ -839,7 +962,7 @@ namespace H5TL {
 		//create dataset and write data in
 		Dataset write(const std::string &name, const void* buffer, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
 			//create and write in one fell swoop
-			Dataset dset = createDataset(name,dt,space,props);
+			Dataset dset = create(name,dt,space,props);
 			dset.write(buffer,dt,space);
 			return dset;
 		}
@@ -849,16 +972,16 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		Dataset write(const std::string &name, const data_t& buffer, const DProps &props = DProps::DEFAULT) {
-			return write(name,H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),props);
+			return write(name,H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),props);
 		}
 		//open and read dataset
 		Dataset read(const std::string &name, void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
-			Dataset ds = openDataset(name);
+			Dataset ds = open(name);
 			ds.read(buffer,buffer_type,buffer_shape,selection);
 			return ds;
 		}
 		Dataset read(const std::string &name, void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
-			return read(name, buffer,buffer_type,buffer_shape,Selection(offset,buffer_shape.extent()));
+			return read(name, buffer,buffer_type,buffer_shape,Hyperslab(offset,buffer_shape.extent()));
 		}
 		template<typename data_t>
 		Dataset read(const std::string &name, data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
@@ -870,23 +993,23 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		Dataset read(const std::string &name, data_t& buffer, const Selection& selection = Selection::ALL) {
-			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),selection);
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),selection);
 		}
 		template<typename data_t>
 		Dataset read(const std::string &name, data_t& buffer, const std::vector<hsize_t>& offset) {
-			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::shape(buffer),offset);
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
 		//open dataset, read with allocate
 		template<typename data_t>
 		typename adapt<data_t>::allocate_return
 		read(const std::string &name, const std::vector<hsize_t>& offset, const std::vector<hsize_t>& buffer_shape) {
-			Dataset ds = openDataset(name);
+			Dataset ds = open(name);
 			return ds.read<data_t>(offset,buffer_shape);
 		}
 		template<typename data_t>
 		typename adapt<data_t>::allocate_return
 		read(const std::string &name) {
-			Dataset ds = openDataset(name);
+			Dataset ds = open(name);
 			return ds.read<data_t>();
 		}
 		//linking
@@ -900,7 +1023,7 @@ namespace H5TL {
 			check(H5Olink(target,id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
 		}
 		void createLink(const std::string& name, const std::string& target) {
-			check(H5Lcreate_soft(path.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
+			check(H5Lcreate_soft(target.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
 		}
 		void createLink(const std::string& name, const std::string& file, const std::string& target) {
 			check(H5Lcreate_external(file.c_str(),target.c_str(),id,name.c_str(),LProps::DEFAULT,H5P_LINK_ACCESS_DEFAULT));
@@ -990,9 +1113,9 @@ namespace H5TL {
 			return &d;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
+			size_t n = util::product(shape.begin(),shape.end(),hsize_t(1));
 			if(n != 1)
-				throw runtime_error("Cannot allocate data_t with shape = {"+std::join(", ", shape.begin(), shape.end())+"}"); //TODO: convert the shape to a string
+				throw runtime_error("Cannot allocate data_t with shape = {"+util::join(", ", shape.begin(), shape.end())+"}"); //TODO: convert the shape to a string
 			return data_t(0);
 		}
 	};
@@ -1022,8 +1145,8 @@ namespace H5TL {
 			return std::begin(d);
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			if(std::product(begin(shape),end(shape),hsize_t(1)) != N)
-				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + std::join(", ",shape.begin(),shape.end()) + "}");
+			if(util::product(begin(shape),end(shape),hsize_t(1)) != N)
+				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + util::join(", ",shape.begin(),shape.end()) + "}");
 			return new T[N];
 		}
 	};
@@ -1080,7 +1203,7 @@ namespace H5TL {
 			return p;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			size_t n = std::product(shape.begin(),shape.end(),hsize_t(1));
+			size_t n = util::product(shape.begin(),shape.end(),hsize_t(1));
 			return new data_t[n];
 		}
 	};
@@ -1102,7 +1225,7 @@ namespace H5TL {
 			return d;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType& dt) {
-			size_t n = std::product(shape.begin(),shape.end(),hsize_t(dt.size()));
+			size_t n = util::product(shape.begin(),shape.end(),hsize_t(dt.size()));
 			return ::operator new[](n);
 		}
 	};
@@ -1137,7 +1260,7 @@ namespace H5TL {
 			return s.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			if(shape.size() > 1 && std::product(shape.begin()+1,shape.end(),hsize_t(1)) > 1) //TODO: does this make sense?
+			if(shape.size() > 1 && util::product(shape.begin()+1,shape.end(),hsize_t(1)) > 1) //TODO: does this make sense?
 				throw std::runtime_error("Cannot allocate std::string with rank > 1");
 			return std::string(shape[0],'\0');
 		}
@@ -1167,8 +1290,8 @@ namespace H5TL {
 			return d.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			if(std::product(shape.begin(),shape.end(),hsize_t(1)) != N)
-				throw runtime_error("Cannot allocate std::array<T,N> with shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
+			if(util::product(shape.begin(),shape.end(),hsize_t(1)) != N)
+				throw runtime_error("Cannot allocate std::array<T,N> with shape = {" + util::join(", ",shape.begin(),shape.end()) + "}.");
 			return std::array<T,N>();
 		}
 	};
@@ -1198,7 +1321,7 @@ namespace H5TL {
 			return v.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			return std::vector<T>(std::product(shape.begin(),shape.end(),hsize_t(1)),T());
+			return std::vector<T>(util::product(shape.begin(),shape.end(),hsize_t(1)),T());
 		}
 	};
 }
@@ -1235,7 +1358,7 @@ namespace H5TL {
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if(shape.size() > N)
-				throw runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + std::join(", ",shape.begin(),shape.end()) + "}.");
+				throw runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + util::join(", ",shape.begin(),shape.end()) + "}.");
 			blitz::TinyVector<int,N> extent(1);
 			//we can't use std::copy_backward on MSVC because blitz::TinyVector::iterator is just a raw pointer
 			auto in = shape.end();
