@@ -557,6 +557,18 @@ namespace H5TL {
 				return make_pair(std::vector<hsize_t>(),std::vector<hsize_t>());
 			}
 		}
+		bool extendable() const {
+			if(H5Sget_simple_extent_type(id) == H5S_SIMPLE) {
+				int n = H5Sget_simple_extent_ndims(id);
+				std::vector<hsize_t> shape(n),maxshape(n);
+				H5Sget_simple_extent_dims(id,shape.data(),maxshape.data());
+				for(size_t i = 0; i < n; ++i) {
+					if(maxshape[i] == H5S_UNLIMITED || shape[i] < maxshape[i])
+						return true;
+				}
+			}
+			return false;
+		}
 		static const size_t MAX_RANK;
 		static const hsize_t UNLIMITED;
 		static const hsize_t UNL;
@@ -949,14 +961,18 @@ namespace H5TL {
 			return Dataset(H5Dopen(id,name.c_str(),H5P_DATASET_ACCESS_DEFAULT));
 		}
 		Dataset create(const std::string &name, const DType &dt, const DSpace &space, const DProps& props = DProps::DEFAULT) {
+			//make a local copy of the dataset creation properties:
+			DProps _props(props);
+			//if space is extendable, but not chunked, we need to chunk it
+			if(!_props.is_chunked() && space.extendable())
+				_props.chunked();
 			//if props is chunked, but does not have chunk dimensions yet, we need to compute them
-			if(props.is_chunked() && props.chunk().size() == 0) {
-				DProps new_props(props);
-				new_props.chunked(space.extent(),dt.size());
-				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,new_props,H5P_DATASET_ACCESS_DEFAULT));
+			if(_props.is_chunked() && _props.chunk().size() == 0) {
+				_props.chunked(space.extent(),dt.size());
+				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,_props,H5P_DATASET_ACCESS_DEFAULT));
 			} else {
 				//no changes necessary
-				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,props,H5P_DATASET_ACCESS_DEFAULT));
+				return Dataset(H5Dcreate(id,name.c_str(),dt,space,LProps::DEFAULT,_props,H5P_DATASET_ACCESS_DEFAULT));
 			}
 		}
 		//create dataset and write data in
