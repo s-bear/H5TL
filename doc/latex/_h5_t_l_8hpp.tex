@@ -1,0 +1,172 @@
+\hypertarget{_h5_t_l_8hpp}{\section{H5\-T\-L/\-H5\-T\-L.hpp File Reference}
+\label{_h5_t_l_8hpp}\index{H5\-T\-L/\-H5\-T\-L.\-hpp@{H5\-T\-L/\-H5\-T\-L.\-hpp}}
+}
+{\ttfamily \#include \char`\"{}hdf5.\-h\char`\"{}}\\*
+{\ttfamily \#include $<$utility$>$}\\*
+{\ttfamily \#include $<$vector$>$}\\*
+{\ttfamily \#include $<$array$>$}\\*
+{\ttfamily \#include $<$iterator$>$}\\*
+{\ttfamily \#include $<$numeric$>$}\\*
+{\ttfamily \#include $<$functional$>$}\\*
+{\ttfamily \#include $<$algorithm$>$}\\*
+{\ttfamily \#include $<$stdexcept$>$}\\*
+{\ttfamily \#include $<$sstream$>$}\\*
+{\ttfamily \#include \char`\"{}blitz/array.\-h\char`\"{}}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_h5_t_l_1_1h5tl__error}{H5\-T\-L\-::h5tl\-\_\-error}
+\begin{DoxyCompactList}\small\item\em exception class for all H\-D\-F5 errors. \end{DoxyCompactList}\item 
+class \hyperlink{class_h5_t_l_1_1_error_handler}{H5\-T\-L\-::\-Error\-Handler}
+\begin{DoxyCompactList}\small\item\em class for walking the H\-D\-F5 error stack. \end{DoxyCompactList}\item 
+class \hyperlink{class_h5_t_l_1_1_i_d}{H5\-T\-L\-::\-I\-D}
+\begin{DoxyCompactList}\small\item\em Virtual class encapsulating an hid\-\_\-t. \end{DoxyCompactList}\item 
+class \hyperlink{class_h5_t_l_1_1_d_type}{H5\-T\-L\-::\-D\-Type}
+\begin{DoxyCompactList}\small\item\em Encapsulate an H\-D\-F5 data type object. \end{DoxyCompactList}\item 
+class \hyperlink{class_h5_t_l_1_1_p_d_type}{H5\-T\-L\-::\-P\-D\-Type}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt}{H5\-T\-L\-::adapt$<$ data\-\_\-t, enable $>$}
+\item 
+class \hyperlink{class_h5_t_l_1_1_props}{H5\-T\-L\-::\-Props}
+\item 
+class \hyperlink{class_h5_t_l_1_1_l_props}{H5\-T\-L\-::\-L\-Props}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_props}{H5\-T\-L\-::\-D\-Props}
+\item 
+class \hyperlink{class_h5_t_l_1_1_selection}{H5\-T\-L\-::\-Selection}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_space}{H5\-T\-L\-::\-D\-Space}
+\item 
+class \hyperlink{class_h5_t_l_1_1_select_all}{H5\-T\-L\-::\-Select\-All}
+\item 
+class \hyperlink{class_h5_t_l_1_1_hyperslab}{H5\-T\-L\-::\-Hyperslab}
+\item 
+class \hyperlink{class_h5_t_l_1_1_attribute}{H5\-T\-L\-::\-Attribute}
+\item 
+class \hyperlink{class_h5_t_l_1_1_object}{H5\-T\-L\-::\-Object}
+\item 
+class \hyperlink{class_h5_t_l_1_1_dataset}{H5\-T\-L\-::\-Dataset}
+\item 
+class \hyperlink{class_h5_t_l_1_1_group}{H5\-T\-L\-::\-Group}
+\item 
+class \hyperlink{class_h5_t_l_1_1_file}{H5\-T\-L\-::\-File}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01number__t_00_01typename_01std_1_1enable__if_3_01std_1_1is__arithmetic58ffd9dad45132ac3625c2d53f8565f6}{H5\-T\-L\-::adapt$<$ number\-\_\-t, typename std\-::enable\-\_\-if$<$ std\-::is\-\_\-arithmetic$<$ number\-\_\-t $>$\-::value $>$\-::type $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01_t[_n]_4}{H5\-T\-L\-::adapt$<$ T\mbox{[}\-N\mbox{]}$>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01const_01char[_n]_4}{H5\-T\-L\-::adapt$<$ const char\mbox{[}\-N\mbox{]}$>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01ptr__t_00_01typename_01std_1_1enable__if_3_01std_1_1is__pointer_3_01p0a19472823b7668f52349b1de2805cc9}{H5\-T\-L\-::adapt$<$ ptr\-\_\-t, typename std\-::enable\-\_\-if$<$ std\-::is\-\_\-pointer$<$ ptr\-\_\-t $>$\-::value \&\&!std\-::is\-\_\-void$<$ typename std\-::remove\-\_\-pointer$<$ ptr\-\_\-t $>$\-::type $>$\-::value $>$\-::type $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01void_01_5_01_4}{H5\-T\-L\-::adapt$<$ void $\ast$ $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01std_1_1string_01_4}{H5\-T\-L\-::adapt$<$ std\-::string $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01std_1_1array_3_01_t_00_01_n_01_4_00_01void_01_4}{H5\-T\-L\-::adapt$<$ std\-::array$<$ T, N $>$, void $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01std_1_1vector_3_01_t_01_4_01_4}{H5\-T\-L\-::adapt$<$ std\-::vector$<$ T $>$ $>$}
+\item 
+struct \hyperlink{struct_h5_t_l_1_1adapt_3_01blitz_1_1_array_3_01_t_00_01_n_01_4_01_4}{H5\-T\-L\-::adapt$<$ blitz\-::\-Array$<$ T, N $>$ $>$}
+\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespace_h5_t_l}{H5\-T\-L}
+\item 
+\hyperlink{namespace_h5_t_l_1_1util}{H5\-T\-L\-::util}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{_h5_t_l_8hpp_a59058fd08440d7ea30ed09d8de233185}{H5\-C\-H\-E\-C\-K}
+\item 
+\#define \hyperlink{_h5_t_l_8hpp_aee6ce891703ca7ed2cb72046c3d1768f}{H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T}
+\item 
+\#define \hyperlink{_h5_t_l_8hpp_a7ccc1cda9969334b121fe7715c9f874a}{H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Input\-It , typename T $>$ }\\T \hyperlink{namespace_h5_t_l_1_1util_ae8a2ececf9e0f95ab928f168fcedef34}{H5\-T\-L\-::util\-::product} (Input\-It first, Input\-It last, T init)
+\item 
+{\footnotesize template$<$typename T $>$ }\\T \hyperlink{namespace_h5_t_l_1_1util_a9435795a9a0055ccdfa8194228e692a2}{H5\-T\-L\-::util\-::clip} (const T \&val, const T \&min, const T \&max)
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \hyperlink{namespace_h5_t_l_1_1util_a4d53214bda1e246cb4f3d3d6919d1380}{H5\-T\-L\-::util\-::prepend} (std\-::vector$<$ T $>$ \&vec, size\-\_\-t N, const T \&t)
+\item 
+{\footnotesize template$<$typename Input\-It $>$ }\\std\-::string \hyperlink{namespace_h5_t_l_1_1util_aa1cd20e4f5fb1a248b8475f923d3b1b5}{H5\-T\-L\-::util\-::join} (const std\-::string \&delim, Input\-It first, Input\-It last)
+\item 
+void \hyperlink{namespace_h5_t_l_ab1eb736c80826c4999a4644ff4d1b918}{H5\-T\-L\-::check} (herr\-\_\-t e)
+\begin{DoxyCompactList}\small\item\em Checks an H\-D\-F5 herr\-\_\-t return code for errors. \end{DoxyCompactList}\item 
+bool \hyperlink{namespace_h5_t_l_ab61feeb286c0d3e6c82b22277ac9291b}{H5\-T\-L\-::check\-\_\-tri} (htri\-\_\-t t)
+\begin{DoxyCompactList}\small\item\em Checks an H\-D\-F5 htri\-\_\-t return code for errors and converts it to a bool. \end{DoxyCompactList}\item 
+hid\-\_\-t \hyperlink{namespace_h5_t_l_add11f817badecc20cdffaeca031e7ab5}{H5\-T\-L\-::check\-\_\-id} (hid\-\_\-t id)
+\begin{DoxyCompactList}\small\item\em Checks an H\-D\-F5 hid\-\_\-t return code for errors. \end{DoxyCompactList}\item 
+ssize\-\_\-t \hyperlink{namespace_h5_t_l_ab5f7e50bf1e42f78c4fc0214b6cceb57}{H5\-T\-L\-::check\-\_\-size} (ssize\-\_\-t sz)
+\begin{DoxyCompactList}\small\item\em Checks an H\-D\-F5 ssize\-\_\-t return code for errors. \end{DoxyCompactList}\item 
+void \hyperlink{namespace_h5_t_l_a31797435e6c9f7813cc320fc4529192f}{H5\-T\-L\-::open} ()
+\item 
+void \hyperlink{namespace_h5_t_l_a1068acc4b97b59901883bbb88b1f4434}{H5\-T\-L\-::close} ()
+\item 
+{\footnotesize template$<$typename T $>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_aa0de5dcbc2c4c8a99ed8e35774ba15ab}{H5\-T\-L\-::dtype} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a889fa5a542d1ee8e363d2686f1e447d7}{H5\-T\-L\-::dtype$<$ int8\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a5583c20a945634c741c4c006f5abd3a6}{H5\-T\-L\-::dtype$<$ uint8\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_ac159834e78342cf3e5daf694c65b0dc9}{H5\-T\-L\-::dtype$<$ int16\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a0a256efae396de32f6c8e17a0ac5b410}{H5\-T\-L\-::dtype$<$ uint16\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a18b8ab0e48c3efb5dca7d93efd1bfbf6}{H5\-T\-L\-::dtype$<$ int32\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_aa42336b53e3ba0b95d2495ba8084df67}{H5\-T\-L\-::dtype$<$ uint32\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a1c8362f6cee0689275ecfddccba88274}{H5\-T\-L\-::dtype$<$ int64\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a112af217f39b59064ce8a48cccc74764}{H5\-T\-L\-::dtype$<$ uint64\-\_\-t $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_a603d589a4de14384ef7d47104e6a7862}{H5\-T\-L\-::dtype$<$ float $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_ab549a1bd6205a5bff9dc8e5ca83fa76a}{H5\-T\-L\-::dtype$<$ double $>$} ()
+\item 
+{\footnotesize template$<$$>$ }\\const D\-Type \& \hyperlink{namespace_h5_t_l_adcc1829002ae4d479fad02d0bf47f793}{H5\-T\-L\-::dtype$<$ const char $\ast$ $>$} ()
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\size\-\_\-t \hyperlink{namespace_h5_t_l_a2bb6834f5cfb632c59f6b8833fb062e1}{H5\-T\-L\-::rank} (const data\-\_\-t \&d)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\std\-::vector$<$ hsize\-\_\-t $>$ \hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{H5\-T\-L\-::shape} (const data\-\_\-t \&d)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\adapt$<$ data\-\_\-t $>$\-::dtype\-\_\-return \hyperlink{namespace_h5_t_l_a85542c4df7874da8c91127958faa22a4}{H5\-T\-L\-::dtype} (const data\-\_\-t \&d)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\adapt$<$ data\-\_\-t $>$\-::data\-\_\-return \hyperlink{namespace_h5_t_l_a1d69ddff4138c6eae990acc82730d434}{H5\-T\-L\-::data} (data\-\_\-t \&d)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\adapt$<$ data\-\_\-t $>$\-::const\-\_\-data\-\_\-return \hyperlink{namespace_h5_t_l_a195c328d15cb83d2cfede33d7a7a5b35}{H5\-T\-L\-::data} (const data\-\_\-t \&d)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\adapt$<$ data\-\_\-t $>$\-::allocate\-\_\-return \hyperlink{namespace_h5_t_l_af374af4623acf05fb53284ae67ffc911}{H5\-T\-L\-::allocate} (const std\-::vector$<$ hsize\-\_\-t $>$ \&shape, const D\-Type \&dt=D\-Type\-::\-N\-O\-N\-E)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\D\-Space \hyperlink{namespace_h5_t_l_ae09d3a5b75f86dad261e807592fee081}{H5\-T\-L\-::space} (const data\-\_\-t \&d)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{_h5_t_l_8hpp_a59058fd08440d7ea30ed09d8de233185}{\index{H5\-T\-L.\-hpp@{H5\-T\-L.\-hpp}!H5\-C\-H\-E\-C\-K@{H5\-C\-H\-E\-C\-K}}
+\index{H5\-C\-H\-E\-C\-K@{H5\-C\-H\-E\-C\-K}!H5TL.hpp@{H5\-T\-L.\-hpp}}
+\subsubsection[{H5\-C\-H\-E\-C\-K}]{\setlength{\rightskip}{0pt plus 5cm}\#define H5\-C\-H\-E\-C\-K}}\label{_h5_t_l_8hpp_a59058fd08440d7ea30ed09d8de233185}
+
+
+Definition at line 1038 of file H5\-T\-L.\-hpp.
+
+\hypertarget{_h5_t_l_8hpp_a7ccc1cda9969334b121fe7715c9f874a}{\index{H5\-T\-L.\-hpp@{H5\-T\-L.\-hpp}!H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T@{H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T}}
+\index{H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T@{H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T}!H5TL.hpp@{H5\-T\-L.\-hpp}}
+\subsubsection[{H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define H5\-T\-L\-\_\-\-B\-L\-I\-T\-Z\-\_\-\-A\-D\-A\-P\-T}}\label{_h5_t_l_8hpp_a7ccc1cda9969334b121fe7715c9f874a}
+
+
+Definition at line 1330 of file H5\-T\-L.\-hpp.
+
+\hypertarget{_h5_t_l_8hpp_aee6ce891703ca7ed2cb72046c3d1768f}{\index{H5\-T\-L.\-hpp@{H5\-T\-L.\-hpp}!H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T@{H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T}}
+\index{H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T@{H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T}!H5TL.hpp@{H5\-T\-L.\-hpp}}
+\subsubsection[{H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T}]{\setlength{\rightskip}{0pt plus 5cm}\#define H5\-T\-L\-\_\-\-S\-T\-D\-\_\-\-A\-D\-A\-P\-T}}\label{_h5_t_l_8hpp_aee6ce891703ca7ed2cb72046c3d1768f}
+
+
+Definition at line 1235 of file H5\-T\-L.\-hpp.
+

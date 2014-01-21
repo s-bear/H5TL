@@ -1,0 +1,463 @@
+\hypertarget{class_h5_t_l_1_1_group}{\section{H5\-T\-L\-:\-:Group Class Reference}
+\label{class_h5_t_l_1_1_group}\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}}
+}
+
+
+{\ttfamily \#include $<$H5\-T\-L.\-hpp$>$}
+
+Inheritance diagram for H5\-T\-L\-:\-:Group\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{class_h5_t_l_1_1_group}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_group_a21fb4c34f51a8a56817f5a8ea1c8b9f3}{Group} (\hyperlink{class_h5_t_l_1_1_group}{Group} \&\&grp)
+\item 
+virtual \hyperlink{class_h5_t_l_1_1_group_a373048dcbc38705ab6439b7eb7d66a7e}{$\sim$\-Group} ()
+\item 
+virtual void \hyperlink{class_h5_t_l_1_1_group_a33879ce41734238eb50b6917268d279d}{close} ()
+\item 
+virtual bool \hyperlink{class_h5_t_l_1_1_group_ab4fbf0c28300b542e2279f5e85fb641f}{valid} (const std\-::string \&path)
+\item 
+virtual bool \hyperlink{class_h5_t_l_1_1_group_abbf255a903c6a9c5a5dcb33660ce0370}{exists} (const std\-::string \&path)
+\item 
+bool \hyperlink{class_h5_t_l_1_1_group_a7f928985e0131b63c21764136bf1a01d}{has\-Attribute} (const std\-::string \&object, const std\-::string \&attr)
+\item 
+\hyperlink{class_h5_t_l_1_1_group}{Group} \hyperlink{class_h5_t_l_1_1_group_ac40bee3d18aed5cc150ec47d61554ef3}{group} (const std\-::string \&name)
+\item 
+\hyperlink{class_h5_t_l_1_1_group}{Group} \hyperlink{class_h5_t_l_1_1_group_a84745fdcd43c75880ca4cd1e064e4ac9}{open\-Group} (const std\-::string \&name)
+\item 
+\hyperlink{class_h5_t_l_1_1_group}{Group} \hyperlink{class_h5_t_l_1_1_group_ab6faa3a0b9c6f9358130e1e5e4a08ad1}{create\-Group} (const std\-::string \&name)
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_a3bc589843f86da0a0e3c7c0382c47188}{open} (const std\-::string \&name)
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_aa894ff509b260d0c5d68a765a5940da9}{create} (const std\-::string \&name, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&dt, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&\hyperlink{namespace_h5_t_l_ae09d3a5b75f86dad261e807592fee081}{space}, const \hyperlink{class_h5_t_l_1_1_d_props}{D\-Props} \&props=\hyperlink{class_h5_t_l_1_1_d_props_a92db9269544c73f48d72be1db4256107}{D\-Props\-::\-D\-E\-F\-A\-U\-L\-T})
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_a90c193fd37dd7f35b9b62f05f830b084}{write} (const std\-::string \&name, const void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&dt, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&\hyperlink{namespace_h5_t_l_ae09d3a5b75f86dad261e807592fee081}{space}, const \hyperlink{class_h5_t_l_1_1_d_props}{D\-Props} \&props=\hyperlink{class_h5_t_l_1_1_d_props_a92db9269544c73f48d72be1db4256107}{D\-Props\-::\-D\-E\-F\-A\-U\-L\-T})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_aa7ec7b8867f7e0bcf2fb1ee7de321119}{write} (const std\-::string \&name, const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&\hyperlink{namespace_h5_t_l_ae09d3a5b75f86dad261e807592fee081}{space}, const \hyperlink{class_h5_t_l_1_1_d_props}{D\-Props} \&props=\hyperlink{class_h5_t_l_1_1_d_props_a92db9269544c73f48d72be1db4256107}{D\-Props\-::\-D\-E\-F\-A\-U\-L\-T})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_a1acf181964e091a05491bdd07dc2acf2}{write} (const std\-::string \&name, const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_props}{D\-Props} \&props=\hyperlink{class_h5_t_l_1_1_d_props_a92db9269544c73f48d72be1db4256107}{D\-Props\-::\-D\-E\-F\-A\-U\-L\-T})
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_ab726c68a6db6a1055085e59dfb87621f}{read} (const std\-::string \&name, void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_a35a7440b9f212a8498da095fffa6df6d}{read} (const std\-::string \&name, void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_ac23072a42de2e938f27e64ea0cd9d96f}{read} (const std\-::string \&name, data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_ab8333c1f74f0d82b87b0a3056b36bfa7}{read} (const std\-::string \&name, data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_a60f8bb8b3a76fa457331a375172fc716}{read} (const std\-::string \&name, data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \hyperlink{class_h5_t_l_1_1_group_acc0a96894857a334132329442482803b}{read} (const std\-::string \&name, data\-\_\-t \&buffer, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{struct_h5_t_l_1_1adapt}{adapt}$<$ data\-\_\-t $>$\-::allocate\-\_\-return \hyperlink{class_h5_t_l_1_1_group_a3ebe23fce9aecac979096da6a71db0c5}{read} (const std\-::string \&name, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset, const std\-::vector$<$ hsize\-\_\-t $>$ \&buffer\-\_\-shape)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{struct_h5_t_l_1_1adapt}{adapt}$<$ data\-\_\-t $>$\-::allocate\-\_\-return \hyperlink{class_h5_t_l_1_1_group_a24d333709b9200ecc94c51f4081ebd70}{read} (const std\-::string \&name)
+\item 
+void \hyperlink{class_h5_t_l_1_1_group_a574293c18fed3e5391267dd3c33bf81a}{create\-Hard\-Link} (const std\-::string \&name, const \hyperlink{class_h5_t_l_1_1_group}{Group} \&target\-\_\-group, const std\-::string \&target)
+\item 
+void \hyperlink{class_h5_t_l_1_1_group_a709506d6232025482633abcb97a4d7c5}{create\-Hard\-Link} (const std\-::string \&name, const std\-::string \&target)
+\item 
+void \hyperlink{class_h5_t_l_1_1_group_a2b8d910eb930a2ec45b3051452a79d73}{create\-Hard\-Link} (const std\-::string \&name, const \hyperlink{class_h5_t_l_1_1_object}{Object} \&target)
+\item 
+void \hyperlink{class_h5_t_l_1_1_group_a3161bd364a0f5f4df9d81619482ff559}{create\-Link} (const std\-::string \&name, const std\-::string \&target)
+\item 
+void \hyperlink{class_h5_t_l_1_1_group_af143a648b8feec1260727e16960afff1}{create\-Link} (const std\-::string \&name, const std\-::string \&file, const std\-::string \&target)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_group_ad2459b5cc9b72fe123565b5afa9c0c8a}{Group} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_group_a23cda162d64c296d39cdd3c63551c275}{Group} (hid\-\_\-t \hyperlink{class_h5_t_l_1_1_i_d_ade483b65e8a77310b025e86b11cbc38c}{id})
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 884 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h5_t_l_1_1_group_ad2459b5cc9b72fe123565b5afa9c0c8a}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!Group@{Group}}
+\index{Group@{Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{Group}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Group\-::\-Group (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_group_ad2459b5cc9b72fe123565b5afa9c0c8a}
+
+
+Definition at line 886 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a23cda162d64c296d39cdd3c63551c275}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!Group@{Group}}
+\index{Group@{Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{Group}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Group\-::\-Group (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_group_a23cda162d64c296d39cdd3c63551c275}
+
+
+Definition at line 887 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a21fb4c34f51a8a56817f5a8ea1c8b9f3}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!Group@{Group}}
+\index{Group@{Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{Group}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Group\-::\-Group (
+\begin{DoxyParamCaption}
+\item[{{\bf Group} \&\&}]{grp}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a21fb4c34f51a8a56817f5a8ea1c8b9f3}
+
+
+Definition at line 889 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a373048dcbc38705ab6439b7eb7d66a7e}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!$\sim$\-Group@{$\sim$\-Group}}
+\index{$\sim$\-Group@{$\sim$\-Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{$\sim$\-Group}]{\setlength{\rightskip}{0pt plus 5cm}virtual H5\-T\-L\-::\-Group\-::$\sim$\-Group (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_group_a373048dcbc38705ab6439b7eb7d66a7e}
+
+
+Definition at line 890 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h5_t_l_1_1_group_a33879ce41734238eb50b6917268d279d}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!close@{close}}
+\index{close@{close}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}virtual void H5\-T\-L\-::\-Group\-::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_group_a33879ce41734238eb50b6917268d279d}
+
+
+Implements \hyperlink{class_h5_t_l_1_1_i_d_ad1a35bb991077bb094cdb0bb44339907}{H5\-T\-L\-::\-I\-D}.
+
+
+
+Reimplemented in \hyperlink{class_h5_t_l_1_1_file_a5499e761feeab4c85ca3aba1fb218ec9}{H5\-T\-L\-::\-File}.
+
+
+
+Definition at line 893 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_aa894ff509b260d0c5d68a765a5940da9}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create@{create}}
+\index{create@{create}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dataset} H5\-T\-L\-::\-Group\-::create (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const {\bf D\-Type} \&}]{dt, }
+\item[{const {\bf D\-Space} \&}]{space, }
+\item[{const {\bf D\-Props} \&}]{props = {\ttfamily {\bf D\-Props\-::\-D\-E\-F\-A\-U\-L\-T}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_aa894ff509b260d0c5d68a765a5940da9}
+
+
+Definition at line 951 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ab6faa3a0b9c6f9358130e1e5e4a08ad1}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Group@{create\-Group}}
+\index{create\-Group@{create\-Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Group}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Group} H5\-T\-L\-::\-Group\-::create\-Group (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_ab6faa3a0b9c6f9358130e1e5e4a08ad1}
+
+
+Definition at line 945 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a574293c18fed3e5391267dd3c33bf81a}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Hard\-Link@{create\-Hard\-Link}}
+\index{create\-Hard\-Link@{create\-Hard\-Link}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Hard\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Group\-::create\-Hard\-Link (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const {\bf Group} \&}]{target\-\_\-group, }
+\item[{const std\-::string \&}]{target}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a574293c18fed3e5391267dd3c33bf81a}
+
+
+Definition at line 1016 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a709506d6232025482633abcb97a4d7c5}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Hard\-Link@{create\-Hard\-Link}}
+\index{create\-Hard\-Link@{create\-Hard\-Link}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Hard\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Group\-::create\-Hard\-Link (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const std\-::string \&}]{target}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a709506d6232025482633abcb97a4d7c5}
+
+
+Definition at line 1019 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a2b8d910eb930a2ec45b3051452a79d73}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Hard\-Link@{create\-Hard\-Link}}
+\index{create\-Hard\-Link@{create\-Hard\-Link}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Hard\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Group\-::create\-Hard\-Link (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const {\bf Object} \&}]{target}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a2b8d910eb930a2ec45b3051452a79d73}
+
+
+Definition at line 1022 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a3161bd364a0f5f4df9d81619482ff559}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Link@{create\-Link}}
+\index{create\-Link@{create\-Link}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Group\-::create\-Link (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const std\-::string \&}]{target}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a3161bd364a0f5f4df9d81619482ff559}
+
+
+Definition at line 1025 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_af143a648b8feec1260727e16960afff1}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!create\-Link@{create\-Link}}
+\index{create\-Link@{create\-Link}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{create\-Link}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Group\-::create\-Link (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const std\-::string \&}]{file, }
+\item[{const std\-::string \&}]{target}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_af143a648b8feec1260727e16960afff1}
+
+
+Definition at line 1028 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_abbf255a903c6a9c5a5dcb33660ce0370}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!exists@{exists}}
+\index{exists@{exists}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{exists}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool H5\-T\-L\-::\-Group\-::exists (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{path}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_group_abbf255a903c6a9c5a5dcb33660ce0370}
+
+
+Definition at line 928 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ac40bee3d18aed5cc150ec47d61554ef3}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!group@{group}}
+\index{group@{group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{group}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Group} H5\-T\-L\-::\-Group\-::group (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_ac40bee3d18aed5cc150ec47d61554ef3}
+
+
+Definition at line 936 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a7f928985e0131b63c21764136bf1a01d}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!has\-Attribute@{has\-Attribute}}
+\index{has\-Attribute@{has\-Attribute}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{has\-Attribute}]{\setlength{\rightskip}{0pt plus 5cm}bool H5\-T\-L\-::\-Group\-::has\-Attribute (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{object, }
+\item[{const std\-::string \&}]{attr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a7f928985e0131b63c21764136bf1a01d}
+
+
+Definition at line 933 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a3bc589843f86da0a0e3c7c0382c47188}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!open@{open}}
+\index{open@{open}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{open}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dataset} H5\-T\-L\-::\-Group\-::open (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a3bc589843f86da0a0e3c7c0382c47188}
+
+
+Definition at line 948 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a84745fdcd43c75880ca4cd1e064e4ac9}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!open\-Group@{open\-Group}}
+\index{open\-Group@{open\-Group}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{open\-Group}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Group} H5\-T\-L\-::\-Group\-::open\-Group (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a84745fdcd43c75880ca4cd1e064e4ac9}
+
+
+Definition at line 942 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ab726c68a6db6a1055085e59dfb87621f}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_ab726c68a6db6a1055085e59dfb87621f}
+
+
+Definition at line 978 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a35a7440b9f212a8498da095fffa6df6d}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a35a7440b9f212a8498da095fffa6df6d}
+
+
+Definition at line 983 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ac23072a42de2e938f27e64ea0cd9d96f}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_ac23072a42de2e938f27e64ea0cd9d96f}
+
+
+Definition at line 987 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ab8333c1f74f0d82b87b0a3056b36bfa7}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_ab8333c1f74f0d82b87b0a3056b36bfa7}
+
+
+Definition at line 991 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a60f8bb8b3a76fa457331a375172fc716}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a60f8bb8b3a76fa457331a375172fc716}
+
+
+Definition at line 995 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_acc0a96894857a334132329442482803b}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_acc0a96894857a334132329442482803b}
+
+
+Definition at line 999 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a3ebe23fce9aecac979096da6a71db0c5}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf adapt}$<$data\-\_\-t$>$\-::allocate\-\_\-return H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{buffer\-\_\-shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a3ebe23fce9aecac979096da6a71db0c5}
+
+
+Definition at line 1005 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a24d333709b9200ecc94c51f4081ebd70}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!read@{read}}
+\index{read@{read}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf adapt}$<$data\-\_\-t$>$\-::allocate\-\_\-return H5\-T\-L\-::\-Group\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a24d333709b9200ecc94c51f4081ebd70}
+
+
+Definition at line 1011 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_ab4fbf0c28300b542e2279f5e85fb641f}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!valid@{valid}}
+\index{valid@{valid}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{valid}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool H5\-T\-L\-::\-Group\-::valid (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{path}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_group_ab4fbf0c28300b542e2279f5e85fb641f}
+
+
+Definition at line 897 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a90c193fd37dd7f35b9b62f05f830b084}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!write@{write}}
+\index{write@{write}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Dataset} H5\-T\-L\-::\-Group\-::write (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{dt, }
+\item[{const {\bf D\-Space} \&}]{space, }
+\item[{const {\bf D\-Props} \&}]{props = {\ttfamily {\bf D\-Props\-::\-D\-E\-F\-A\-U\-L\-T}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a90c193fd37dd7f35b9b62f05f830b084}
+
+
+Definition at line 963 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_aa7ec7b8867f7e0bcf2fb1ee7de321119}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!write@{write}}
+\index{write@{write}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::write (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{space, }
+\item[{const {\bf D\-Props} \&}]{props = {\ttfamily {\bf D\-Props\-::\-D\-E\-F\-A\-U\-L\-T}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_aa7ec7b8867f7e0bcf2fb1ee7de321119}
+
+
+Definition at line 970 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_group_a1acf181964e091a05491bdd07dc2acf2}{\index{H5\-T\-L\-::\-Group@{H5\-T\-L\-::\-Group}!write@{write}}
+\index{write@{write}!H5TL::Group@{H5\-T\-L\-::\-Group}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf Dataset} H5\-T\-L\-::\-Group\-::write (
+\begin{DoxyParamCaption}
+\item[{const std\-::string \&}]{name, }
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Props} \&}]{props = {\ttfamily {\bf D\-Props\-::\-D\-E\-F\-A\-U\-L\-T}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_group_a1acf181964e091a05491bdd07dc2acf2}
+
+
+Definition at line 974 of file H5\-T\-L.\-hpp.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+H5\-T\-L/\hyperlink{_h5_t_l_8hpp}{H5\-T\-L.\-hpp}\end{DoxyCompactItemize}

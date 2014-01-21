@@ -1,0 +1,393 @@
+\hypertarget{class_h5_t_l_1_1_d_type}{\section{H5\-T\-L\-:\-:D\-Type Class Reference}
+\label{class_h5_t_l_1_1_d_type}\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}}
+}
+
+
+Encapsulate an H\-D\-F5 data type object.  
+
+
+
+
+{\ttfamily \#include $<$H5\-T\-L.\-hpp$>$}
+
+Inheritance diagram for H5\-T\-L\-:\-:D\-Type\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_h5_t_l_1_1_d_type}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type_a5ba85ceb49042ecd7c9a536d3342a143}{D\-Type} (const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&dt)
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type_a2e4087bdb1aae026237ac05894e559b9}{D\-Type} (\hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&\&dt)
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type_a11fb262f22fd509d1fb047120c5b0a92}{D\-Type} (const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&dt, size\-\_\-t sz)
+\item 
+virtual \hyperlink{class_h5_t_l_1_1_d_type_a693b78e01470174565503241195fa7d9}{$\sim$\-D\-Type} ()
+\item 
+void \hyperlink{class_h5_t_l_1_1_d_type_a0839ae0745f1ed4f15bfe521f14e983e}{close} ()
+\item 
+void \hyperlink{class_h5_t_l_1_1_d_type_a16e2caeb17c88224bb286201d1b6463c}{size} (size\-\_\-t sz)
+\begin{DoxyCompactList}\small\item\em Set the size, in bytes, of the datatype. \end{DoxyCompactList}\item 
+virtual size\-\_\-t \hyperlink{class_h5_t_l_1_1_d_type_a1ece4a21faeb565b63695521a0cf0767}{size} () const 
+\item 
+virtual bool \hyperlink{class_h5_t_l_1_1_d_type_af32cf33b4b23e8326ea7134fac1fa6b8}{operator==} (const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&other) const 
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a6a438fe2e5e351a7a5f25deb4637f908}{N\-O\-N\-E}
+\begin{DoxyCompactList}\small\item\em Not a valid type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_ac2a6c1610fcc3d1a56ba67bff203f5e8}{I\-N\-T8}
+\begin{DoxyCompactList}\small\item\em Native 8-\/bit signed integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a6e37c76bcf8cea8511e8ef6fbafb269b}{U\-I\-N\-T8}
+\begin{DoxyCompactList}\small\item\em Native 8-\/bit unsigned integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a4f605ac6c7ba995aa5cc7f8b4b634029}{I\-N\-T16}
+\begin{DoxyCompactList}\small\item\em Native 16-\/bit signed integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a95cecc3c8350b6088acbc497a89c3c10}{U\-I\-N\-T16}
+\begin{DoxyCompactList}\small\item\em Native 16-\/bit unsigned integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_aeac9765985f2a8195e30a84c3b23af9f}{I\-N\-T32}
+\begin{DoxyCompactList}\small\item\em Native 32-\/bit signed integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a29c3994fbc6782ddfb316178fa17864d}{U\-I\-N\-T32}
+\begin{DoxyCompactList}\small\item\em Native 32-\/bit unsigned integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_ae8b348ef9c7faa11383fc84389ff8ffc}{I\-N\-T64}
+\begin{DoxyCompactList}\small\item\em Native 64-\/bit signed integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_abc95d3cc92fc398366a0a52bd21ded7a}{U\-I\-N\-T64}
+\begin{DoxyCompactList}\small\item\em Native 64-\/bit unsigned integer type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_aa7b15a197d2cc12261708d234eafecf5}{F\-L\-O\-A\-T}
+\begin{DoxyCompactList}\small\item\em Native float type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_ad17216b2872b91a3ab1ae498fec46773}{D\-O\-U\-B\-L\-E}
+\begin{DoxyCompactList}\small\item\em Native double-\/precision float type. \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_a261bdb031bcbd6930d09e11c53eb45d3}{S\-T\-R\-I\-N\-G}
+\begin{DoxyCompactList}\small\item\em Native string character type (copy and set size for multi-\/character strings) \end{DoxyCompactList}\item 
+static const \hyperlink{class_h5_t_l_1_1_p_d_type}{P\-D\-Type} \hyperlink{class_h5_t_l_1_1_d_type_aeec0653c7baf8f9c695d35ac3d5b5457}{R\-E\-F\-E\-R\-E\-N\-C\-E}
+\begin{DoxyCompactList}\small\item\em H\-D\-F5 object reference type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type_a7de5859c78eac6aacb64b355c40db270}{D\-Type} (hid\-\_\-t \hyperlink{class_h5_t_l_1_1_i_d_ade483b65e8a77310b025e86b11cbc38c}{id})
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type_a9b125e54e616f2bd5c0c52849c6b2383}{D\-Type} (hid\-\_\-t \hyperlink{class_h5_t_l_1_1_i_d_ade483b65e8a77310b025e86b11cbc38c}{id}, size\-\_\-t sz)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_type_ab93eacb81dea8d0c21041812e61f85ab}{Dataset}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_type_abd4bab8f7ee748d7ea63f7f9b6248611}{Attribute}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Encapsulate an H\-D\-F5 data type object. 
+
+Detailed\-Description 
+
+Definition at line 179 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h5_t_l_1_1_d_type_a7de5859c78eac6aacb64b355c40db270}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-Type@{D\-Type}}
+\index{D\-Type@{D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Type\-::\-D\-Type (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_d_type_a7de5859c78eac6aacb64b355c40db270}
+
+
+Definition at line 183 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a9b125e54e616f2bd5c0c52849c6b2383}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-Type@{D\-Type}}
+\index{D\-Type@{D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Type\-::\-D\-Type (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{id, }
+\item[{size\-\_\-t}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_d_type_a9b125e54e616f2bd5c0c52849c6b2383}
+
+
+Definition at line 184 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a5ba85ceb49042ecd7c9a536d3342a143}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-Type@{D\-Type}}
+\index{D\-Type@{D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Type\-::\-D\-Type (
+\begin{DoxyParamCaption}
+\item[{const {\bf D\-Type} \&}]{dt}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_type_a5ba85ceb49042ecd7c9a536d3342a143}
+
+
+Definition at line 188 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a2e4087bdb1aae026237ac05894e559b9}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-Type@{D\-Type}}
+\index{D\-Type@{D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Type\-::\-D\-Type (
+\begin{DoxyParamCaption}
+\item[{{\bf D\-Type} \&\&}]{dt}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_type_a2e4087bdb1aae026237ac05894e559b9}
+
+
+Definition at line 189 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a11fb262f22fd509d1fb047120c5b0a92}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-Type@{D\-Type}}
+\index{D\-Type@{D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Type\-::\-D\-Type (
+\begin{DoxyParamCaption}
+\item[{const {\bf D\-Type} \&}]{dt, }
+\item[{size\-\_\-t}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_type_a11fb262f22fd509d1fb047120c5b0a92}
+
+
+Definition at line 190 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a693b78e01470174565503241195fa7d9}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!$\sim$\-D\-Type@{$\sim$\-D\-Type}}
+\index{$\sim$\-D\-Type@{$\sim$\-D\-Type}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{$\sim$\-D\-Type}]{\setlength{\rightskip}{0pt plus 5cm}virtual H5\-T\-L\-::\-D\-Type\-::$\sim$\-D\-Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_d_type_a693b78e01470174565503241195fa7d9}
+
+
+Definition at line 193 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h5_t_l_1_1_d_type_a0839ae0745f1ed4f15bfe521f14e983e}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!close@{close}}
+\index{close@{close}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-D\-Type\-::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_d_type_a0839ae0745f1ed4f15bfe521f14e983e}
+
+
+Implements \hyperlink{class_h5_t_l_1_1_i_d_ad1a35bb991077bb094cdb0bb44339907}{H5\-T\-L\-::\-I\-D}.
+
+
+
+Reimplemented in \hyperlink{class_h5_t_l_1_1_p_d_type_a85fa032de8ec7be551f92e2115743518}{H5\-T\-L\-::\-P\-D\-Type}.
+
+
+
+Definition at line 196 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_af32cf33b4b23e8326ea7134fac1fa6b8}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!operator==@{operator==}}
+\index{operator==@{operator==}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool H5\-T\-L\-::\-D\-Type\-::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf D\-Type} \&}]{other}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_d_type_af32cf33b4b23e8326ea7134fac1fa6b8}
+
+
+Definition at line 211 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a16e2caeb17c88224bb286201d1b6463c}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!size@{size}}
+\index{size@{size}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-D\-Type\-::size (
+\begin{DoxyParamCaption}
+\item[{size\-\_\-t}]{sz}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_type_a16e2caeb17c88224bb286201d1b6463c}
+
+
+Set the size, in bytes, of the datatype. 
+
+Set the size, in bytes, of the datatype. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em sz} & The size of the datatype, in bytes. Set to 0 for variable-\/size strings. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 204 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a1ece4a21faeb565b63695521a0cf0767}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!size@{size}}
+\index{size@{size}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{size}]{\setlength{\rightskip}{0pt plus 5cm}virtual size\-\_\-t H5\-T\-L\-::\-D\-Type\-::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_d_type_a1ece4a21faeb565b63695521a0cf0767}
+
+
+Definition at line 208 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{class_h5_t_l_1_1_d_type_abd4bab8f7ee748d7ea63f7f9b6248611}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!Attribute@{Attribute}}
+\index{Attribute@{Attribute}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{Attribute}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Attribute}\hspace{0.3cm}{\ttfamily [friend]}}}\label{class_h5_t_l_1_1_d_type_abd4bab8f7ee748d7ea63f7f9b6248611}
+
+
+Definition at line 181 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_ab93eacb81dea8d0c21041812e61f85ab}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!Dataset@{Dataset}}
+\index{Dataset@{Dataset}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{Dataset}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Dataset}\hspace{0.3cm}{\ttfamily [friend]}}}\label{class_h5_t_l_1_1_d_type_ab93eacb81dea8d0c21041812e61f85ab}
+
+
+Definition at line 180 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_h5_t_l_1_1_d_type_ad17216b2872b91a3ab1ae498fec46773}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!D\-O\-U\-B\-L\-E@{D\-O\-U\-B\-L\-E}}
+\index{D\-O\-U\-B\-L\-E@{D\-O\-U\-B\-L\-E}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{D\-O\-U\-B\-L\-E}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-D\-O\-U\-B\-L\-E\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_ad17216b2872b91a3ab1ae498fec46773}
+
+
+Native double-\/precision float type. 
+
+
+
+Definition at line 224 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_aa7b15a197d2cc12261708d234eafecf5}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!F\-L\-O\-A\-T@{F\-L\-O\-A\-T}}
+\index{F\-L\-O\-A\-T@{F\-L\-O\-A\-T}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{F\-L\-O\-A\-T}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-F\-L\-O\-A\-T\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_aa7b15a197d2cc12261708d234eafecf5}
+
+
+Native float type. 
+
+
+
+Definition at line 223 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a4f605ac6c7ba995aa5cc7f8b4b634029}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!I\-N\-T16@{I\-N\-T16}}
+\index{I\-N\-T16@{I\-N\-T16}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{I\-N\-T16}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-I\-N\-T16\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a4f605ac6c7ba995aa5cc7f8b4b634029}
+
+
+Native 16-\/bit signed integer type. 
+
+
+
+Definition at line 217 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_aeac9765985f2a8195e30a84c3b23af9f}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!I\-N\-T32@{I\-N\-T32}}
+\index{I\-N\-T32@{I\-N\-T32}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{I\-N\-T32}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-I\-N\-T32\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_aeac9765985f2a8195e30a84c3b23af9f}
+
+
+Native 32-\/bit signed integer type. 
+
+
+
+Definition at line 219 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_ae8b348ef9c7faa11383fc84389ff8ffc}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!I\-N\-T64@{I\-N\-T64}}
+\index{I\-N\-T64@{I\-N\-T64}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{I\-N\-T64}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-I\-N\-T64\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_ae8b348ef9c7faa11383fc84389ff8ffc}
+
+
+Native 64-\/bit signed integer type. 
+
+
+
+Definition at line 221 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_ac2a6c1610fcc3d1a56ba67bff203f5e8}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!I\-N\-T8@{I\-N\-T8}}
+\index{I\-N\-T8@{I\-N\-T8}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{I\-N\-T8}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-I\-N\-T8\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_ac2a6c1610fcc3d1a56ba67bff203f5e8}
+
+
+Native 8-\/bit signed integer type. 
+
+
+
+Definition at line 215 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a6a438fe2e5e351a7a5f25deb4637f908}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!N\-O\-N\-E@{N\-O\-N\-E}}
+\index{N\-O\-N\-E@{N\-O\-N\-E}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{N\-O\-N\-E}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-N\-O\-N\-E\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a6a438fe2e5e351a7a5f25deb4637f908}
+
+
+Not a valid type. 
+
+
+
+Definition at line 214 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_aeec0653c7baf8f9c695d35ac3d5b5457}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!R\-E\-F\-E\-R\-E\-N\-C\-E@{R\-E\-F\-E\-R\-E\-N\-C\-E}}
+\index{R\-E\-F\-E\-R\-E\-N\-C\-E@{R\-E\-F\-E\-R\-E\-N\-C\-E}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{R\-E\-F\-E\-R\-E\-N\-C\-E}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-R\-E\-F\-E\-R\-E\-N\-C\-E\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_aeec0653c7baf8f9c695d35ac3d5b5457}
+
+
+H\-D\-F5 object reference type. 
+
+
+
+Definition at line 226 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a261bdb031bcbd6930d09e11c53eb45d3}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!S\-T\-R\-I\-N\-G@{S\-T\-R\-I\-N\-G}}
+\index{S\-T\-R\-I\-N\-G@{S\-T\-R\-I\-N\-G}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{S\-T\-R\-I\-N\-G}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-S\-T\-R\-I\-N\-G\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a261bdb031bcbd6930d09e11c53eb45d3}
+
+
+Native string character type (copy and set size for multi-\/character strings) 
+
+
+
+Definition at line 225 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a95cecc3c8350b6088acbc497a89c3c10}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!U\-I\-N\-T16@{U\-I\-N\-T16}}
+\index{U\-I\-N\-T16@{U\-I\-N\-T16}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{U\-I\-N\-T16}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-U\-I\-N\-T16\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a95cecc3c8350b6088acbc497a89c3c10}
+
+
+Native 16-\/bit unsigned integer type. 
+
+
+
+Definition at line 218 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a29c3994fbc6782ddfb316178fa17864d}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!U\-I\-N\-T32@{U\-I\-N\-T32}}
+\index{U\-I\-N\-T32@{U\-I\-N\-T32}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{U\-I\-N\-T32}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-U\-I\-N\-T32\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a29c3994fbc6782ddfb316178fa17864d}
+
+
+Native 32-\/bit unsigned integer type. 
+
+
+
+Definition at line 220 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_abc95d3cc92fc398366a0a52bd21ded7a}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!U\-I\-N\-T64@{U\-I\-N\-T64}}
+\index{U\-I\-N\-T64@{U\-I\-N\-T64}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{U\-I\-N\-T64}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-U\-I\-N\-T64\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_abc95d3cc92fc398366a0a52bd21ded7a}
+
+
+Native 64-\/bit unsigned integer type. 
+
+
+
+Definition at line 222 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_type_a6e37c76bcf8cea8511e8ef6fbafb269b}{\index{H5\-T\-L\-::\-D\-Type@{H5\-T\-L\-::\-D\-Type}!U\-I\-N\-T8@{U\-I\-N\-T8}}
+\index{U\-I\-N\-T8@{U\-I\-N\-T8}!H5TL::DType@{H5\-T\-L\-::\-D\-Type}}
+\subsubsection[{U\-I\-N\-T8}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf P\-D\-Type} H5\-T\-L\-::\-D\-Type\-::\-U\-I\-N\-T8\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_type_a6e37c76bcf8cea8511e8ef6fbafb269b}
+
+
+Native 8-\/bit unsigned integer type. 
+
+
+
+Definition at line 216 of file H5\-T\-L.\-hpp.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+H5\-T\-L/\hyperlink{_h5_t_l_8hpp}{H5\-T\-L.\-hpp}\end{DoxyCompactItemize}

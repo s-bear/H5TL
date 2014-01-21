@@ -1,0 +1,514 @@
+\hypertarget{class_h5_t_l_1_1_dataset}{\section{H5\-T\-L\-:\-:Dataset Class Reference}
+\label{class_h5_t_l_1_1_dataset}\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}}
+}
+
+
+{\ttfamily \#include $<$H5\-T\-L.\-hpp$>$}
+
+Inheritance diagram for H5\-T\-L\-:\-:Dataset\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_h5_t_l_1_1_dataset}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset_a0dbc91a3302c8affed45970aeb3cdd88}{Dataset} (\hyperlink{class_h5_t_l_1_1_dataset}{Dataset} \&\&dset)
+\item 
+virtual \hyperlink{class_h5_t_l_1_1_dataset_a918b06db14171308441b89b701d827ba}{$\sim$\-Dataset} ()
+\item 
+virtual void \hyperlink{class_h5_t_l_1_1_dataset_a870b88885b1edd806edcc15cc4a68b89}{close} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \hyperlink{class_h5_t_l_1_1_dataset_a3b0cc1434d993029fcbff1998767e0c3}{space} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \hyperlink{class_h5_t_l_1_1_dataset_a3ac128ce40c50aaf352c70c96c853748}{dtype} ()
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_aebd58da33d992bb608067c85c944e688}{write} (const void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_a5eff3aaf3ac89c159cd8182400947b50}{write} (const void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_aec3ddf07a6b592c8e7f8b44e7fd35375}{write} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a077d5bb62ed4b99db4900ae2af64cb7b}{write} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a57a932b797520777fb16ebe9161cffd5}{write} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a919ef513e9cd4bb57c796551d4b1d2f7}{write} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a85346218808829de0cb2c84fa42efe86}{write} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a59c376ac04cbb6f040d3bcf7ddac2c21}{write} (const data\-\_\-t \&buffer, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_a0a8e406f9036b0e95d6645bc7f17dd85}{extend} (const std\-::vector$<$ hsize\-\_\-t $>$ \&extent)
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_a0db33d74e18e6908a30ee8048a42ae5d}{append} (const void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_af0f65d79e42993b413fdc48760a28bf5}{append} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a09b7f1c8bf3d92fd3dfdf0e21138350d}{append} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a21a8ba439908fc08837b01e737247f37}{append} (const data\-\_\-t \&buffer, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_aba2bb711bf30e38ac5078663c200c318}{append} (const void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a791cc0c96a11264f01137984487ee17c}{append} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a82d72341e7102390af4995aaaea3962a}{append} (const data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a72b917d03cf1be028b0a60663f3735da}{append} (const data\-\_\-t \&buffer)
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_a13145066f529134568242b3aa03ff991}{read} (void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+void \hyperlink{class_h5_t_l_1_1_dataset_abddc9236c56c2631b70dc2347d5788bd}{read} (void $\ast$buffer, const \hyperlink{class_h5_t_l_1_1_d_type}{D\-Type} \&buffer\-\_\-type, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_ab0f7e4ae35955b9c4990f23405b37186}{read} (data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_aa8d9fd06fae090ddded69ac66040443a}{read} (data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&buffer\-\_\-shape, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_a1b66996cc6de6e7ea03a110e15888a3a}{read} (data\-\_\-t \&buffer, const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&selection=\hyperlink{class_h5_t_l_1_1_selection_a32d830ebff3c607e0425fa5d6ef72df0}{Selection\-::\-A\-L\-L})
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\void \hyperlink{class_h5_t_l_1_1_dataset_aa7ffa9c5a6f1e11351fecea1dbf7d9c5}{read} (data\-\_\-t \&buffer, const std\-::vector$<$ hsize\-\_\-t $>$ \&offset)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{struct_h5_t_l_1_1adapt}{adapt}$<$ data\-\_\-t $>$\-::allocate\-\_\-return \hyperlink{class_h5_t_l_1_1_dataset_a993f08f7a55ecf7cef453c58af2de7c8}{read} (const std\-::vector$<$ hsize\-\_\-t $>$ \&offset, const std\-::vector$<$ hsize\-\_\-t $>$ \&buffer\-\_\-shape)
+\item 
+{\footnotesize template$<$typename data\-\_\-t $>$ }\\\hyperlink{struct_h5_t_l_1_1adapt}{adapt}$<$ data\-\_\-t $>$\-::allocate\-\_\-return \hyperlink{class_h5_t_l_1_1_dataset_add8fa95fb77a9167f432e5d6abddc2ed}{read} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset_af6f2cd1a5170e2b7d866721c9be0fd11}{Dataset} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_dataset_a0857ba27c707399302da28064342915f}{Dataset} (hid\-\_\-t \hyperlink{class_h5_t_l_1_1_i_d_ade483b65e8a77310b025e86b11cbc38c}{id})
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_h5_t_l_1_1_dataset_a2697825715974a353728f0d4d5658112}{Group}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 689 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h5_t_l_1_1_dataset_af6f2cd1a5170e2b7d866721c9be0fd11}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!Dataset@{Dataset}}
+\index{Dataset@{Dataset}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{Dataset}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Dataset\-::\-Dataset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_dataset_af6f2cd1a5170e2b7d866721c9be0fd11}
+
+
+Definition at line 692 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a0857ba27c707399302da28064342915f}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!Dataset@{Dataset}}
+\index{Dataset@{Dataset}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{Dataset}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Dataset\-::\-Dataset (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_dataset_a0857ba27c707399302da28064342915f}
+
+
+Definition at line 693 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a0dbc91a3302c8affed45970aeb3cdd88}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!Dataset@{Dataset}}
+\index{Dataset@{Dataset}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{Dataset}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Dataset\-::\-Dataset (
+\begin{DoxyParamCaption}
+\item[{{\bf Dataset} \&\&}]{dset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a0dbc91a3302c8affed45970aeb3cdd88}
+
+
+Definition at line 695 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a918b06db14171308441b89b701d827ba}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!$\sim$\-Dataset@{$\sim$\-Dataset}}
+\index{$\sim$\-Dataset@{$\sim$\-Dataset}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{$\sim$\-Dataset}]{\setlength{\rightskip}{0pt plus 5cm}virtual H5\-T\-L\-::\-Dataset\-::$\sim$\-Dataset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_dataset_a918b06db14171308441b89b701d827ba}
+
+
+Definition at line 696 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h5_t_l_1_1_dataset_a0db33d74e18e6908a30ee8048a42ae5d}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a0db33d74e18e6908a30ee8048a42ae5d}
+
+
+Definition at line 776 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_af0f65d79e42993b413fdc48760a28bf5}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_af0f65d79e42993b413fdc48760a28bf5}
+
+
+Definition at line 797 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a09b7f1c8bf3d92fd3dfdf0e21138350d}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a09b7f1c8bf3d92fd3dfdf0e21138350d}
+
+
+Definition at line 801 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a21a8ba439908fc08837b01e737247f37}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a21a8ba439908fc08837b01e737247f37}
+
+
+Definition at line 805 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_aba2bb711bf30e38ac5078663c200c318}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_aba2bb711bf30e38ac5078663c200c318}
+
+
+Definition at line 809 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a791cc0c96a11264f01137984487ee17c}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a791cc0c96a11264f01137984487ee17c}
+
+
+Definition at line 831 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a82d72341e7102390af4995aaaea3962a}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a82d72341e7102390af4995aaaea3962a}
+
+
+Definition at line 835 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a72b917d03cf1be028b0a60663f3735da}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!append@{append}}
+\index{append@{append}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{append}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::append (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a72b917d03cf1be028b0a60663f3735da}
+
+
+Definition at line 839 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a870b88885b1edd806edcc15cc4a68b89}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!close@{close}}
+\index{close@{close}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}virtual void H5\-T\-L\-::\-Dataset\-::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_dataset_a870b88885b1edd806edcc15cc4a68b89}
+
+
+Implements \hyperlink{class_h5_t_l_1_1_i_d_ad1a35bb991077bb094cdb0bb44339907}{H5\-T\-L\-::\-I\-D}.
+
+
+
+Definition at line 699 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a3ac128ce40c50aaf352c70c96c853748}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!dtype@{dtype}}
+\index{dtype@{dtype}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{dtype}]{\setlength{\rightskip}{0pt plus 5cm}{\bf D\-Type} H5\-T\-L\-::\-Dataset\-::dtype (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a3ac128ce40c50aaf352c70c96c853748}
+
+
+Definition at line 705 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a0a8e406f9036b0e95d6645bc7f17dd85}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!extend@{extend}}
+\index{extend@{extend}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{extend}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::extend (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{extent}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a0a8e406f9036b0e95d6645bc7f17dd85}
+
+
+Definition at line 772 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a13145066f529134568242b3aa03ff991}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a13145066f529134568242b3aa03ff991}
+
+
+Definition at line 843 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_abddc9236c56c2631b70dc2347d5788bd}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_abddc9236c56c2631b70dc2347d5788bd}
+
+
+Definition at line 847 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_ab0f7e4ae35955b9c4990f23405b37186}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_ab0f7e4ae35955b9c4990f23405b37186}
+
+
+Definition at line 851 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_aa8d9fd06fae090ddded69ac66040443a}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_aa8d9fd06fae090ddded69ac66040443a}
+
+
+Definition at line 855 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a1b66996cc6de6e7ea03a110e15888a3a}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a1b66996cc6de6e7ea03a110e15888a3a}
+
+
+Definition at line 859 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_aa7ffa9c5a6f1e11351fecea1dbf7d9c5}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{data\-\_\-t \&}]{buffer, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_aa7ffa9c5a6f1e11351fecea1dbf7d9c5}
+
+
+Definition at line 863 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a993f08f7a55ecf7cef453c58af2de7c8}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf adapt}$<$data\-\_\-t$>$\-::allocate\-\_\-return H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{buffer\-\_\-shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a993f08f7a55ecf7cef453c58af2de7c8}
+
+
+Definition at line 869 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_add8fa95fb77a9167f432e5d6abddc2ed}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!read@{read}}
+\index{read@{read}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{read}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ {\bf adapt}$<$data\-\_\-t$>$\-::allocate\-\_\-return H5\-T\-L\-::\-Dataset\-::read (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_add8fa95fb77a9167f432e5d6abddc2ed}
+
+
+Definition at line 876 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a3b0cc1434d993029fcbff1998767e0c3}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!space@{space}}
+\index{space@{space}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{space}]{\setlength{\rightskip}{0pt plus 5cm}{\bf D\-Space} H5\-T\-L\-::\-Dataset\-::space (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a3b0cc1434d993029fcbff1998767e0c3}
+
+
+Definition at line 702 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_aebd58da33d992bb608067c85c944e688}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_aebd58da33d992bb608067c85c944e688}
+
+
+Definition at line 730 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a5eff3aaf3ac89c159cd8182400947b50}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const void $\ast$}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a5eff3aaf3ac89c159cd8182400947b50}
+
+
+Definition at line 733 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_aec3ddf07a6b592c8e7f8b44e7fd35375}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_aec3ddf07a6b592c8e7f8b44e7fd35375}
+
+
+Definition at line 748 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a077d5bb62ed4b99db4900ae2af64cb7b}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Space} \&}]{buffer\-\_\-shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a077d5bb62ed4b99db4900ae2af64cb7b}
+
+
+Definition at line 752 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a57a932b797520777fb16ebe9161cffd5}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a57a932b797520777fb16ebe9161cffd5}
+
+
+Definition at line 756 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a919ef513e9cd4bb57c796551d4b1d2f7}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf D\-Type} \&}]{buffer\-\_\-type, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a919ef513e9cd4bb57c796551d4b1d2f7}
+
+
+Definition at line 760 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a85346218808829de0cb2c84fa42efe86}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const {\bf Selection} \&}]{selection = {\ttfamily {\bf Selection\-::\-A\-L\-L}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a85346218808829de0cb2c84fa42efe86}
+
+
+Definition at line 764 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_dataset_a59c376ac04cbb6f040d3bcf7ddac2c21}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!write@{write}}
+\index{write@{write}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename data\-\_\-t $>$ void H5\-T\-L\-::\-Dataset\-::write (
+\begin{DoxyParamCaption}
+\item[{const data\-\_\-t \&}]{buffer, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_dataset_a59c376ac04cbb6f040d3bcf7ddac2c21}
+
+
+Definition at line 768 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{class_h5_t_l_1_1_dataset_a2697825715974a353728f0d4d5658112}{\index{H5\-T\-L\-::\-Dataset@{H5\-T\-L\-::\-Dataset}!Group@{Group}}
+\index{Group@{Group}!H5TL::Dataset@{H5\-T\-L\-::\-Dataset}}
+\subsubsection[{Group}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Group}\hspace{0.3cm}{\ttfamily [friend]}}}\label{class_h5_t_l_1_1_dataset_a2697825715974a353728f0d4d5658112}
+
+
+Definition at line 690 of file H5\-T\-L.\-hpp.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+H5\-T\-L/\hyperlink{_h5_t_l_8hpp}{H5\-T\-L.\-hpp}\end{DoxyCompactItemize}

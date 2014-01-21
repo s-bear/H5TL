@@ -1,0 +1,336 @@
+\hypertarget{class_h5_t_l_1_1_d_space}{\section{H5\-T\-L\-:\-:D\-Space Class Reference}
+\label{class_h5_t_l_1_1_d_space}\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}}
+}
+
+
+{\ttfamily \#include $<$H5\-T\-L.\-hpp$>$}
+
+Inheritance diagram for H5\-T\-L\-:\-:D\-Space\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_h5_t_l_1_1_d_space}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_abe4839703fc08c5851b8388ee43177ef}{D\-Space} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_a0ba05245349237b1e42813cf4397fa32}{D\-Space} (const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&ds)
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_af10333ae1d222213a34db2a338ae158c}{D\-Space} (\hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \&\&ds)
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_a0bacd841219760f82023a5c6d34d71c8}{D\-Space} (size\-\_\-t N, const hsize\-\_\-t $\ast$\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape}, const hsize\-\_\-t $\ast$maxshape=nullptr)
+\item 
+{\footnotesize template$<$size\-\_\-t N$>$ }\\\hyperlink{class_h5_t_l_1_1_d_space_a361184a3052fd5fe5bd71454b244007d}{D\-Space} (const hsize\-\_\-t(\&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape})\mbox{[}N\mbox{]})
+\item 
+{\footnotesize template$<$size\-\_\-t N$>$ }\\\hyperlink{class_h5_t_l_1_1_d_space_a376a9922dbf0eb7234bb33d5e14825a9}{D\-Space} (const hsize\-\_\-t(\&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape})\mbox{[}N\mbox{]}, const hsize\-\_\-t(\&maxshape)\mbox{[}N\mbox{]})
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_a911e7f9f9398e7324c508f55fe63baaa}{D\-Space} (const std\-::vector$<$ hsize\-\_\-t $>$ \&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape})
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_aed1106ff0fb79eda9c2666b62eebc4d8}{D\-Space} (const std\-::vector$<$ hsize\-\_\-t $>$ \&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape}, const std\-::vector$<$ hsize\-\_\-t $>$ \&maxshape)
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_a7abcd0097c46b8f3252b6610bca3ebd1}{$\sim$\-D\-Space} ()
+\item 
+void \hyperlink{class_h5_t_l_1_1_d_space_a527298cfe321414033f52329a49e6b7a}{close} ()
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \& \hyperlink{class_h5_t_l_1_1_d_space_ab42688e0331b2b49d311d43dde36c31e}{select} (const \hyperlink{class_h5_t_l_1_1_selection}{Selection} \&s)
+\item 
+void \hyperlink{class_h5_t_l_1_1_d_space_a7557c53c7dc3b9b4e8a12cc35a438564}{extent} (const std\-::vector$<$ hsize\-\_\-t $>$ \&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape})
+\item 
+void \hyperlink{class_h5_t_l_1_1_d_space_a62a6b850d17c08da4437c6080f7c3598}{extent} (const std\-::vector$<$ hsize\-\_\-t $>$ \&\hyperlink{namespace_h5_t_l_a18d3869e336e2b6a64ec318cf9890c90}{shape}, const std\-::vector$<$ hsize\-\_\-t $>$ \&maxshape)
+\item 
+std\-::vector$<$ hsize\-\_\-t $>$ \hyperlink{class_h5_t_l_1_1_d_space_a217bb888d3d9666e1105a7b839f130d7}{extent} () const 
+\item 
+std\-::vector$<$ hsize\-\_\-t $>$ \hyperlink{class_h5_t_l_1_1_d_space_aa253d3194c386398cd3a614022226091}{max\-\_\-extent} () const 
+\item 
+std\-::pair$<$ std\-::vector\\*
+$<$ hsize\-\_\-t $>$, std\-::vector\\*
+$<$ hsize\-\_\-t $>$ $>$ \hyperlink{class_h5_t_l_1_1_d_space_a8d0637d8c3adbee551721f7fbd609de1}{extents} () const 
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const size\-\_\-t \hyperlink{class_h5_t_l_1_1_d_space_aaff3fd7254edf581676b4d0a5740b80e}{M\-A\-X\-\_\-\-R\-A\-N\-K}
+\item 
+static const hsize\-\_\-t \hyperlink{class_h5_t_l_1_1_d_space_a2c7e4e6d7392338ff352da82243f9f21}{U\-N\-L\-I\-M\-I\-T\-E\-D}
+\item 
+static const hsize\-\_\-t \hyperlink{class_h5_t_l_1_1_d_space_a3f52ebf53e3a4da32927b0867a0bd8f9}{U\-N\-L}
+\item 
+static const \hyperlink{class_h5_t_l_1_1_d_space}{D\-Space} \hyperlink{class_h5_t_l_1_1_d_space_a0fd9cf77c7cd46e51764f71ce1e6eb11}{S\-C\-A\-L\-A\-R}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_d_space_add7bd418265b7dcea2e6b0fd60ea15e0}{D\-Space} (hid\-\_\-t \hyperlink{class_h5_t_l_1_1_i_d_ade483b65e8a77310b025e86b11cbc38c}{id})
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_space_ab93eacb81dea8d0c21041812e61f85ab}{Dataset}
+\item 
+class \hyperlink{class_h5_t_l_1_1_d_space_abd4bab8f7ee748d7ea63f7f9b6248611}{Attribute}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 466 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h5_t_l_1_1_d_space_add7bd418265b7dcea2e6b0fd60ea15e0}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_d_space_add7bd418265b7dcea2e6b0fd60ea15e0}
+
+
+Definition at line 470 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_abe4839703fc08c5851b8388ee43177ef}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_abe4839703fc08c5851b8388ee43177ef}
+
+
+Definition at line 472 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a0ba05245349237b1e42813cf4397fa32}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{const {\bf D\-Space} \&}]{ds}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a0ba05245349237b1e42813cf4397fa32}
+
+
+Definition at line 473 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_af10333ae1d222213a34db2a338ae158c}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{{\bf D\-Space} \&\&}]{ds}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_af10333ae1d222213a34db2a338ae158c}
+
+
+Definition at line 474 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a0bacd841219760f82023a5c6d34d71c8}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{size\-\_\-t}]{N, }
+\item[{const hsize\-\_\-t $\ast$}]{shape, }
+\item[{const hsize\-\_\-t $\ast$}]{maxshape = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a0bacd841219760f82023a5c6d34d71c8}
+
+
+Definition at line 475 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a361184a3052fd5fe5bd71454b244007d}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}template$<$size\-\_\-t N$>$ H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{const hsize\-\_\-t(\&)}]{shape\mbox{[}\-N\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}}\label{class_h5_t_l_1_1_d_space_a361184a3052fd5fe5bd71454b244007d}
+
+
+Definition at line 483 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a376a9922dbf0eb7234bb33d5e14825a9}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}template$<$size\-\_\-t N$>$ H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{const hsize\-\_\-t(\&)}]{shape\mbox{[}\-N\mbox{]}, }
+\item[{const hsize\-\_\-t(\&)}]{maxshape\mbox{[}\-N\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a376a9922dbf0eb7234bb33d5e14825a9}
+
+
+Definition at line 491 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a911e7f9f9398e7324c508f55fe63baaa}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}}\label{class_h5_t_l_1_1_d_space_a911e7f9f9398e7324c508f55fe63baaa}
+
+
+Definition at line 498 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_aed1106ff0fb79eda9c2666b62eebc4d8}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!D\-Space@{D\-Space}}
+\index{D\-Space@{D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::\-D\-Space (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{maxshape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_aed1106ff0fb79eda9c2666b62eebc4d8}
+
+
+Definition at line 506 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a7abcd0097c46b8f3252b6610bca3ebd1}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!$\sim$\-D\-Space@{$\sim$\-D\-Space}}
+\index{$\sim$\-D\-Space@{$\sim$\-D\-Space}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{$\sim$\-D\-Space}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-D\-Space\-::$\sim$\-D\-Space (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a7abcd0097c46b8f3252b6610bca3ebd1}
+
+
+Definition at line 514 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h5_t_l_1_1_d_space_a527298cfe321414033f52329a49e6b7a}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!close@{close}}
+\index{close@{close}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-D\-Space\-::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_h5_t_l_1_1_d_space_a527298cfe321414033f52329a49e6b7a}
+
+
+Implements \hyperlink{class_h5_t_l_1_1_i_d_ad1a35bb991077bb094cdb0bb44339907}{H5\-T\-L\-::\-I\-D}.
+
+
+
+Definition at line 517 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a7557c53c7dc3b9b4e8a12cc35a438564}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!extent@{extent}}
+\index{extent@{extent}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{extent}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-D\-Space\-::extent (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{shape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a7557c53c7dc3b9b4e8a12cc35a438564}
+
+
+Definition at line 524 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a62a6b850d17c08da4437c6080f7c3598}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!extent@{extent}}
+\index{extent@{extent}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{extent}]{\setlength{\rightskip}{0pt plus 5cm}void H5\-T\-L\-::\-D\-Space\-::extent (
+\begin{DoxyParamCaption}
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{shape, }
+\item[{const std\-::vector$<$ hsize\-\_\-t $>$ \&}]{maxshape}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a62a6b850d17c08da4437c6080f7c3598}
+
+
+Definition at line 527 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a217bb888d3d9666e1105a7b839f130d7}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!extent@{extent}}
+\index{extent@{extent}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{extent}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$hsize\-\_\-t$>$ H5\-T\-L\-::\-D\-Space\-::extent (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a217bb888d3d9666e1105a7b839f130d7}
+
+
+Definition at line 530 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a8d0637d8c3adbee551721f7fbd609de1}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!extents@{extents}}
+\index{extents@{extents}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{extents}]{\setlength{\rightskip}{0pt plus 5cm}std\-::pair$<$std\-::vector$<$hsize\-\_\-t$>$, std\-::vector$<$hsize\-\_\-t$>$ $>$ H5\-T\-L\-::\-D\-Space\-::extents (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_a8d0637d8c3adbee551721f7fbd609de1}
+
+
+Definition at line 550 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_aa253d3194c386398cd3a614022226091}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!max\-\_\-extent@{max\-\_\-extent}}
+\index{max\-\_\-extent@{max\-\_\-extent}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{max\-\_\-extent}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$hsize\-\_\-t$>$ H5\-T\-L\-::\-D\-Space\-::max\-\_\-extent (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_aa253d3194c386398cd3a614022226091}
+
+
+Definition at line 540 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_ab42688e0331b2b49d311d43dde36c31e}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!select@{select}}
+\index{select@{select}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{select}]{\setlength{\rightskip}{0pt plus 5cm}{\bf D\-Space}\& H5\-T\-L\-::\-D\-Space\-::select (
+\begin{DoxyParamCaption}
+\item[{const {\bf Selection} \&}]{s}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_h5_t_l_1_1_d_space_ab42688e0331b2b49d311d43dde36c31e}
+
+
+Definition at line 520 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{class_h5_t_l_1_1_d_space_abd4bab8f7ee748d7ea63f7f9b6248611}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!Attribute@{Attribute}}
+\index{Attribute@{Attribute}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{Attribute}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Attribute}\hspace{0.3cm}{\ttfamily [friend]}}}\label{class_h5_t_l_1_1_d_space_abd4bab8f7ee748d7ea63f7f9b6248611}
+
+
+Definition at line 468 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_ab93eacb81dea8d0c21041812e61f85ab}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!Dataset@{Dataset}}
+\index{Dataset@{Dataset}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{Dataset}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Dataset}\hspace{0.3cm}{\ttfamily [friend]}}}\label{class_h5_t_l_1_1_d_space_ab93eacb81dea8d0c21041812e61f85ab}
+
+
+Definition at line 467 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_h5_t_l_1_1_d_space_aaff3fd7254edf581676b4d0a5740b80e}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!M\-A\-X\-\_\-\-R\-A\-N\-K@{M\-A\-X\-\_\-\-R\-A\-N\-K}}
+\index{M\-A\-X\-\_\-\-R\-A\-N\-K@{M\-A\-X\-\_\-\-R\-A\-N\-K}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{M\-A\-X\-\_\-\-R\-A\-N\-K}]{\setlength{\rightskip}{0pt plus 5cm}const size\-\_\-t H5\-T\-L\-::\-D\-Space\-::\-M\-A\-X\-\_\-\-R\-A\-N\-K\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_space_aaff3fd7254edf581676b4d0a5740b80e}
+
+
+Definition at line 560 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a0fd9cf77c7cd46e51764f71ce1e6eb11}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!S\-C\-A\-L\-A\-R@{S\-C\-A\-L\-A\-R}}
+\index{S\-C\-A\-L\-A\-R@{S\-C\-A\-L\-A\-R}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{S\-C\-A\-L\-A\-R}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf D\-Space} H5\-T\-L\-::\-D\-Space\-::\-S\-C\-A\-L\-A\-R\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_space_a0fd9cf77c7cd46e51764f71ce1e6eb11}
+
+
+Definition at line 563 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a3f52ebf53e3a4da32927b0867a0bd8f9}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!U\-N\-L@{U\-N\-L}}
+\index{U\-N\-L@{U\-N\-L}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{U\-N\-L}]{\setlength{\rightskip}{0pt plus 5cm}const hsize\-\_\-t H5\-T\-L\-::\-D\-Space\-::\-U\-N\-L\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_space_a3f52ebf53e3a4da32927b0867a0bd8f9}
+
+
+Definition at line 562 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_d_space_a2c7e4e6d7392338ff352da82243f9f21}{\index{H5\-T\-L\-::\-D\-Space@{H5\-T\-L\-::\-D\-Space}!U\-N\-L\-I\-M\-I\-T\-E\-D@{U\-N\-L\-I\-M\-I\-T\-E\-D}}
+\index{U\-N\-L\-I\-M\-I\-T\-E\-D@{U\-N\-L\-I\-M\-I\-T\-E\-D}!H5TL::DSpace@{H5\-T\-L\-::\-D\-Space}}
+\subsubsection[{U\-N\-L\-I\-M\-I\-T\-E\-D}]{\setlength{\rightskip}{0pt plus 5cm}const hsize\-\_\-t H5\-T\-L\-::\-D\-Space\-::\-U\-N\-L\-I\-M\-I\-T\-E\-D\hspace{0.3cm}{\ttfamily [static]}}}\label{class_h5_t_l_1_1_d_space_a2c7e4e6d7392338ff352da82243f9f21}
+
+
+Definition at line 561 of file H5\-T\-L.\-hpp.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+H5\-T\-L/\hyperlink{_h5_t_l_8hpp}{H5\-T\-L.\-hpp}\end{DoxyCompactItemize}

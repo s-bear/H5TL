@@ -1,0 +1,120 @@
+\hypertarget{class_h5_t_l_1_1_error_handler}{\section{H5\-T\-L\-:\-:Error\-Handler Class Reference}
+\label{class_h5_t_l_1_1_error_handler}\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}}
+}
+
+
+class for walking the H\-D\-F5 error stack.  
+
+
+
+
+{\ttfamily \#include $<$H5\-T\-L.\-hpp$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\-::string \hyperlink{class_h5_t_l_1_1_error_handler_a21c2c116d3f151229d45bfed823185d6}{get\-\_\-error} (hid\-\_\-t es=H5\-E\-\_\-\-D\-E\-F\-A\-U\-L\-T)
+\begin{DoxyCompactList}\small\item\em Return a std\-::string for the H\-D\-F5 error stack. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_h5_t_l_1_1_error_handler_ad45ba2e2661df16f5f78d4c1e9aeec33}{Error\-Handler} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\-::string \hyperlink{class_h5_t_l_1_1_error_handler_a8197421bdfdd5f82b053e3737a90472d}{class\-\_\-name} (hid\-\_\-t class\-\_\-id)
+\item 
+static herr\-\_\-t \hyperlink{class_h5_t_l_1_1_error_handler_a76cbcca838c3ee2885dd2c5006735e1c}{append\-\_\-error} (unsigned n, const H5\-E\-\_\-error2\-\_\-t $\ast$err\-\_\-desc, void $\ast$client\-\_\-data)
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const \hyperlink{class_h5_t_l_1_1_error_handler}{Error\-Handler} \hyperlink{class_h5_t_l_1_1_error_handler_a1242321919aa0894adea386817d6a5ba}{E\-H}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+class for walking the H\-D\-F5 error stack. 
+
+Definition at line 59 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_h5_t_l_1_1_error_handler_ad45ba2e2661df16f5f78d4c1e9aeec33}{\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}!Error\-Handler@{Error\-Handler}}
+\index{Error\-Handler@{Error\-Handler}!H5TL::ErrorHandler@{H5\-T\-L\-::\-Error\-Handler}}
+\subsubsection[{Error\-Handler}]{\setlength{\rightskip}{0pt plus 5cm}H5\-T\-L\-::\-Error\-Handler\-::\-Error\-Handler (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_error_handler_ad45ba2e2661df16f5f78d4c1e9aeec33}
+
+
+Definition at line 62 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_h5_t_l_1_1_error_handler_a76cbcca838c3ee2885dd2c5006735e1c}{\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}!append\-\_\-error@{append\-\_\-error}}
+\index{append\-\_\-error@{append\-\_\-error}!H5TL::ErrorHandler@{H5\-T\-L\-::\-Error\-Handler}}
+\subsubsection[{append\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}static herr\-\_\-t H5\-T\-L\-::\-Error\-Handler\-::append\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{unsigned}]{n, }
+\item[{const H5\-E\-\_\-error2\-\_\-t $\ast$}]{err\-\_\-desc, }
+\item[{void $\ast$}]{client\-\_\-data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_error_handler_a76cbcca838c3ee2885dd2c5006735e1c}
+
+
+Definition at line 74 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_error_handler_a8197421bdfdd5f82b053e3737a90472d}{\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}!class\-\_\-name@{class\-\_\-name}}
+\index{class\-\_\-name@{class\-\_\-name}!H5TL::ErrorHandler@{H5\-T\-L\-::\-Error\-Handler}}
+\subsubsection[{class\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}static std\-::string H5\-T\-L\-::\-Error\-Handler\-::class\-\_\-name (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{class\-\_\-id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_error_handler_a8197421bdfdd5f82b053e3737a90472d}
+
+
+Definition at line 68 of file H5\-T\-L.\-hpp.
+
+\hypertarget{class_h5_t_l_1_1_error_handler_a21c2c116d3f151229d45bfed823185d6}{\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}!get\-\_\-error@{get\-\_\-error}}
+\index{get\-\_\-error@{get\-\_\-error}!H5TL::ErrorHandler@{H5\-T\-L\-::\-Error\-Handler}}
+\subsubsection[{get\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}static std\-::string H5\-T\-L\-::\-Error\-Handler\-::get\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{hid\-\_\-t}]{es = {\ttfamily H5E\-\_\-DEFAULT}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{class_h5_t_l_1_1_error_handler_a21c2c116d3f151229d45bfed823185d6}
+
+
+Return a std\-::string for the H\-D\-F5 error stack. 
+
+Walks and then clears the indicated H\-D\-F5 error stack, building a string description of the current error. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em es} & The error stack to walk, and subsequently clear. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string representation of the error stack. 
+\end{DoxyReturn}
+
+
+Definition at line 88 of file H5\-T\-L.\-hpp.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_h5_t_l_1_1_error_handler_a1242321919aa0894adea386817d6a5ba}{\index{H5\-T\-L\-::\-Error\-Handler@{H5\-T\-L\-::\-Error\-Handler}!E\-H@{E\-H}}
+\index{E\-H@{E\-H}!H5TL::ErrorHandler@{H5\-T\-L\-::\-Error\-Handler}}
+\subsubsection[{E\-H}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Error\-Handler} H5\-T\-L\-::\-Error\-Handler\-::\-E\-H\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [protected]}}}\label{class_h5_t_l_1_1_error_handler_a1242321919aa0894adea386817d6a5ba}
+
+
+Definition at line 66 of file H5\-T\-L.\-hpp.
+
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+H5\-T\-L/\hyperlink{_h5_t_l_8hpp}{H5\-T\-L.\-hpp}\end{DoxyCompactItemize}
