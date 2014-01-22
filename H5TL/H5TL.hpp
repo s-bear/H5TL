@@ -645,6 +645,10 @@ namespace H5TL {
 			read(H5TL::data(buffer),H5TL::dtype(buffer));
 		}
 		template<typename data_t>
+		void read(data_t* buffer) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer));
+		}
+		template<typename data_t>
 		void read() {
 			auto buffer = H5TL::allocate<data_t>(space().extent(),dtype());
 			read(buffer);
@@ -859,6 +863,7 @@ namespace H5TL {
 		void read(void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
 			read(buffer,buffer_type,buffer_shape,Hyperslab(offset,buffer_shape.extent()));
 		}
+		//read w/ reference to buffer
 		template<typename data_t>
 		void read(data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			read(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,selection);
@@ -873,6 +878,23 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		void read(data_t& buffer, const std::vector<hsize_t>& offset) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
+		}
+		//read w/ pointer to buffer
+		template<typename data_t>
+		void read(data_t* buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,selection);
+		}
+		template<typename data_t>
+		void read(data_t* buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,offset);
+		}
+		template<typename data_t>
+		void read(data_t* buffer, const Selection& selection = Selection::ALL) {
+			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),selection);
+		}
+		template<typename data_t>
+		void read(data_t* buffer, const std::vector<hsize_t>& offset) {
 			read(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
 		//read with allocate
@@ -999,6 +1021,7 @@ namespace H5TL {
 		Dataset read(const std::string &name, void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
 			return read(name, buffer,buffer_type,buffer_shape,Hyperslab(offset,buffer_shape.extent()));
 		}
+		//read with reference to buffer
 		template<typename data_t>
 		Dataset read(const std::string &name, data_t& buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
 			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,selection);
@@ -1013,6 +1036,23 @@ namespace H5TL {
 		}
 		template<typename data_t>
 		Dataset read(const std::string &name, data_t& buffer, const std::vector<hsize_t>& offset) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
+		}
+		//read with pointer to buffer
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t* buffer, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,selection);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t* buffer, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),buffer_shape,offset);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t* buffer, const Selection& selection = Selection::ALL) {
+			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),selection);
+		}
+		template<typename data_t>
+		Dataset read(const std::string &name, data_t* buffer, const std::vector<hsize_t>& offset) {
 			return read(name, H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
 		//open dataset, read with allocate
