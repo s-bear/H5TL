@@ -792,8 +792,11 @@ namespace H5TL {
 			write(H5TL::data(buffer),H5TL::dtype(buffer),H5TL::space(buffer),offset);
 		}
 		//extend
+		void extend(const hsize_t* extent) {
+			check(H5Dextend(id,extent));
+		}
 		void extend(const std::vector<hsize_t>& extent) {
-			check(H5Dextend(id,extent.data()));
+			extend(extent.data());
 		}
 		//append with offset -- like write with offset, but checks to see if the dataset needs to be extended first
 		void append(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const std::vector<hsize_t>& offset) {
