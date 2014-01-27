@@ -385,9 +385,16 @@ namespace H5TL {
 			check(H5Pset_layout(id,H5D_CHUNKED));
 			return *this;
 		}
-		DProps& chunked(const std::vector<hsize_t> &chunk_shape) {
-			check(H5Pset_chunk(id,int(chunk_shape.size()),chunk_shape.data()));
+		DProps& chunked(int ndims, const hsize_t* chunk_shape) {
+			check(H5Pset_chunk(id,ndims,chunk_shape));
 			return *this;
+		}
+		template<size_t N>
+		DProps& chunked(const hsize_t (&chunk_shape)[N]) {
+			return chunked(N,chunk_shape);
+		}
+		DProps& chunked(const std::vector<hsize_t> &chunk_shape) {
+			return chunked(chunk_shape.size(),chunk_shape.data());
 		}
 		DProps& chunked(const std::vector<hsize_t> &data_shape, size_t item_nbytes, size_t chunk_nbytes=0, size_t line_nbytes = 8192) {
 			//if chunk_nbytes is 0, we should compute a value for it:
