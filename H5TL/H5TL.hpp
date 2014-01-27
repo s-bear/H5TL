@@ -1099,6 +1099,14 @@ namespace H5TL {
 #pragma pop_macro("H5CHECK")
 		};
 		File(const std::string& name, const OpenMode& mode = READ_WRITE) {
+			open(name,mode);
+		}
+		File() {}
+		virtual ~File() {
+			if(id) close();
+		}
+		virtual void open(const std::string& name, const OpenMode& mode = READ_WRITE) {
+			if(id) close();
 			if(mode == TRUNCATE || mode == CREATE) {
 				id = check_id(H5Fcreate(name.c_str(),mode,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT));
 			} else {
@@ -1107,9 +1115,6 @@ namespace H5TL {
 					tmp_id = H5Fcreate(name.c_str(),CREATE,H5P_FILE_CREATE_DEFAULT,H5P_FILE_ACCESS_DEFAULT);
 				id = check_id(tmp_id);
 			}
-		}
-		virtual ~File() {
-			if(id) close();
 		}
 		virtual void close() {
 			check(H5Fclose(id)); id = 0;
