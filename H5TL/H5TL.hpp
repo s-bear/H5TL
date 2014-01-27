@@ -705,9 +705,9 @@ namespace H5TL {
 	class Dataset : public Object {
 		friend class Group;
 	protected:
-		Dataset() : Object() {}
 		Dataset(hid_t id) : Object(id) {}
 	public:
+		Dataset() : Object() {}
 		Dataset(Dataset &&dset) : Object(std::move(dset)) {}
 		virtual ~Dataset() {
 			if(id) close();
