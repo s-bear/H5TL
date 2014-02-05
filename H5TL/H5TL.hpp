@@ -156,19 +156,21 @@ namespace H5TL {
 		hid_t id;
 		ID() : id(0) {}
 		ID(hid_t _id) : id(check_id(_id)) {}
-		//copy constructor is protected - can be made public as necessary by sub-classes
+		//copy constructor is protected - can be used as necessary by sub-classes
 		ID(const ID& i) : id(i.id) {}
-		//copy assign is protected - can be made public as necessary by sub-classes
+		//copy assign is protected - can be used as necessary by sub-classes
 		ID& operator=(const ID& i) {
 			if (id) close();
 			id = i.id;
 			return *this;
 		}
+		//steal the underlying resources from another ID (calls close() first if necessary)
 		void steal(ID& i) {
 			if (id) close();
 			id = i.id;
 			i.id = 0;
 		}
+		//swap underlying resources with another ID
 		void swap(ID& i1) {
 			std::swap(id, i1.id);
 		}
@@ -183,7 +185,11 @@ namespace H5TL {
 		}
 
 		virtual ~ID() {}
+
+		//close the ID
 		virtual void close() = 0;
+
+		//convert to hid_t, so that we can use H5TL objects with the corresponding C library
 		virtual operator hid_t() const { return id; }
 		virtual bool operator==(const ID& other) const {
 			return this == &other || id == other.id;
@@ -195,6 +201,8 @@ namespace H5TL {
 		virtual operator bool() const { return valid(); }
 		
 	};
+
+	//swap 2 IDs -- should this be in std?
 	void swap(ID& i0, ID& i1) {
 		i0.swap(i1);
 	}
