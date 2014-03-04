@@ -4,13 +4,15 @@ H5TL: HDF5 C++ Template Library
 This library is a C++ wrapper of the excellent HDF5 Library. It is a single-header library that does not depend on the official HDF5 C++ bindings. The purpose of this library is to provide an easy-to-use, basic level of functionality for reading and writing HDF5 files.
 
 The library includes compatibility for
-- OpenCV Mat
-- Blitz++ Array
+- OpenCV's Mat
+- Blitz++'s Array
 - std::vector and std::array
 
 TODO:
 - Testing & bug fixes
-- Attribute support
+- Non-atomic data-types
+- Object References
+- Automatically allocating storage for reads in more cases
 - Documentation
 
 Example
