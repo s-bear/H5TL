@@ -154,7 +154,17 @@ namespace H5TL {
 	* \param sz The ssize_t return code to check.
 	* \returns sz, unchanged.
 	*/
-	inline ssize_t check_size(ssize_t sz) {
+	inline ssize_t check_ssize(ssize_t sz) {
+		if (sz < 0) throw h5tl_error(ErrorHandler::EH.get_error());
+		else return sz;
+	}
+	/** \brief Checks an HDF5 hssize_t return code for errors.
+	*
+	* Checks an HDF5 hssize_t return code for errors and returns it. If there is an error, throws an H5TL::h5tl_error with the message given by ErrorHandler::get_error().
+	* \param sz The hssize_t return code to check.
+	* \returns sz, unchanged.
+	*/
+	inline hssize_t check_hssize(hssize_t sz) {
 		if (sz < 0) throw h5tl_error(ErrorHandler::EH.get_error());
 		else return sz;
 	}
@@ -685,6 +695,12 @@ namespace H5TL {
 				return std::vector<hsize_t>();
 			}
 		}
+		hssize_t count() const {
+            return check_hssize(H5Sget_simple_extent_npoints(id));
+        }
+        hssize_t countSelected() const {
+            return check_hssize(H5Sget_select_npoints(id));
+        }
 		std::vector<hsize_t> max_extent() const {
 			if (H5Sget_simple_extent_type(id) == H5S_SIMPLE) {
 				int n = H5Sget_simple_extent_ndims(id);
@@ -775,9 +791,9 @@ namespace H5TL {
 			check(H5Aclose(id)); id = 0;
 		}
 		std::string name() {
-			ssize_t len = check_size(H5Aget_name(id, 0, nullptr));
+			ssize_t len = check_ssize(H5Aget_name(id, 0, nullptr));
 			std::string tmp(len, '\0');
-			check_size(H5Aget_name(id, len, &(tmp[0])));
+			check_ssize(H5Aget_name(id, len, &(tmp[0])));
 			return tmp;
 		}
 		DType dtype() {
