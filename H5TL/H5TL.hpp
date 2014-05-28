@@ -60,7 +60,7 @@ namespace H5TL {
 
 		template<typename InputIt>
 		std::string join(const std::string& delim, InputIt first, InputIt last) {
-			ostringstream builder;
+			std::ostringstream builder;
 			builder << *first; ++first;
 			while (first != last) {
 				builder << delim << *first;
