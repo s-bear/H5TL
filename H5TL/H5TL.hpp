@@ -1353,7 +1353,7 @@ namespace H5TL {
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			size_t n = util::product(shape.begin(), shape.end(), hsize_t(1));
 			if (n != 1)
-				throw runtime_error("Cannot allocate data_t with shape = {" + util::join(", ", shape.begin(), shape.end()) + "}"); //TODO: convert the shape to a string
+				throw std::runtime_error("Cannot allocate data_t with shape = {" + util::join(", ", shape.begin(), shape.end()) + "}"); //TODO: convert the shape to a string
 			return data_t(0);
 		}
 	};
@@ -1384,7 +1384,7 @@ namespace H5TL {
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (util::product(begin(shape), end(shape), hsize_t(1)) != N)
-				throw runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + util::join(", ", shape.begin(), shape.end()) + "}");
+				throw std::runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + util::join(", ", shape.begin(), shape.end()) + "}");
 			return new T[N];
 		}
 	};
@@ -1529,7 +1529,7 @@ namespace H5TL {
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (util::product(shape.begin(), shape.end(), hsize_t(1)) != N)
-				throw runtime_error("Cannot allocate std::array<T,N> with shape = {" + util::join(", ", shape.begin(), shape.end()) + "}.");
+				throw std::runtime_error("Cannot allocate std::array<T,N> with shape = {" + util::join(", ", shape.begin(), shape.end()) + "}.");
 			return std::array<T, N>();
 		}
 	};
@@ -1595,7 +1595,7 @@ namespace H5TL {
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (shape.size() > N)
-				throw runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + util::join(", ", shape.begin(), shape.end()) + "}.");
+				throw std::runtime_error("Cannot allocate blitz::Array<T,N> with higher dimensionality shape = {" + util::join(", ", shape.begin(), shape.end()) + "}.");
 			blitz::TinyVector<int, N> extent(1);
 			//we can't use std::copy_backward on MSVC because blitz::TinyVector::iterator is just a raw pointer
 			auto in = shape.end();
