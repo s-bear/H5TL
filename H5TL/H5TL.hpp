@@ -1415,10 +1415,11 @@ namespace H5TL {
 	};
 
 	//pointer adapter
-	template<typename ptr_t>
-	struct adapt<ptr_t, typename std::enable_if<std::is_pointer<ptr_t>::value
-		&& !std::is_void<typename std::remove_pointer<ptr_t>::type>::value
+	template<typename cvptr_t>
+	struct adapt<cvptr_t, typename std::enable_if<std::is_pointer<cvptr_t>::value
+		&& !std::is_void<typename std::remove_pointer<cvptr_t>::type>::value
 	>::type> {
+		typedef typename std::remove_cv<cvptr_t>::type ptr_t;
 		typedef typename std::remove_cv<typename std::remove_pointer<ptr_t>::type>::type data_t;
 		typedef const DType& dtype_return;
 		typedef ptr_t data_return;
