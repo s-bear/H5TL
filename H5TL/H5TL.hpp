@@ -35,6 +35,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
+#include <cstdint>
 
 namespace H5TL {
 	namespace util {
@@ -1260,6 +1261,7 @@ namespace H5TL {
 	public:
 		enum OpenMode : unsigned int {
 			#pragma push_macro("H5CHECK") //compatible with MSVC, gcc, clang
+			#undef H5CHECK
 			#define H5CHECK //need to make this not call H5check() so that the following expressions are constant:
 			TRUNCATE = H5F_ACC_TRUNC,
 			CREATE = H5F_ACC_EXCL,
