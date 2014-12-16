@@ -1328,13 +1328,30 @@ static allocate_return allocate(const std::vector<hsize_t>&, const DType&);
 */
 namespace H5TL {
 
-	//arithmetic type adapter
+	//typedef the int type with the given # of bytes
+	template<std::size_t sz> struct intx_t; //undefined
+	template<> struct intx_t<1> { typedef int8_t type; };
+	template<> struct intx_t<2> { typedef int16_t type; };
+	template<> struct intx_t<4> { typedef int32_t type; };
+	template<> struct intx_t<8> { typedef int64_t type; };
+
+	typedef intx_t<sizeof(bool)>::type intbool_t;
+
+	//convert bool types to int types, leave others unchanged
+	template<typename T>
+	struct bool_to_int { typedef T type; };
+	template<> struct bool_to_int<bool> { typedef intbool_t type; };
+	template<> struct bool_to_int<const bool> { typedef const intbool_t type; };
+
+
+	//arithmetic & bool type adapter
 	template<typename number_t>
-	struct adapt<number_t, typename std::enable_if<std::is_arithmetic<number_t>::value>::type> {
+	struct adapt<number_t, typename std::enable_if<std::is_arithmetic<typename bool_to_int<number_t>::type>::value>::type> {
 		typedef typename std::remove_cv<number_t>::type data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt; //no bool type
 		typedef const DType& dtype_return;
-		typedef data_t* data_return;
-		typedef const data_t* const_data_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt* const_data_return;
 		typedef data_t allocate_return;
 
 		static size_t rank(const data_t&) {
@@ -1344,13 +1361,13 @@ namespace H5TL {
 			return std::vector<hsize_t>();
 		}
 		static dtype_return dtype(const data_t&) {
-			return H5TL::dtype<data_t>();
+			return H5TL::dtype<data_nbt>();
 		}
 		static data_return data(data_t& d) {
-			return &d;
+			return (data_return)(&d);
 		}
 		static const_data_return data(const data_t& d) {
-			return &d;
+			return (const_data_return)(&d);
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			size_t n = util::product(shape.begin(), shape.end(), hsize_t(1));
@@ -1364,9 +1381,10 @@ namespace H5TL {
 	template<typename T, size_t N>
 	struct adapt<T[N]> {
 		typedef typename std::remove_cv<T>::type data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
-		typedef data_t* data_return;
-		typedef const data_t* const_data_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt* const_data_return;
 		typedef data_t* allocate_return;
 
 		static size_t rank(const T(&)[N]) {
@@ -1376,18 +1394,18 @@ namespace H5TL {
 			return std::vector<hsize_t>(1, N);
 		}
 		static dtype_return dtype(const data_t(&)[N]) {
-			return H5TL::dtype<data_t>();
+			return H5TL::dtype<data_nbt>();
 		}
 		static data_return data(data_t(&d)[N]) {
-			return std::begin(d);
+			return (data_return)std::begin(d);
 		}
 		static const_data_return data(const data_t(&d)[N]) {
-			return std::begin(d);
+			return (data_return)std::begin(d);
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (util::product(begin(shape), end(shape), hsize_t(1)) != N)
 				throw std::runtime_error("Cannot allocate fixed sized array with conflicting shape = {" + util::join(", ", shape.begin(), shape.end()) + "}");
-			return new T[N];
+			return new data_t[N];
 		}
 	};
 
@@ -1422,10 +1440,11 @@ namespace H5TL {
 		&& !std::is_void<typename std::remove_pointer<ptr_t>::type>::value
 	>::type> {
 		typedef typename std::remove_cv<typename std::remove_pointer<ptr_t>::type>::type data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
-		typedef ptr_t data_return;
-		typedef const ptr_t const_data_return;
-		typedef ptr_t allocate_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt const_data_return;
+		typedef data_t* allocate_return;
 
 		static size_t rank(const ptr_t&) {
 			static_assert(false, "Cannot determine rank of data from pointer");
@@ -1434,12 +1453,12 @@ namespace H5TL {
 			static_assert(false, "Cannot determine shape of data from pointer");
 		}
 		static dtype_return dtype(const ptr_t&) {
-			return H5TL::dtype<data_t>();
+			return H5TL::dtype<data_nbt>();
 		}
-		static data_return data(ptr_t& p) {
+		static data_return data(data_t*& p) {
 			return p;
 		}
-		static const_data_return data(const ptr_t& p) {
+		static const_data_return data(const data_t*& p) {
 			return p;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
@@ -1509,10 +1528,12 @@ namespace H5TL {
 	//std::array
 	template<typename T, size_t N>
 	struct adapt<std::array<T, N>, void> {
+		typedef T data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
-		typedef T* data_return;
-		typedef const T* const_data_return;
-		typedef std::array<T, N> allocate_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt* const_data_return;
+		typedef std::array<data_t, N> allocate_return;
 
 		static size_t rank(const std::array<T, N>&) {
 			return 1;
@@ -1521,13 +1542,13 @@ namespace H5TL {
 			return std::vector<hsize_t>(1, hsize_t(N));
 		}
 		static dtype_return dtype(const std::array<T, N>&) {
-			return H5TL::dtype<T>();
+			return H5TL::dtype<data_nbt>();
 		}
 		static data_return data(std::array<T, N> &d) {
-			return d.data();
+			return (data_return)d.data();
 		}
 		static const_data_return data(const std::array<T, N>& d) {
-			return d.data();
+			return (const_data_return)d.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (util::product(shape.begin(), shape.end(), hsize_t(1)) != N)
@@ -1539,10 +1560,11 @@ namespace H5TL {
 	//std::vector
 	template<typename T>
 	struct adapt<std::vector<T>> {
-
+		typedef T data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
-		typedef typename std::vector<T>::pointer data_return;
-		typedef typename std::vector<T>::const_pointer const_data_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt* const_data_return;
 		typedef std::vector<T> allocate_return;
 
 		static size_t rank(const std::vector<T>&) {
@@ -1552,13 +1574,13 @@ namespace H5TL {
 			return std::vector<hsize_t>(1, v.size());
 		}
 		static dtype_return dtype(const std::vector<T>&) {
-			return H5TL::dtype<T>();
+			return H5TL::dtype<data_nbt>();
 		}
 		static data_return data(std::vector<T>& v) {
-			return v.data();
+			return (data_return)v.data();
 		}
 		static const_data_return data(const std::vector<T>& v) {
-			return v.data();
+			return (const_data_return)v.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			return std::vector<T>(util::product(shape.begin(), shape.end(), hsize_t(1)), T());
@@ -1573,10 +1595,12 @@ namespace H5TL {
 namespace H5TL {
 	template<typename T, int N>
 	struct adapt<blitz::Array<T, N>> {
+		typedef T data_t;
+		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
 
-		typedef T* data_return;
-		typedef const T* const_data_return;
+		typedef data_nbt* data_return;
+		typedef const data_nbt* const_data_return;
 		typedef blitz::Array<T, N> allocate_return;
 
 		static size_t rank(const blitz::Array<T, N>&) {
@@ -1587,13 +1611,13 @@ namespace H5TL {
 			return std::vector<hsize_t>(s.begin(), s.end());
 		}
 		static dtype_return dtype(const blitz::Array<T, N>&) {
-			return H5TL::dtype<T>();
+			return H5TL::dtype<data_nbt>();
 		}
 		static data_return data(blitz::Array<T, N>& d) {
-			return d.data();
+			return (data_return)d.data();
 		}
 		static const_data_return data(const blitz::Array<T, N>& d) {
-			return d.data();
+			return (const_data_return)d.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
 			if (shape.size() > N)

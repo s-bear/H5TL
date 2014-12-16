@@ -24,7 +24,6 @@
 // H5TLTest.cpp : Defines the entry point for the console application.
 //
 
-
 #include "../H5TL/H5TL.hpp"
 #include <vector>
 #include <set>
@@ -34,7 +33,20 @@
 #include <numeric>
 using namespace std;
 
-#include "blitz/Array.h"
+//#include "blitz/Array.h"
+
+template<typename T, size_t N>
+ostream& operator<<(ostream& os, const array<T,N>& vec) {
+	os << "array{";
+	bool first = true;
+	for(auto t : vec) {
+		if(first) {os << t; first = false;}
+		else {os << ", " << t;}
+	}
+	os << "}" << endl;
+	return os;
+}
+
 
 template<typename T>
 ostream& operator<<(ostream& os, const vector<T>& vec) {
@@ -72,6 +84,16 @@ int main(int argc, char* argv[]) {
 		c.resize(13);
 		cds.read(c);
 		cout << "c: " << c;
+		
+		//vector<bool> doesn't work because the standard is weird
+		array<bool,10> d; 
+		for(size_t i = 0; i < d.size(); ++i)
+			d[i] = (i % 2 == 0);
+		cout << boolalpha << "d: " << d;
+		f.write("d",d);
+		array<bool,10> e = f.read<array<bool,10>>("d");
+		cout << "e: " << e;
+		
 		return 0;
 	} catch(H5TL::h5tl_error &e) {
 		cerr << e.what();
