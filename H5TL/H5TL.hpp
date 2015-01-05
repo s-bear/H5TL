@@ -1494,9 +1494,9 @@ namespace H5TL {
 		typedef const void* const_data_return;
 		typedef void* allocate_return;
 
-		static size_t rank(const void*);
-		static std::vector<hsize_t> shape(const void*);
-		static dtype_return dtype(const void*);
+		//static size_t rank(const void*);
+		//static std::vector<hsize_t> shape(const void*);
+		//static dtype_return dtype(const void*);
 		static data_return data(void* d) {
 			return d;
 		}
