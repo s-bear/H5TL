@@ -72,6 +72,39 @@ namespace H5TL {
 	}
 	//General library interface:
 
+	//forware declarations & typedefs
+	template<typename XX> class ErrorHandler_;
+	typedef ErrorHandler_<void> ErrorHandler;
+
+	class ID;
+
+	template<typename XX> class DType_;
+	typedef DType_<void> DType;
+
+	class PDType;
+
+	template<typename data_t, typename enable> struct adapt;
+
+	class Props;
+	template<typename XX> class LProps_;
+	template<typename XX> class DProps_;
+	typedef LProps_<void> LProps;
+	typedef DProps_<void> DProps;
+
+	template<typename XX> class DSpace_;
+	typedef DSpace_<void> DSpace;
+
+	template<typename XX> class Selection_;
+	typedef Selection_<void> Selection;
+	class SelectAll;
+	class Hyperslab;
+
+	class Attribute;
+	class Object;
+	class Dataset;
+	class Group;
+	class File;
+
 	///exception class for all HDF5 errors.
 	class h5tl_error : public std::runtime_error {
 	public:
@@ -116,7 +149,7 @@ namespace H5TL {
 		}
 		static const ErrorHandler_<void> EH;
 	};
-	typedef ErrorHandler_<void> ErrorHandler;
+	
 	template<typename XX>
 	const ErrorHandler ErrorHandler_<XX>::EH;
 
@@ -182,7 +215,6 @@ namespace H5TL {
 		check(H5close());
 	}
 
-	class ID;
 	inline void swap(ID&, ID&);
 
 	/** \brief Virtual class encapsulating an hid_t. */
@@ -237,9 +269,6 @@ namespace H5TL {
 	inline void swap(ID& i0, ID& i1) {
 		i0.swap(i1);
 	}
-
-
-	class PDType;
 
 	/** \brief Encapsulate an HDF5 data type object.
 	*
@@ -307,8 +336,6 @@ namespace H5TL {
 		static const PDType STRING; ///< Native string character type (copy and set size for multi-character strings)
 		static const PDType REFERENCE; ///< HDF5 object reference type
 	};
-
-	typedef DType_<void> DType;
 
 	class PDType : public DType {
 		friend class DType_<void>;
@@ -471,7 +498,7 @@ namespace H5TL {
 			return *this;
 		}
 	};
-	typedef LProps_<void> LProps;
+
 	template<typename XX> const LProps LProps_<XX>::DEFAULT = LProps().create_intermediate();
 
 	//dataset creation properties
@@ -584,26 +611,11 @@ namespace H5TL {
 			return dims;
 		}
 	};
-	typedef DProps_<void> DProps;
-
+	
 	template<typename XX>
 	const DProps DProps_<XX>::DEFAULT = DProps(H5P_DATASET_CREATE_DEFAULT);
 
-	template<typename XX>
-	class DSpace_;
-
-	typedef DSpace_<void> DSpace;
-
-	class SelectAll;
-
-	template<typename XX>
-	class Selection_ {
-	public:
-		virtual void set(DSpace& ds) const = 0;
-		static const SelectAll ALL;
-	};
-
-	typedef Selection_<void> Selection;
+	
 
 	template<typename XX>
 	class DSpace_ : public ID {
@@ -746,10 +758,12 @@ namespace H5TL {
 	template<typename XX> const hsize_t DSpace_<XX>::UNL = hsize_t(H5S_UNLIMITED);
 	template<typename XX> const DSpace DSpace_<XX>::SCALAR = DSpace(H5Screate(H5S_SCALAR));
 
-	template<typename data_t>
-	DSpace space(const data_t& d) {
-		return DSpace(H5TL::shape(d));
-	}
+		template<typename XX>
+	class Selection_ {
+	public:
+		virtual void set(DSpace& ds) const = 0;
+		static const SelectAll ALL;
+	};
 
 	class SelectAll : public Selection {
 		virtual void set(DSpace& ds) const {
@@ -770,6 +784,11 @@ namespace H5TL {
 			check(H5Sselect_hyperslab(ds, H5S_SELECT_SET, start.data(), stride.data(), count.data(), block.data()));
 		}
 	};
+
+	template<typename data_t>
+	DSpace space(const data_t& d) {
+		return DSpace(H5TL::shape(d));
+	}
 
 	//Attributes
 	class Attribute : public ID {
