@@ -588,6 +588,14 @@ namespace H5TL {
 			//the minimum chunk shape is a 1 in every dimension
 			return chunked(chunk_shape);
 		}
+		DProps_& fill(const void* value, const DType& value_type) {
+			check(H5Pset_fill_value(id,value_type,value));
+			return *this;
+		}
+		template<typename data_t>
+		DProps_& fill(const data_t& value) {
+			return fill(data(value),dtype(value));
+		}
 		DProps_& deflate(unsigned int level) {
 			check(H5Pset_deflate(id, level));
 			return *this;
