@@ -635,6 +635,12 @@ namespace H5TL {
 		friend class Attribute;
 	protected:
 		DSpace_(hid_t id) : ID(id) {}
+        void init(size_t N, const hsize_t *shape, const hsize_t *maxshape) {
+            if (N)
+                id = check_id(H5Screate_simple(int(N), shape, maxshape));
+            else
+                id = check_id(H5Screate(H5S_SCALAR));
+        }
 	public:
 		DSpace_() : ID(H5Screate(H5S_SCALAR)) {}
 		//copy
@@ -649,49 +655,20 @@ namespace H5TL {
 			steal(ds);
 			return *this;
 		}
+        //construct simple
 		DSpace_(size_t N, const hsize_t *shape, const hsize_t *maxshape = nullptr) : ID(0) {
-			if (N) {
-				id = check_id(H5Screate_simple(int(N), shape, maxshape));
-			}
-			else {
-				id = check_id(H5Screate(H5S_SCALAR));
-			}
+            init(N, shape, maxshape);
 		}
+        DSpace_(std::initializer_list<hsize_t> shape) : ID(0) { init(shape.size(), shape.begin(), nullptr); }
 		template<size_t N>
-		explicit DSpace_(const hsize_t(&shape)[N]) : ID(0) {
-			if (N) {
-				id = check_id(H5Screate_simple(int(N), shape, nullptr));
-			}
-			else {
-				id = check_id(H5Screate(H5S_SCALAR));
-			}
-		}
+        explicit DSpace_(const hsize_t(&shape)[N]) : ID(0) { init(N, shape, nullptr); }
 		template<size_t N>
-		DSpace_(const hsize_t(&shape)[N], const hsize_t(&maxshape)[N]) : ID(0) {
-			if (N) {
-				id = check_id(H5Screate_simple(int(N), shape, maxshape));
-			}
-			else {
-				id = check_id(H5Screate(H5S_SCALAR));
-			}
-		}
-		explicit DSpace_(const std::vector<hsize_t>& shape) : ID(0) {
-			if (shape.size()) {
-				id = check_id(H5Screate(H5S_SIMPLE));
-				extent(shape, shape);
-			}
-			else {
-				id = check_id(H5Screate(H5S_SCALAR));
-			}
-		}
+        DSpace_(const hsize_t(&shape)[N], const hsize_t(&maxshape)[N]) : ID(0) { init(N, shape, maxshape); }
+        explicit DSpace_(const std::vector<hsize_t>& shape) : ID(0) { init(shape.size(), shape.data(), nullptr); }
 		DSpace_(const std::vector<hsize_t> &shape, const std::vector<hsize_t> &maxshape) : ID(0) {
-			if (shape.size()) {
-				id = check_id(H5Screate(H5S_SIMPLE));
-				extent(shape, maxshape);
-			}
-			else {
-				id = check_id(H5Screate(H5S_SCALAR));
-			}
+            if (shape.size() != maxshape.size())
+                throw std::runtime_error("shape and maxshape must be same size.");
+            init(shape.size(), shape.data(), maxshape.data());
 		}
 		~DSpace_() {
 			if (id) close();
