@@ -504,6 +504,7 @@ namespace H5TL {
 	//dataset creation properties
 	template<typename XX>
 	class DProps_ : public Props {
+		friend class Dataset;
 		DProps_(hid_t id) : Props(id) {}
 	public:
 		static const DProps_<void> DEFAULT;
@@ -619,8 +620,6 @@ namespace H5TL {
 	
 	template<typename XX>
 	const DProps DProps_<XX>::DEFAULT = DProps(H5P_DATASET_CREATE_DEFAULT);
-
-	
 
 	template<typename XX>
 	class DSpace_ : public ID {
@@ -930,6 +929,9 @@ namespace H5TL {
 		}
 		DType dtype() {
 			return DType(H5Dget_type(id));
+		}
+		DProps props() {
+			return DProps(H5Dget_create_plist(id));
 		}
 		//write
 		void write(const void* buffer, const DType& buffer_type, const DSpace& buffer_shape, const Selection& selection = Selection::ALL) {
