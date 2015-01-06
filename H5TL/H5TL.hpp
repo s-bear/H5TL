@@ -591,6 +591,11 @@ namespace H5TL {
 			check(H5Pset_deflate(id, level));
 			return *this;
 		}
+		DProps_& szip(unsigned int pix_per_block=16, bool nn = true) {
+			//pix_per_block must be even and <= 32, nn = true for doing nearest neighbor preprocessing step
+			check(H5Pset_szip(id, nn ? H5_SZIP_NN_OPTION_MASK : H5_SZIP_EC_OPTION_MASK, pix_per_block));
+			return *this;
+		}
 		DProps_& fletcher32() {
 			check(H5Pset_fletcher32(id));
 			return *this;
