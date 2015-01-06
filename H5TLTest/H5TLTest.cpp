@@ -78,7 +78,8 @@ int main(int argc, char* argv[]) {
 		cout << "c: " << c;
 		hsize_t dims[] = {10}, maxdims[] = {H5TL::DSpace::UNL};
 		H5TL::DSpace cs(dims,maxdims);
-		H5TL::Dataset cds = f.write("data/c",c,cs);
+		H5TL::DProps cp = H5TL::DProps().chunked().deflate(3).fill(1);
+		H5TL::Dataset cds = f.write("data/c",c,cs,cp);
 		int x[] = {25,26,27};
 		cds.append(x);
 		c.resize(13);
