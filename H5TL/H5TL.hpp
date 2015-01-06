@@ -761,14 +761,16 @@ namespace H5TL {
 	};
 	template<typename XX> const SelectAll Selection_<XX>::ALL;
 
-	class Hyperslab : public Selection {
-	protected:
-		std::vector<hsize_t> start, stride, count, block;
-	public:
-		Hyperslab() {}
-		Hyperslab(const Hyperslab& h) : Selection(h), start(h.start), stride(h.stride), count(h.count), block(h.block) {}
-		Hyperslab(Hyperslab&& h) : Selection(std::move(h)), start(std::move(h.start)), stride(std::move(h.stride)), count(std::move(h.count)), block(std::move(h.block)) {}
-		Hyperslab(const std::vector<hsize_t>& start, const std::vector<hsize_t>& count) : start(start), count(count) {}
+    class Hyperslab : public Selection {
+    protected:
+        std::vector<hsize_t> start, stride, count, block;
+    public:
+        Hyperslab() {}
+        Hyperslab(const Hyperslab& h) : Selection(h), start(h.start), stride(h.stride), count(h.count), block(h.block) {}
+        Hyperslab(Hyperslab&& h) : Selection(std::move(h)), start(std::move(h.start)), stride(std::move(h.stride)), count(std::move(h.count)), block(std::move(h.block)) {}
+        Hyperslab(const std::vector<hsize_t>& start, const std::vector<hsize_t>& count) : start(start), count(count) {}
+        template<size_t N>
+        Hyperslab(const hsize_t(&start)[N], const hsize_t(&count)[N]) : start(start, start + N), count(count, count + N) {}
 		virtual void set(DSpace& ds) const {
 			check(H5Sselect_hyperslab(ds, H5S_SELECT_SET, start.data(), stride.data(), count.data(), block.data()));
 		}
