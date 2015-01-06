@@ -1457,7 +1457,7 @@ namespace H5TL {
 		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
 		typedef data_nbt* data_return;
-		typedef const data_nbt const_data_return;
+		typedef const data_nbt* const_data_return;
 		typedef data_t* allocate_return;
 
 		static size_t rank(const ptr_t&) {
