@@ -1469,10 +1469,10 @@ namespace H5TL {
 		static dtype_return dtype(const ptr_t&) {
 			return H5TL::dtype<data_nbt>();
 		}
-		static data_return data(data_t*& p) {
+		static data_return data(data_t*const& p) {
 			return p;
 		}
-		static const_data_return data(const data_t*& p) {
+		static const_data_return data(const data_t*const& p) {
 			return p;
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
