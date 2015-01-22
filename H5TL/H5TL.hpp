@@ -1572,8 +1572,8 @@ namespace H5TL {
 	};
 
 	//std::vector
-	template<typename T>
-	struct adapt<std::vector<T>> {
+	template<typename T, typename A>
+	struct adapt<std::vector<T,A>> {
 		typedef T data_t;
 		typedef typename bool_to_int<data_t>::type data_nbt;
 		typedef const DType& dtype_return;
@@ -1581,23 +1581,23 @@ namespace H5TL {
 		typedef const data_nbt* const_data_return;
 		typedef std::vector<T> allocate_return;
 
-		static size_t rank(const std::vector<T>&) {
+		static size_t rank(const std::vector<T,A>&) {
 			return 1;
 		}
-		static std::vector<hsize_t> shape(const std::vector<T>& v) {
+		static std::vector<hsize_t> shape(const std::vector<T,A>& v) {
 			return std::vector<hsize_t>(1, v.size());
 		}
-		static dtype_return dtype(const std::vector<T>&) {
+		static dtype_return dtype(const std::vector<T,A>&) {
 			return H5TL::dtype<data_nbt>();
 		}
-		static data_return data(std::vector<T>& v) {
+		static data_return data(std::vector<T,A>& v) {
 			return (data_return)v.data();
 		}
-		static const_data_return data(const std::vector<T>& v) {
+		static const_data_return data(const std::vector<T,A>& v) {
 			return (const_data_return)v.data();
 		}
 		static allocate_return allocate(const std::vector<hsize_t>& shape, const DType&) {
-			return std::vector<T>(util::product(shape.begin(), shape.end(), hsize_t(1)), T());
+			return std::vector<T,A>(util::product(shape.begin(), shape.end(), hsize_t(1)), T());
 		}
 	};
 }
